@@ -1,0 +1,1958 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Negotiation Assist</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --accent:#0E8C8C;--accent-2:#16B8A6;--accent-deep:#0A6F6F;
+    --accent-soft:rgba(14,140,140,.10);--accent-glow:rgba(14,140,140,.28);
+    --pos:#12A46B;--neg:#D3453F;--warn:#C8881B;--info:#2F6FD0;--purple:#6F5BD6;
+    --bg:#F5F6F7;--panel:#FFFFFF;--panel-2:#FBFBFC;--panel-3:#F0F2F3;
+    --line:rgba(16,24,32,.10);--line-2:rgba(16,24,32,.16);
+    --t1:#10181F;--t2:rgba(16,24,32,.66);--t3:rgba(16,24,32,.46);--t4:rgba(16,24,32,.32);
+    --rm:#0E8C8C;--conv:#2F6FD0;--oh:#C8881B;--mar:#6F5BD6;
+    --radius:14px;
+  }
+  body.dark{
+    --accent:#16B8A6;--accent-2:#3FE0C8;--accent-deep:#0E8C8C;
+    --accent-soft:rgba(22,184,166,.14);--accent-glow:rgba(22,184,166,.30);
+    --pos:#25D08A;--neg:#F26661;--warn:#E3A83A;--info:#5C9BFF;--purple:#A08CF0;
+    --bg:#0B0D10;--panel:#14171C;--panel-2:#101317;--panel-3:#1B1F25;
+    --line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.14);
+    --t1:#EEF1F4;--t2:rgba(255,255,255,.62);--t3:rgba(255,255,255,.42);--t4:rgba(255,255,255,.28);
+    --rm:#16B8A6;--conv:#5C9BFF;--oh:#E3A83A;--mar:#A08CF0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Inter','Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;
+    font-size:15px;line-height:1.45;overflow:hidden}
+  .app{display:flex;height:100vh;overflow:hidden}
+  aside{width:252px;flex-shrink:0;background:var(--panel-2);border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .brand{height:60px;display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--line);flex-shrink:0}
+  .logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));flex-shrink:0}
+  .logo svg{width:17px;height:17px;stroke:#fff}
+  .brand b{font-size:16px;font-weight:750;letter-spacing:-.2px;display:block;line-height:1.1}
+  .brand .sd{font-size:11.5px;color:var(--t3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  nav{flex:1;padding:10px 9px 16px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+  nav::-webkit-scrollbar{width:6px}nav::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:6px}
+  .nav-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--t4);padding:13px 11px 5px;font-weight:750}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:7.5px 11px;border-radius:9px;color:var(--t2);
+    font-weight:520;cursor:pointer;font-size:14px;transition:.14s;position:relative}
+  .nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.75}
+  .nav-item:hover{background:var(--panel-3);color:var(--t1)}
+  .nav-item.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:650}
+  body.dark .nav-item.active{color:var(--accent-2)}
+  .nav-item.active svg{opacity:1}
+  .nav-item.active::before{content:"";position:absolute;left:-9px;top:7px;bottom:7px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+  .side-foot{padding:9px 11px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:7px;flex-shrink:0}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:9px;font-size:13px;color:var(--t2);cursor:pointer}
+  .toggle-row:hover{background:var(--panel-3)}
+  .sw{width:32px;height:18px;border-radius:20px;background:var(--line-2);position:relative;transition:.2s;flex-shrink:0}
+  .sw::after{content:"";position:absolute;width:13px;height:13px;border-radius:50%;background:#fff;top:2.5px;left:2.5px;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+  .sw.on{background:var(--accent)}.sw.on::after{left:16.5px}
+  .user{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:10px;background:var(--panel-3)}
+  .ava{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));
+    display:grid;place-items:center;font-weight:750;font-size:12px;color:#fff;flex-shrink:0}
+  .user .nm{font-size:13px;font-weight:650;line-height:1.2}.user .ro{font-size:11.5px;color:var(--t3)}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+  header.top{height:60px;border-bottom:1px solid var(--line);background:var(--panel);display:flex;align-items:center;
+    gap:8px;padding:0 22px;flex-shrink:0;overflow-x:auto}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:620;color:var(--t2);
+    background:var(--panel-3);border:1px solid var(--line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .pill.live{color:var(--accent-deep);border-color:var(--accent);background:var(--accent-soft)}
+  body.dark .pill.live{color:var(--accent-2)}
+  .pill .sep{color:var(--t4);margin:0 1px}
+  .spacer{flex:1}
+  .scroll{flex:1;overflow-y:auto;overflow-x:hidden}
+  .scroll::-webkit-scrollbar{width:9px}.scroll::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:9px}
+  .wrap{max-width:1320px;margin:0 auto;padding:22px 26px 70px}
+  .view{display:none}.view.active{display:block;animation:fade .22s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .vhead{margin-bottom:16px}
+  .vhead h1{font-size:23px;font-weight:750;letter-spacing:-.3px}
+  .vhead .sub{font-size:13.5px;color:var(--t2);margin-top:4px;max-width:940px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:16px;overflow:hidden}
+  .card-h{display:flex;align-items:center;gap:10px;padding:13px 17px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .card-h .ttl{display:flex;align-items:center;gap:9px;font-weight:680;font-size:14.5px}
+  .card-h .ic{width:24px;height:24px;border-radius:7px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0}
+  .card-h .ic svg{width:14px;height:14px;stroke:var(--accent);fill:none}
+  .card-h .hint{font-size:12px;color:var(--t3);margin-left:auto;text-align:right}
+  .card-b{padding:16px 17px}
+  .card-b.flush{padding:0}
+  .aibtn{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;color:var(--accent-deep);
+    background:var(--accent-soft);border:1px solid transparent;border-radius:8px;padding:5px 9px;cursor:pointer;font-family:inherit}
+  body.dark .aibtn{color:var(--accent-2)}
+  .aibtn:hover{border-color:var(--accent)}
+  .aibtn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+  .aichev{transition:.2s}.aibtn.open .aichev{transform:rotate(180deg)}
+  .aiins{display:none;padding:12px 17px;background:var(--accent-soft);border-bottom:1px solid var(--line);font-size:13.3px;color:var(--t2);line-height:1.55}
+  .aiins.open{display:block}
+  .aiins b{color:var(--t1)}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;background:var(--line);
+    border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+  .m{background:var(--panel);padding:15px 17px}
+  .m .v{font-size:22px;font-weight:760;letter-spacing:-.5px;line-height:1.1}
+  .m .v.a{color:var(--accent-deep)} body.dark .m .v.a{color:var(--accent-2)}
+  .m .l{font-size:12px;color:var(--t3);margin-top:3px;font-weight:550}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  @media(max-width:1100px){.grid2,.grid3{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);
+    font-weight:700;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--panel-2);white-space:nowrap}
+  td{padding:8.5px 14px;border-bottom:1px solid var(--line);color:var(--t2);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td b,td strong{color:var(--t1);font-weight:640}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr.grp td{background:var(--panel-2);font-weight:700;color:var(--t1)}
+  tr:hover td{background:var(--panel-2)}
+  tr.grp:hover td{background:var(--panel-2)}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.02em;white-space:nowrap}
+  .tag.pos{background:rgba(18,164,107,.14);color:var(--pos)}
+  .tag.neg{background:rgba(211,69,63,.13);color:var(--neg)}
+  .tag.warn{background:rgba(200,136,27,.15);color:var(--warn)}
+  .tag.info{background:rgba(47,111,208,.13);color:var(--info)}
+  .tag.mut{background:var(--panel-3);color:var(--t3)}
+  .tag.acc{background:var(--accent-soft);color:var(--accent-deep)} body.dark .tag.acc{color:var(--accent-2)}
+  .prov{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:750;padding:2px 6px;border-radius:4px;letter-spacing:.03em;text-transform:uppercase}
+  .prov.c{background:rgba(47,111,208,.12);color:var(--info)}
+  .prov.m{background:rgba(18,164,107,.13);color:var(--pos)}
+  .prov.b{background:rgba(200,136,27,.15);color:var(--warn)}
+  .chartbox{padding:6px 4px}
+  svg.ch{width:100%;height:auto;display:block;overflow:visible}
+  svg.ch text{font-family:inherit;fill:var(--t3);font-size:11px}
+  svg.ch text.lab{fill:var(--t2);font-size:11.5px;font-weight:600}
+  svg.ch text.val{fill:var(--t1);font-size:11.5px;font-weight:700}
+  svg.ch line.grid{stroke:var(--line);stroke-width:1}
+  svg.ch line.axis{stroke:var(--line-2);stroke-width:1}
+  .insight{display:flex;gap:9px;align-items:flex-start;margin-top:13px;padding:11px 13px;border-radius:10px;
+    background:var(--accent-soft);font-size:13px;color:var(--t2);line-height:1.5}
+  .insight svg{width:15px;height:15px;flex-shrink:0;margin-top:1.5px;stroke:var(--accent);fill:none;stroke-width:2}
+  .insight b{color:var(--t1)}
+  .controls{display:flex;flex-wrap:wrap;gap:14px}
+  .ctrl label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);font-weight:700;margin-bottom:6px}
+  .ctrl select,.ctrl input[type=number]{font-family:inherit;font-size:13.5px;font-weight:600;color:var(--t1);background:var(--panel-2);
+    border:1px solid var(--line-2);border-radius:9px;padding:8px 11px;min-width:190px;cursor:pointer}
+  .seg{display:inline-flex;background:var(--panel-3);border-radius:9px;padding:3px;gap:2px}
+  .seg button{font-family:inherit;font-size:12.5px;font-weight:640;color:var(--t2);background:transparent;border:none;
+    border-radius:7px;padding:6px 12px;cursor:pointer;transition:.14s;white-space:nowrap}
+  .seg button:hover{color:var(--t1)}
+  .seg button.on{background:var(--panel);color:var(--accent-deep);box-shadow:0 1px 3px rgba(0,0,0,.09)}
+  body.dark .seg button.on{background:var(--panel);color:var(--accent-2)}
+  .sliderbox{margin-top:16px;padding:13px 15px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2)}
+  .sliderbox .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+  .sliderbox .lab{font-size:12px;font-weight:650;color:var(--t3);text-transform:uppercase;letter-spacing:.06em}
+  .sliderbox .val{font-size:16px;font-weight:750;color:var(--t1);font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:5px;border-radius:5px;background:var(--line-2);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--accent);
+    cursor:pointer;border:3px solid var(--panel);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--accent);cursor:pointer;border:3px solid var(--panel)}
+  .ticks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--t4);margin-top:5px;font-weight:600}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .kpi.hero{border-color:var(--accent);background:var(--accent-soft)}
+  .kpi .k{font-size:11.5px;color:var(--t3);font-weight:620;margin-bottom:5px}
+  .kpi .v{font-size:24px;font-weight:770;letter-spacing:-.6px;line-height:1.05;font-variant-numeric:tabular-nums}
+  .kpi .u{font-size:11.5px;color:var(--t3);margin-top:4px}
+  .barstack{display:flex;height:38px;border-radius:9px;overflow:hidden;border:1px solid var(--line)}
+  .barstack .sg{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:750;color:#fff;position:relative}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:11px;font-size:12.5px;color:var(--t2)}
+  .legend .lg{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .legend b{color:var(--t1);font-variant-numeric:tabular-nums}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:11.5px;font-weight:600;color:var(--t2);background:var(--panel-3);border:1px solid var(--line);
+    border-radius:7px;padding:4px 9px}
+  .chip b{color:var(--t1);font-weight:700}
+  .fp{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+  .fpcard{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel-2);position:relative}
+  .fpcard .fprize{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:750;color:var(--accent-deep);
+    background:var(--accent-soft);border-radius:5px;padding:2px 6px}
+  body.dark .fpcard .fprize{color:var(--accent-2)}
+  .fpcard .fv{font-size:20px;font-weight:770;letter-spacing:-.5px}
+  .fpcard .fl{font-size:13px;font-weight:650;margin-top:2px}
+  .fpcard .fs{font-size:11.5px;color:var(--t3);margin-top:6px;line-height:1.45}
+  .levwrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:10px}
+  .lev{border:1px solid var(--line);border-radius:11px;padding:11px 13px;background:var(--panel-2);cursor:pointer;transition:.14s}
+  .lev:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .lev.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .lev .lt{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:670;margin-bottom:4px}
+  .lev .dotc{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .lev p{font-size:11.8px;color:var(--t3);line-height:1.45}
+  .lev .conf{margin-left:auto;font-size:9.5px;font-weight:750;text-transform:uppercase;letter-spacing:.04em;
+    padding:2px 6px;border-radius:4px;white-space:nowrap}
+  .conf.hi{background:rgba(18,164,107,.14);color:var(--pos)}
+  .conf.mod{background:rgba(200,136,27,.15);color:var(--warn)}
+  .conf.nt{background:var(--panel-3);color:var(--t4)}
+  .pillargrp{margin-bottom:18px}
+  .pillargrp h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);font-weight:750;margin-bottom:9px;
+    display:flex;align-items:center;gap:8px}
+  .pillargrp h4 span{font-weight:650;color:var(--t4);text-transform:none;letter-spacing:0;font-size:11.5px}
+  .morebtn{width:100%;margin-top:12px;padding:9px;border:1px dashed var(--line-2);border-radius:10px;background:transparent;
+    color:var(--t2);font-family:inherit;font-size:12.5px;font-weight:650;cursor:pointer}
+  .morebtn:hover{border-color:var(--accent);color:var(--accent-deep)}
+  .matrix{width:100%;border-collapse:separate;border-spacing:4px}
+  .matrix td,.matrix th{text-align:center;padding:11px 8px;border-radius:8px;font-size:12.5px;border:none}
+  .matrix th{background:transparent;color:var(--t3);text-transform:none;letter-spacing:0;font-size:11.5px;font-weight:650}
+  .matrix td.c{background:var(--panel-3);font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums}
+  .matrix td.c.best{background:rgba(18,164,107,.16);color:var(--pos)}
+  .matrix td.c.worst{background:rgba(211,69,63,.12);color:var(--neg)}
+  .matrix td.c.cur{outline:2px solid var(--accent);outline-offset:-2px}
+  .foot-note{font-size:11.5px;color:var(--t4);line-height:1.5;margin-top:10px}
+  .reco{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .reco:last-child{border-bottom:none;padding-bottom:0}
+  .reco .num{width:24px;height:24px;border-radius:7px;background:var(--accent-soft);color:var(--accent-deep);
+    display:grid;place-items:center;font-size:12px;font-weight:780;flex-shrink:0}
+  body.dark .reco .num{color:var(--accent-2)}
+  .reco .rt{font-size:13.5px;font-weight:670;margin-bottom:3px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .reco p{font-size:12.8px;color:var(--t2);line-height:1.5}
+  .timeline{position:relative;padding:10px 0 0}
+  .phaserow{display:grid;gap:3px;margin-bottom:4px}
+  .phase{padding:9px 10px;border-radius:8px;font-size:11.5px;font-weight:680;text-align:center;color:#fff}
+  .bulletlist{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .bulletlist li{display:flex;gap:8px;font-size:13px;color:var(--t2);line-height:1.5}
+  .bulletlist li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:11px;overflow:hidden;border:1px solid var(--line)}
+  .split>div{padding:14px 16px}
+  .split>div:first-child{border-right:1px solid var(--line);background:var(--panel-2)}
+  .split h5{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin-bottom:9px}
+
+  :root{--accent:#B45309;--accent-2:#D97706;--accent-deep:#8A3E07;
+    --accent-soft:rgba(180,83,9,.09);--accent-glow:rgba(180,83,9,.26);
+    --rm:#B45309;--conv:#0891B2;--oh:#6F5BD6;--mar:#12A46B;}
+  body.dark{--accent:#F59E0B;--accent-2:#FBBF24;--accent-deep:#D97706;
+    --accent-soft:rgba(245,158,11,.14);--rm:#F59E0B;}
+  .mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px}
+  .rawbox{background:var(--panel-3);border:1px solid var(--line);border-radius:9px;padding:11px 13px;
+    font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.3px;line-height:1.65;color:var(--t1);
+    white-space:pre-wrap;word-break:break-word}
+  .vsel{display:flex;gap:8px;flex-wrap:wrap}
+  .vbtn{flex:1;min-width:150px;border:2px solid var(--line);border-radius:12px;padding:13px 15px;background:var(--panel-2);
+    cursor:pointer;font-family:inherit;text-align:left;transition:.14s}
+  .vbtn:hover{border-color:var(--accent)}
+  .vbtn.on{border-color:var(--accent);background:var(--accent-soft)}
+  .vbtn .vn{font-size:15px;font-weight:720;margin-bottom:3px}
+  .vbtn .vm{font-size:12px;color:var(--t3)}
+  .vbtn.out{opacity:.45}
+  .prof{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;background:var(--line);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .prof .pc{background:var(--panel);padding:13px 15px}
+  .prof .pv{font-size:19px;font-weight:760;letter-spacing:-.3px}
+  .prof .pl{font-size:11.5px;color:var(--t3);margin-top:3px}
+  .people{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+  .person{border:1px solid var(--line);border-radius:13px;background:var(--panel-2);padding:15px}
+  .person .ph{display:flex;align-items:flex-start;gap:10px;margin-bottom:11px}
+  .person .av{width:38px;height:38px;border-radius:10px;background:var(--accent-soft);color:var(--accent-deep);
+    display:grid;place-items:center;font-size:14px;font-weight:800;flex-shrink:0}
+  body.dark .person .av{color:var(--accent-2)}
+  .person .pr{font-size:14.5px;font-weight:700;line-height:1.25}
+  .person .pa{font-size:11.5px;color:var(--t3);margin-top:2px}
+  .axes{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+  .ax{display:grid;grid-template-columns:96px 1fr 52px;gap:9px;align-items:center}
+  .ax .al{font-size:11.5px;color:var(--t3);font-weight:620}
+  .ax .abar{height:8px;border-radius:5px;background:var(--panel-3);position:relative;overflow:hidden}
+  .ax .afill{height:100%;border-radius:5px;background:var(--accent)}
+  .ax .av2{font-size:11.5px;font-weight:700;text-align:right;color:var(--t2)}
+  .evid{border-top:1px solid var(--line);padding-top:10px;margin-top:6px}
+  .evid .er{display:flex;gap:8px;font-size:11.8px;color:var(--t2);line-height:1.45;margin-bottom:6px}
+  .evid .er b{color:var(--t1)}
+  .pnote{font-size:12px;color:var(--t2);line-height:1.5;margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
+  .pnote b{color:var(--t1)}
+  .script{border-left:3px solid var(--accent);padding:12px 16px;background:var(--panel-2);border-radius:0 10px 10px 0;margin-bottom:11px}
+  .script .sl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);font-weight:750;margin-bottom:5px}
+  .script p{font-size:14px;line-height:1.55;color:var(--t1);font-style:italic}
+  .ladder{display:flex;flex-direction:column;gap:0}
+  .lrow{display:grid;grid-template-columns:70px 1fr auto;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);align-items:center}
+  .lrow:last-child{border-bottom:none}
+  .lrow .lstep{font-size:11px;font-weight:800;color:var(--accent-deep);letter-spacing:.06em}
+  body.dark .lrow .lstep{color:var(--accent-2)}
+  .lrow .ltxt{font-size:13.5px;line-height:1.45}
+  .lrow .lval{font-size:14px;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .zbar{position:relative;height:56px;margin:18px 0 8px}
+  .ztrack{position:absolute;left:0;right:0;top:24px;height:8px;border-radius:5px;background:var(--panel-3)}
+  .zzone{position:absolute;top:24px;height:8px;background:var(--pos);opacity:.55;border-radius:5px}
+  .zmk{position:absolute;top:10px;width:3px;height:36px;border-radius:2px}
+  .zlab{position:absolute;font-size:11px;font-weight:750;white-space:nowrap;transform:translateX(-50%)}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:1100px){.grid4{grid-template-columns:1fr 1fr}}
+  .mapline{display:grid;grid-template-columns:1fr 40px 1fr;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+  .mapline:last-child{border-bottom:none}
+  .mapline .mus{text-align:right}
+  .mapline .mr{font-size:14px;font-weight:680}
+  .mapline .mm{font-size:12px;color:var(--t3);margin-top:2px;line-height:1.4}
+  .mapline .marrow{text-align:center;color:var(--accent);font-size:17px}
+  .matrix2{position:relative;width:100%;max-width:520px;aspect-ratio:1;border:1px solid var(--line);border-radius:12px;background:var(--panel-2)}
+  .q{position:absolute;width:50%;height:50%;display:grid;place-items:center;padding:14px;text-align:center;
+    font-size:12.5px;font-weight:650;color:var(--t3);line-height:1.35}
+  .dotv{position:absolute;width:15px;height:15px;border-radius:50%;background:var(--accent);
+    border:3px solid var(--panel);transform:translate(-50%,50%);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+  .dotv span{position:absolute;left:19px;top:-4px;font-size:12px;font-weight:750;color:var(--t1);white-space:nowrap}
+  .cockrow{display:grid;grid-template-columns:120px 1fr 130px 130px 110px;gap:12px;align-items:center;
+    padding:12px 0;border-bottom:1px solid var(--line)}
+  .cockrow input{font-family:inherit;font-size:16px;font-weight:700;background:var(--panel-2);border:2px solid var(--line-2);
+    border-radius:9px;padding:9px 11px;color:var(--t1);width:100%;font-variant-numeric:tabular-nums}
+  .cockrow input:focus{outline:none;border-color:var(--accent)}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7l7-4 7 4"/><path d="M3 11l4-8 4 8a4 4 0 0 1-8 0z"/><path d="M13 11l4-8 4 8a4 4 0 0 1-8 0z"/></svg></div>
+      <div><b>Negotiation Assist</b><div class="sd">Grinding media package</div></div>
+    </div>
+    <nav>
+      <div class="nav-lbl">Prepare</div>
+      <div class="nav-item active" data-view="brief"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Negotiation Brief</div>
+      <div class="nav-item" data-view="params"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Parameter Setting</div>
+      <div class="nav-item" data-view="intake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Quote Intake</div>
+      <div class="nav-item" data-view="normalise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Normalisation</div>
+      <div class="nav-item" data-view="compare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 18V6M10 18v-9M16 18v-5M22 18V4"/></svg>Bid Comparison</div>
+      <div class="nav-item" data-view="ruthless"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>Ruthless Competition</div>
+      <div class="nav-item" data-view="tco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 4 5-8"/></svg>TCO Model</div>
+      <div class="nav-item" data-view="targets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>Target Setting</div>
+      <div class="nav-lbl">Round 1 &#183; five vendors</div>
+      <div class="nav-item" data-view="r1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="18" cy="9" r="2.5"/></svg>Round 1 Preparation</div>
+      <div class="nav-item" data-view="r1sum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Round 1 Summary</div>
+      <div class="nav-lbl">Round 2 &#183; shortlist</div>
+      <div class="nav-item" data-view="r2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="18" cy="9" r="2.5"/></svg>Round 2 Preparation</div>
+      <div class="nav-item" data-view="r2sum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Round 2 Summary</div>
+      <div class="nav-lbl">Execute</div>
+      <div class="nav-item" data-view="cockpit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20a8 8 0 1 1 8-8"/><path d="M12 12l5-3"/></svg>Live Cockpit</div>
+      <div class="nav-item" data-view="award"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg>Award &amp; Savings</div>
+      <div class="nav-lbl">Method</div>
+      <div class="nav-item" data-view="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/></svg>Data &amp; Assumptions</div>
+    </nav>
+    <div class="side-foot">
+      <div class="toggle-row" id="dmToggle"><span>Dark mode</span><span class="sw" id="dmSwitch"></span></div>
+      <div class="toggle-row" id="curToggle"><span>Show in IDR</span><span class="sw" id="curSwitch"></span></div>
+      <div class="user"><div class="ava">LN</div><div><div class="nm">Lead Negotiator</div><div class="ro">Grinding media package</div></div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <span class="pill live"><span class="dot"></span>Round <span id="pillRound">1</span> of 2</span>
+      <span class="pill">3,900 t initial charge &#183; 2.4 Mt/yr ground</span>
+      <span class="pill" id="pillValue"></span>
+      <span class="pill" id="pillLead"></span>
+      <div class="spacer"></div>
+      <span class="pill" id="pillCur"></span>
+    </header>
+    <div class="scroll"><div class="wrap">
+
+<!-- ============ BRIEF ============ -->
+<div class="view active" data-view="brief">
+  <div class="vhead"><h1>Negotiation brief</h1><div class="sub">A grinding media supply agreement across two specifications, five invited vendors and two negotiation rounds. Evaluated on three-year total cost of ownership rather than on quoted price per tonne.</div></div>
+  <div class="stat-row" id="briefStats"></div>
+  <div class="grid2">
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span>Scope</div></div>
+      <div class="card-b flush"><table id="tb_scope"><tbody></tbody></table></div>
+    </section>
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span>Non-negotiables</div>
+        <div class="hint">Stated to every vendor in round 1</div></div>
+      <div class="card-b"><ul class="bulletlist" id="nonneg"></ul></div>
+    </section>
+  </div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/></svg></span>Vendors invited</div></div>
+    <div class="card-b flush"><table id="tb_vendors"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>Round plan</div></div>
+    <div class="card-b flush"><table id="tb_rounds"><tbody></tbody></table></div>
+  </section>
+</div>
+
+<!-- ============ PARAMS ============ -->
+<div class="view" data-view="params">
+  <div class="vhead"><h1>Parameter setting</h1><div class="sub">The cost structure the bids will be compared on, split between upfront and operational. Every variable is either a constant we set, or a field the vendors have to supply.</div></div>
+  <div class="grid2">
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>Upfront cost</div><div class="hint">Paid once, at acquisition</div></div>
+      <div class="card-b flush"><table id="tb_upf"><tbody></tbody></table></div>
+    </section>
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>Operational cost</div><div class="hint">Recurring, over the ownership horizon</div></div>
+      <div class="card-b flush"><table id="tb_ops"><tbody></tbody></table></div>
+    </section>
+  </div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Data request generated for vendors</div>
+      <div class="hint">Sent with the request for quotation, derived from the variables above</div></div>
+    <div class="card-b"><div class="rawbox" id="dataReq"></div>
+      <div class="insight"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span>Fourteen of the twenty-two fields are operational rather than upfront. Asking for them at the request stage is what makes a three-year comparison possible later. A vendor who declines to supply a wear rate or a supply reliability guarantee has told you something before the negotiation starts.</span></div></div>
+  </section>
+</div>
+
+<!-- ============ INTAKE ============ -->
+<div class="view" data-view="intake">
+  <div class="vhead"><h1>Quote intake</h1><div class="sub">Five quotes in four formats. Field-level extraction with a confidence on each, and an explicit list of what could not be read or was never supplied.</div></div>
+  <div class="stat-row" id="intakeStats"></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></span>What arrived</div></div>
+    <div class="card-b flush"><table id="tb_intake"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg></span>Gaps and follow-ups</div>
+      <div class="hint">Every gap becomes a question in round 1</div></div>
+    <div class="card-b flush"><table id="tb_gaps"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 4h16v16H4z"/></svg></span>Extraction example</div>
+      <div class="hint">One quote, as received and as structured</div></div>
+    <div class="card-b"><div class="grid2">
+      <div><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin-bottom:9px">As received</h5>
+        <div class="rawbox" id="qRaw"></div></div>
+      <div><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin-bottom:9px">Extracted</h5>
+        <div id="qOut"></div></div>
+    </div></div>
+  </section>
+</div>
+
+<!-- ============ NORMALISE ============ -->
+<div class="view" data-view="normalise">
+  <div class="vhead"><h1>Normalisation</h1><div class="sub">Five quotes written to five different sets of assumptions. These are the adjustments that make them comparable, each one visible and reversible.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>Adjustments applied</div></div>
+    <div class="card-b flush"><table id="tb_norm"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 12c3-6 6-6 9 0s6 6 9 0"/></svg></span>Effect of normalisation on the headline ranking</div></div>
+    <div class="card-b"><div class="chartbox" id="ch_norm"></div>
+      <div class="legrow" style="display:flex;gap:18px;font-size:13px;color:var(--t2);margin-top:10px">
+        <span><i style="background:var(--t4);width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:6px"></i>As quoted</span>
+        <span><i style="background:var(--accent);width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:6px"></i>Normalised</span></div>
+      <div class="insight" id="normIns"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span></span></div></div>
+  </section>
+</div>
+
+<!-- ============ COMPARE ============ -->
+<div class="view" data-view="compare">
+  <div class="vhead"><h1>Bid comparison</h1><div class="sub">Normalised, line by line, at the level a buyer can put to a vendor. Best rate in each line is highlighted.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span>Forged media, per tonne</div><div class="hint" id="cmpHint"></div></div>
+    <div class="card-b flush"><table id="tb_cmp_pm"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span>High-chrome media, per tonne</div></div>
+    <div class="card-b flush"><table id="tb_cmp_tr"><tbody></tbody></table></div>
+  </section>
+</div>
+
+<!-- ============ RUTHLESS ============ -->
+<div class="view" data-view="ruthless">
+  <div class="vhead"><h1>Ruthless competition</h1><div class="sub">The best rate achieved in each line, by any vendor, assembled into a single theoretical package. No vendor offers it, and no vendor is shown it. It sets the floor the targets are built from.</div></div>
+  <div class="kpis" id="ruthKpis"></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></span>Best rate by line</div>
+      <div class="hint">Who holds the best rate, and what each vendor gives away against it</div></div>
+    <div class="card-b flush"><table id="tb_ruth"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 18V6M10 18v-7M16 18v-11M22 18V4"/></svg></span>Gap to the theoretical best</div></div>
+    <div class="card-b"><div class="chartbox" id="ch_ruth"></div>
+      <div class="insight" id="ruthIns"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span></span></div></div>
+  </section>
+</div>
+
+<!-- ============ TCO ============ -->
+<div class="view" data-view="tco">
+  <div class="vhead"><h1>Total cost of ownership</h1><div class="sub">Acquisition, duty, freight and financing, against wear-driven makeup volume, breakage, packaging, insurance, stockout risk and the year-end volume rebate, discounted over the contract horizon.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 21V8M10 21V3M16 21v-9"/></svg></span>Assumptions</div>
+      <div class="hint">Agreed with plant operations and finance before the negotiation</div></div>
+    <div class="card-b">
+      <div class="grid2">
+        <div class="sliderbox" style="margin-top:0"><div class="row"><span class="lab">Steel/chrome index movement</span><span class="val" id="fuelV"></span></div>
+          <input type="range" id="inFuel" min="60" max="140" step="1" value="100">
+          <div class="ticks"><span>60%</span><span>80%</span><span>100%</span><span>120%</span><span>140%</span></div></div>
+        <div class="sliderbox" style="margin-top:0"><div class="row"><span class="lab">Annual clinker throughput</span><span class="val" id="kmV"></span></div>
+          <input type="range" id="inKm" min="750" max="4000" step="50" value="2400">
+          <div class="ticks"><span>0.75 Mt</span><span>1.7 Mt</span><span>2.4 Mt</span><span>3.2 Mt</span><span>4.0 Mt</span></div></div>
+      </div>
+      <div class="grid2" style="margin-top:14px">
+        <div class="sliderbox" style="margin-top:0"><div class="row"><span class="lab">Contract horizon</span><span class="val" id="yrV"></span></div>
+          <input type="range" id="inYr" min="1" max="5" step="1" value="3">
+          <div class="ticks"><span>1 yr</span><span>2</span><span>3</span><span>4</span><span>5 yrs</span></div></div>
+        <div class="sliderbox" style="margin-top:0"><div class="row"><span class="lab">Discount rate</span><span class="val" id="drV"></span></div>
+          <input type="range" id="inDr" min="0" max="180" step="5" value="90">
+          <div class="ticks"><span>0%</span><span>6%</span><span>12%</span><span>18%</span></div></div>
+      </div>
+    </div>
+  </section>
+  <div class="kpis" id="tcoKpis"></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 6h18M6 6v4M12 6v8M18 6v12"/></svg></span>Quoted price against total cost of ownership</div>
+      <div class="hint">Whole package, 3,900 tonnes initial charge plus makeup volume</div></div>
+    <div class="card-b"><div class="chartbox" id="ch_tco"></div>
+      <div class="legrow" style="display:flex;gap:18px;font-size:13px;color:var(--t2);margin-top:10px">
+        <span><i style="background:var(--t4);width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:6px"></i>Quoted, initial charge only</span>
+        <span><i style="background:var(--accent);width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:6px"></i>Total cost of ownership</span></div>
+      <div class="insight" id="tcoIns"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span></span></div></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span>Build-up, per tonne of forged media</div></div>
+    <div class="card-b flush"><table id="tb_tco"><tbody></tbody></table></div>
+  </section>
+</div>
+
+<!-- ============ TARGETS ============ -->
+<div class="view" data-view="targets">
+  <div class="vhead"><h1>Target setting</h1><div class="sub">For each vendor: the most desired outcome derived from their own margin, and the least acceptable agreement derived from what the next best alternative already offers us. Where the two do not overlap, there is no zone of agreement.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg></span>Zone of potential agreement, forged media per tonne</div>
+      <div class="hint">Green band is the zone. No band means no overlap</div></div>
+    <div class="card-b"><div id="zopaBars"></div>
+      <div class="insight" id="zopaIns"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span></span></div></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span>Derivation</div></div>
+    <div class="card-b flush"><table id="tb_zopa"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Our position</div></div>
+    <div class="card-b flush"><table id="tb_ourpos"><tbody></tbody></table></div>
+  </section>
+</div>
+
+<!-- ============ ROUND 1 ============ -->
+<div class="view" data-view="r1">
+  <div class="vhead"><h1>Round 1 preparation</h1><div class="sub">All five vendors, in parallel, on the same day. Objective is to clarify, test, anchor and communicate urgency. No concession is given in this round.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/></svg></span>Select vendor</div></div>
+    <div class="card-b"><div class="vsel" id="r1sel"></div></div>
+  </section>
+  <div id="r1body"></div>
+</div>
+
+<div class="view" data-view="r1sum">
+  <div class="vhead"><h1>Round 1 summary</h1><div class="sub">Movement, re-ranking and the shortlist decision, with the reason each vendor is carried or dropped.</div></div>
+  <div id="r1sumbody"></div>
+</div>
+
+<!-- ============ ROUND 2 ============ -->
+<div class="view" data-view="r2">
+  <div class="vhead"><h1>Round 2 preparation</h1><div class="sub">Three shortlisted vendors. Objective is to close the gap to the target, trade terms, and secure a best and final offer. Counterparty reads are updated with what was observed in round 1.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/></svg></span>Select vendor</div>
+      <div class="hint">Two vendors were released after round 1</div></div>
+    <div class="card-b"><div class="vsel" id="r2sel"></div></div>
+  </section>
+  <div id="r2body"></div>
+</div>
+
+<div class="view" data-view="r2sum">
+  <div class="vhead"><h1>Round 2 summary</h1><div class="sub">Best and final offers, final ranking on total cost of ownership, and the recommended award.</div></div>
+  <div id="r2sumbody"></div>
+</div>
+
+<!-- ============ COCKPIT ============ -->
+<div class="view" data-view="cockpit">
+  <div class="vhead"><h1>Live cockpit</h1><div class="sub">Type a revised offer as it is given in the room. Ranking, total cost of ownership and position against the target recompute on every keystroke.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 20a8 8 0 1 1 8-8"/><path d="M12 12l5-3"/></svg></span>Revised offers</div>
+      <div class="hint">Forged and high-chrome media, per tonne</div>
+      <button class="aibtn" type="button" id="cockReset" style="margin-left:auto">Reset to opening quotes</button></div>
+    <div class="card-b"><div id="cockpit"></div></div>
+  </section>
+  <div class="kpis" id="cockKpis"></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 18V6M10 18v-7M16 18v-11M22 18V4"/></svg></span>Live ranking</div></div>
+    <div class="card-b"><div class="chartbox" id="ch_cock"></div>
+      <div class="insight" id="cockIns"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span></span></div></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span>Position against target</div></div>
+    <div class="card-b flush"><table id="tb_cock"><tbody></tbody></table></div>
+  </section>
+</div>
+
+<!-- ============ AWARD ============ -->
+<div class="view" data-view="award">
+  <div class="vhead"><h1>Award and savings</h1><div class="sub">Baseline definition, savings measured against it, what was conceded, and the review that closes the file.</div></div>
+  <div class="kpis" id="awardKpis"></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 12c3-6 6-6 9 0s6 6 9 0"/></svg></span>From opening quote to award</div></div>
+    <div class="card-b"><div class="chartbox" id="ch_award"></div></div>
+  </section>
+  <div class="grid2">
+    <section class="card">
+      <div class="card-h"><div class="ttl">Baseline and savings</div></div>
+      <div class="card-b flush"><table id="tb_sav"><tbody></tbody></table></div>
+    </section>
+    <section class="card">
+      <div class="card-h"><div class="ttl">What was conceded</div></div>
+      <div class="card-b flush"><table id="tb_conc"><tbody></tbody></table></div>
+    </section>
+  </div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>Post-negotiation review</div></div>
+    <div class="card-b flush"><table id="tb_review"><tbody></tbody></table></div>
+  </section>
+</div>
+
+<!-- ============ DATA ============ -->
+<div class="view" data-view="data">
+  <div class="vhead"><h1>Data and assumptions</h1><div class="sub">Inputs, sources and the governance that applies to the counterparty reads.</div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl">Source register</div></div>
+    <div class="card-b flush"><table id="tb_src"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span>Counterparty read, rules of use</div>
+      <div class="hint">Applies to every profile in this tool</div></div>
+    <div class="card-b flush"><table id="tb_rules"><tbody></tbody></table></div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl">Model assumptions</div></div>
+    <div class="card-b flush"><table id="tb_assum"><tbody></tbody></table></div>
+  </section>
+  <p class="foot-note">Figures are illustrative and built on a synthetic package constructed to mirror a grinding media supply agreement of this scale. Vendors, their attendees and our team are identified by role only. Market series for steel, ferrochrome and financing rates as at 12 September 2026.</p>
+</div>
+
+    </div></div>
+  </div>
+</div>
+
+<script>
+
+/* ---------- tiny svg chart kit ---------- */
+const NS='http://www.w3.org/2000/svg';
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function plural(w){return w==='box'?'boxes':w+'s';}
+function nfmt(n,d){return Number(n).toLocaleString('en-US',{minimumFractionDigits:d||0,maximumFractionDigits:d===undefined?0:d});}
+function svgOpen(w,h){return '<svg class="ch" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid meet">';}
+function hbar(rows,o){
+  o=o||{};var W=o.w||700,rh=o.rh||30,pad=o.padL||178,gap=6,H=rows.length*(rh+gap)+18;
+  var max=Math.max.apply(null,rows.map(function(r){return r.v;}))||1;
+  var s=svgOpen(W,H),y=8;
+  rows.forEach(function(r){
+    var w=Math.max(2,(r.v/max)*(W-pad-108));
+    s+='<text class="lab" x="'+(pad-10)+'" y="'+(y+rh/2+4)+'" text-anchor="end">'+esc(r.k)+'</text>';
+    s+='<rect x="'+pad+'" y="'+y+'" width="'+w+'" height="'+rh+'" rx="4" fill="'+(r.c||'var(--accent)')+'"/>';
+    s+='<text class="val" x="'+(pad+w+9)+'" y="'+(y+rh/2+4)+'">'+esc(r.t)+'</text>';
+    y+=rh+gap;
+  });
+  return s+'</svg>';
+}
+function vbar(rows,o){
+  o=o||{};var W=o.w||700,H=o.h||230,bot=42,top=24,bw=(W-40)/rows.length;
+  var max=o.max||Math.max.apply(null,rows.map(function(r){return r.v;}))*1.16||1;
+  var s=svgOpen(W,H);
+  s+='<line class="axis" x1="20" y1="'+(H-bot)+'" x2="'+(W-10)+'" y2="'+(H-bot)+'"/>';
+  rows.forEach(function(r,i){
+    var h=Math.max(1,(r.v/max)*(H-bot-top)),x=20+i*bw+bw*0.16,w=bw*0.68;
+    s+='<rect x="'+x+'" y="'+(H-bot-h)+'" width="'+w+'" height="'+h+'" rx="3" fill="'+(r.c||'var(--accent)')+'"/>';
+    s+='<text class="val" x="'+(x+w/2)+'" y="'+(H-bot-h-7)+'" text-anchor="middle">'+esc(r.t)+'</text>';
+    s+='<text x="'+(x+w/2)+'" y="'+(H-bot+16)+'" text-anchor="middle">'+esc(r.k)+'</text>';
+    if(r.k2)s+='<text x="'+(x+w/2)+'" y="'+(H-bot+29)+'" text-anchor="middle" font-size="10">'+esc(r.k2)+'</text>';
+  });
+  return s+'</svg>';
+}
+function waterfall(rows,o){
+  o=o||{};var W=o.w||760,H=o.h||250,bot=52,top=26,bw=(W-36)/rows.length;
+  var run=0,vals=[],minv=0,maxv=0;
+  rows.forEach(function(r){
+    if(r.type==='total'){vals.push({b:0,t:r.v});run=r.v;}
+    else{var s0=run,s1=run+r.v;vals.push({b:Math.min(s0,s1),t:Math.max(s0,s1)});run=s1;}
+    maxv=Math.max(maxv,vals[vals.length-1].t);
+  });
+  var sc=(H-bot-top)/(maxv*1.06||1);
+  var s=svgOpen(W,H);
+  s+='<line class="axis" x1="18" y1="'+(H-bot)+'" x2="'+(W-10)+'" y2="'+(H-bot)+'"/>';
+  rows.forEach(function(r,i){
+    var v=vals[i],x=18+i*bw+bw*0.17,w=bw*0.66;
+    var y=H-bot-v.t*sc,h=Math.max(1.5,(v.t-v.b)*sc);
+    var c=r.type==='total'?'var(--accent)':(r.v<0?'var(--neg)':'var(--info)');
+    s+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="3" fill="'+c+'"/>';
+    s+='<text class="val" x="'+(x+w/2)+'" y="'+(y-7)+'" text-anchor="middle">'+esc(r.t)+'</text>';
+    var lines=String(r.k).split('|');
+    lines.forEach(function(ln,j){
+      s+='<text x="'+(x+w/2)+'" y="'+(H-bot+16+j*12)+'" text-anchor="middle" font-size="10.5">'+esc(ln)+'</text>';
+    });
+  });
+  return s+'</svg>';
+}
+function lineChart(series,xlabs,o){
+  o=o||{};var W=o.w||720,H=o.h||250,L=o.padL||48,R=14,T=16,B=38;
+  var all=[];series.forEach(function(s){s.v.forEach(function(v){if(v!==null&&v!==undefined)all.push(v);});});
+  var mn=o.min!==undefined?o.min:Math.min.apply(null,all),mx=o.max!==undefined?o.max:Math.max.apply(null,all);
+  var span=(mx-mn)||1;mn-=span*0.12;mx+=span*0.12;
+  var px=function(i){return L+i*((W-L-R)/Math.max(1,xlabs.length-1));};
+  var py=function(v){return T+(1-(v-mn)/(mx-mn))*(H-T-B);};
+  var s=svgOpen(W,H);
+  for(var g=0;g<=4;g++){var yy=T+g*(H-T-B)/4,vv=mx-(mx-mn)*g/4;
+    s+='<line class="grid" x1="'+L+'" y1="'+yy+'" x2="'+(W-R)+'" y2="'+yy+'"/>';
+    s+='<text x="'+(L-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="10.5">'+nfmt(vv,o.dec===undefined?0:o.dec)+'</text>';}
+  xlabs.forEach(function(l,i){ if(o.every&&i%o.every!==0&&i!==xlabs.length-1)return;
+    s+='<text x="'+px(i)+'" y="'+(H-B+16)+'" text-anchor="middle" font-size="10.5">'+esc(l)+'</text>';});
+  if(o.band){var d1='',d2='';
+    o.band.lo.forEach(function(v,i){d1+=(i?'L':'M')+px(i)+' '+py(v);});
+    for(var bi=o.band.hi.length-1;bi>=0;bi--){d2+='L'+px(bi)+' '+py(o.band.hi[bi]);}
+    s+='<path d="'+d1+d2+'Z" fill="'+(o.band.c||'var(--accent)')+'" opacity="0.14" stroke="none"/>';}
+  series.forEach(function(se){
+    var d='',started=false;
+    se.v.forEach(function(v,i){ if(v===null||v===undefined)return;
+      d+=(started?'L':'M')+px(i)+' '+py(v);started=true;});
+    s+='<path d="'+d+'" fill="none" stroke="'+se.c+'" stroke-width="'+(se.w||2.2)+'" stroke-linejoin="round" stroke-linecap="round"'+(se.dash?' stroke-dasharray="5 4"':'')+'/>';
+    if(se.dots!==false)se.v.forEach(function(v,i){if(v===null||v===undefined)return;
+      s+='<circle cx="'+px(i)+'" cy="'+py(v)+'" r="2.8" fill="'+se.c+'"/>';});
+  });
+  return s+'</svg>';
+}
+function scatter(pts,o){
+  o=o||{};var W=o.w||720,H=o.h||330,L=56,R=18,T=18,B=48;
+  var xs=pts.map(function(p){return p.x;}),ys=pts.map(function(p){return p.y;});
+  var xmn=Math.min.apply(null,xs),xmx=Math.max.apply(null,xs),ymn=Math.min.apply(null,ys),ymx=Math.max.apply(null,ys);
+  var xp=(xmx-xmn)*0.12||1,yp=(ymx-ymn)*0.12||1;xmn-=xp;xmx+=xp;ymn-=yp;ymx+=yp;
+  var px=function(v){return L+((v-xmn)/(xmx-xmn))*(W-L-R);};
+  var py=function(v){return T+(1-(v-ymn)/(ymx-ymn))*(H-T-B);};
+  var rmx=Math.max.apply(null,pts.map(function(p){return p.r||1;}));
+  var s=svgOpen(W,H);
+  for(var g=0;g<=4;g++){var yy=T+g*(H-T-B)/4;
+    s+='<line class="grid" x1="'+L+'" y1="'+yy+'" x2="'+(W-R)+'" y2="'+yy+'"/>';
+    s+='<text x="'+(L-8)+'" y="'+(yy+4)+'" text-anchor="end" font-size="10.5">'+nfmt(ymx-(ymx-ymn)*g/4,o.ydec||0)+'</text>';}
+  for(var g2=0;g2<=4;g2++){var xx=L+g2*(W-L-R)/4;
+    s+='<text x="'+xx+'" y="'+(H-B+16)+'" text-anchor="middle" font-size="10.5">'+nfmt(xmn+(xmx-xmn)*g2/4,o.xdec||0)+'</text>';}
+  if(o.medX!==undefined)s+='<line x1="'+px(o.medX)+'" y1="'+T+'" x2="'+px(o.medX)+'" y2="'+(H-B)+'" stroke="var(--line-2)" stroke-dasharray="5 4"/>';
+  if(o.medY!==undefined)s+='<line x1="'+L+'" y1="'+py(o.medY)+'" x2="'+(W-R)+'" y2="'+py(o.medY)+'" stroke="var(--line-2)" stroke-dasharray="5 4"/>';
+  pts.forEach(function(p){
+    var r=6+Math.sqrt((p.r||1)/rmx)*16;
+    s+='<circle cx="'+px(p.x)+'" cy="'+py(p.y)+'" r="'+r+'" fill="'+(p.c||'var(--accent)')+'" opacity="0.5"/>';
+    s+='<circle cx="'+px(p.x)+'" cy="'+py(p.y)+'" r="'+r+'" fill="none" stroke="'+(p.c||'var(--accent)')+'" stroke-width="1.4"/>';
+    if(p.lab)s+='<text x="'+px(p.x)+'" y="'+(py(p.y)-r-5)+'" text-anchor="middle" font-size="10.5" class="lab">'+esc(p.lab)+'</text>';
+  });
+  s+='<text x="'+((L+W-R)/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="11" class="lab">'+esc(o.xlab||'')+'</text>';
+  s+='<text x="14" y="'+((T+H-B)/2)+'" text-anchor="middle" font-size="11" class="lab" transform="rotate(-90 14 '+((T+H-B)/2)+')">'+esc(o.ylab||'')+'</text>';
+  return s+'</svg>';
+}
+function pareto(items,o){
+  o=o||{};var W=o.w||740,H=o.h||260,L=46,R=46,T=18,B=44;
+  var tot=items.reduce(function(a,b){return a+b.v;},0),bw=(W-L-R)/items.length;
+  var mx=Math.max.apply(null,items.map(function(i){return i.v;}))*1.12;
+  var s=svgOpen(W,H),cum=0,pts=[];
+  items.forEach(function(it,i){
+    var h=(it.v/mx)*(H-T-B),x=L+i*bw+bw*0.12;
+    s+='<rect x="'+x+'" y="'+(H-B-h)+'" width="'+(bw*0.76)+'" height="'+h+'" rx="2" fill="var(--accent)" opacity="0.8"/>';
+    cum+=it.v;pts.push({x:x+bw*0.38,y:T+(1-cum/tot)*(H-T-B)});
+    if(items.length<=14)s+='<text x="'+(x+bw*0.38)+'" y="'+(H-B+15)+'" text-anchor="middle" font-size="10">'+esc(it.k)+'</text>';
+  });
+  var d='';pts.forEach(function(p,i){d+=(i?'L':'M')+p.x+' '+p.y;});
+  s+='<path d="'+d+'" fill="none" stroke="var(--warn)" stroke-width="2.2"/>';
+  s+='<line class="axis" x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'"/>';
+  [0,25,50,75,100].forEach(function(p){var yy=T+(1-p/100)*(H-T-B);
+    s+='<text x="'+(W-R+7)+'" y="'+(yy+4)+'" font-size="10.5" fill="var(--warn)">'+p+'%</text>';});
+  return s+'</svg>';
+}
+function donut(parts,o){
+  o=o||{};var S=o.s||180,cx=S/2,cy=S/2,r=S*0.40,sw=S*0.17;
+  var tot=parts.reduce(function(a,b){return a+b.v;},0),ang=-Math.PI/2;
+  var s=svgOpen(S,S);
+  parts.forEach(function(p){
+    var a=p.v/tot*Math.PI*2,x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);
+    ang+=a;var x2=cx+r*Math.cos(ang),y2=cy+r*Math.sin(ang);
+    s+='<path d="M'+x1+' '+y1+' A'+r+' '+r+' 0 '+(a>Math.PI?1:0)+' 1 '+x2+' '+y2+'" fill="none" stroke="'+p.c+'" stroke-width="'+sw+'"/>';
+  });
+  if(o.mid)s+='<text x="'+cx+'" y="'+(cy+2)+'" text-anchor="middle" class="val" font-size="17">'+esc(o.mid)+'</text>';
+  if(o.sub)s+='<text x="'+cx+'" y="'+(cy+18)+'" text-anchor="middle" font-size="10.5">'+esc(o.sub)+'</text>';
+  return s+'</svg>';
+}
+function heatCell(v,lo,hi,inv){
+  var t=(v-lo)/((hi-lo)||1);if(inv)t=1-t;t=Math.max(0,Math.min(1,t));
+  return 'rgba('+Math.round(211-(211-18)*t)+','+Math.round(69+(164-69)*t)+','+Math.round(63+(107-63)*t)+',0.18)';
+}
+/* ---------- ui plumbing ---------- */
+function toggleAI(b){b.classList.toggle('open');var p=b.closest('.card').querySelector('.aiins');if(p)p.classList.toggle('open');}
+function bindNav(){
+  document.querySelectorAll('.nav-item').forEach(function(n){
+    n.addEventListener('click',function(){
+      var v=n.getAttribute('data-view');
+      document.querySelectorAll('.nav-item').forEach(function(x){x.classList.toggle('active',x===n);});
+      document.querySelectorAll('.view').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-view')===v);});
+      document.querySelector('.scroll').scrollTop=0;
+      if(window.onViewChange)window.onViewChange(v);
+    });
+  });
+  var dm=document.getElementById('dmToggle');
+  if(dm)dm.addEventListener('click',function(){
+    document.body.classList.toggle('dark');
+    document.getElementById('dmSwitch').classList.toggle('on');
+  });
+}
+
+/* ============================================================
+   PACKAGE
+   ============================================================ */
+const FX=16400;
+const QTY={pm:3000,tr:900}; /* initial mill charge, tonnes: forged, high-chrome */
+const A={fuel:1.00,km:2400000,years:3,dr:0.090,contrib:3400,insPM:0.0040,insTR:0.0030,
+  regPM:16,regTR:26,finRate:0.095};
+const S={cur:"USD",round:1,r1v:"A",r2v:"A",fuel:100,km:2400,yr:3,dr:90,cock:{}};
+
+const VENDORS=[
+{k:"A",n:"Vendor A",origin:"Australia",scale:"Global, 12 manufacturing sites",est:1937,rev:1450,gm:18.4,
+ orderbook:"9 months",ourShare:1.4,theirShare:26,quad:"Strategic partnership",
+ pm:{acq:1195,duty:0,log:68,adv:30,lead:3,cons:0.38,maint:20,rep:9,tyre:19,avail:97.5,resid:22},
+ tr:{acq:1382,duty:0,log:72,maint:14,tyre:21,resid:20},
+ r1:1163+0,shortlist:true},
+{k:"B",n:"Vendor B",origin:"China",scale:"Regional, 4 manufacturing sites",est:1993,rev:680,gm:14.2,
+ orderbook:"4 months",ourShare:3.8,theirShare:18,quad:"One-sided cooperation",
+ pm:{acq:1150,duty:9,log:52,adv:50,lead:4,cons:0.42,maint:23,rep:11,tyre:20,avail:96.0,resid:17},
+ tr:{acq:1334,duty:9,log:55,maint:17,tyre:22,resid:16},
+ shortlist:false},
+{k:"C",n:"Vendor C",origin:"China",scale:"Domestic plus export",est:2004,rev:320,gm:11.8,
+ orderbook:"2 months",ourShare:9.1,theirShare:12,quad:"Standard negotiation",
+ pm:{acq:1060,duty:9,log:52,adv:60,lead:5,cons:0.44,maint:22,rep:11,tyre:20,avail:96.0,resid:13},
+ tr:{acq:1280,duty:9,log:55,maint:17,tyre:22,resid:12},
+ shortlist:false},
+{k:"D",n:"Vendor D",origin:"Europe",scale:"Global, 19 manufacturing sites",est:1891,rev:2350,gm:21.6,
+ orderbook:"11 months",ourShare:0.6,theirShare:22,quad:"Supplier-led",
+ pm:{acq:1250,duty:0,log:92,adv:20,lead:3,cons:0.36,maint:23,rep:12,tyre:19,avail:98.0,resid:15},
+ tr:{acq:1460,duty:0,log:98,maint:15,tyre:20,resid:15},
+ shortlist:true},
+{k:"E",n:"Vendor E",origin:"South Africa",scale:"Regional, 6 manufacturing sites",est:1975,rev:1050,gm:16.1,
+ orderbook:"6 months",ourShare:2.2,theirShare:22,quad:"Strategic partnership",
+ pm:{acq:1170,duty:3,log:78,adv:40,lead:4,cons:0.40,maint:22,rep:10,tyre:19,avail:96.5,resid:19},
+ tr:{acq:1352,duty:3,log:82,maint:16,tyre:21,resid:18},
+ shortlist:true}
+];
+function V(k){return VENDORS.filter(function(v){return v.k===k;})[0];}
+const SHORT=["A","D","E"];
+
+/* round prices, USD per tonne */
+const PRICES={
+ 1:{A:{pm:1195,tr:1382},B:{pm:1150,tr:1334},C:{pm:1060,tr:1280},D:{pm:1250,tr:1460},E:{pm:1170,tr:1352}},
+ 2:{A:{pm:1163,tr:1343},B:{pm:1102,tr:1278},C:{pm:1027,tr:1241},D:{pm:1195,tr:1392},E:{pm:1136,tr:1313}},
+ 3:{A:{pm:1118,tr:1298},D:{pm:1153,tr:1347},E:{pm:1106,tr:1279}}
+};
+
+/* ============================================================
+   TCO ENGINE
+   ============================================================ */
+function assum(){
+ return {fuel:S.fuel/100, km:S.km*1000, years:S.yr, dr:S.dr/1000,
+   contrib:A.contrib, finRate:A.finRate};
+}
+function af(dr,n){return dr===0?n:(1-Math.pow(1+dr,-n))/dr;}
+function df(dr,n){return Math.pow(1+dr,-n);}
+function rebatePct(base,n){return Math.min(0.32, base*(1+0.09*(n-3)));}
+
+function tcoPM(v,price){
+ const a=assum(),p=v.pm;
+ const acq=(price===undefined)?p.acq:price;
+ const duty=acq*p.duty/100;
+ const fin=acq*(p.adv/100)*a.finRate*(p.lead/12);
+ const upfront=acq+duty+p.log+fin+A.regPM;
+ const fuel=p.cons/1000*a.km*acq*a.fuel/QTY.pm;
+ const ins=acq*A.insPM;
+ const down=(1-p.avail/100)*365*a.contrib/QTY.pm;
+ const opex=fuel+p.maint+p.rep+p.tyre+ins+down;
+ const opexPV=opex*af(a.dr,a.years);
+ const resid=acq*rebatePct(p.resid/100,a.years)*df(a.dr,a.years);
+ return {acq:acq,duty:duty,fin:fin,log:p.log,reg:A.regPM,upfront:upfront,
+   fuel:fuel,maint:p.maint,rep:p.rep,tyre:p.tyre,ins:ins,down:down,opex:opex,
+   opexPV:opexPV,resid:resid,tco:upfront+opexPV-resid};
+}
+function tcoTR(v,price){
+ const a=assum(),p=v.tr;
+ const acq=(price===undefined)?p.acq:price;
+ const duty=acq*p.duty/100;
+ const fin=acq*(v.pm.adv/100)*a.finRate*(v.pm.lead/12);
+ const upfront=acq+duty+p.log+fin+A.regTR;
+ const ins=acq*A.insTR;
+ const opex=p.maint+p.tyre+ins;
+ const opexPV=opex*af(a.dr,a.years);
+ const resid=acq*rebatePct(p.resid/100,a.years)*df(a.dr,a.years);
+ return {acq:acq,upfront:upfront,opex:opex,opexPV:opexPV,resid:resid,tco:upfront+opexPV-resid};
+}
+function pkg(k,round){
+ const v=V(k);
+ const pr=(round&&PRICES[round]&&PRICES[round][k])?PRICES[round][k]:
+   (S.cock[k]?S.cock[k]:{pm:v.pm.acq,tr:v.tr.acq});
+ const p=tcoPM(v,pr.pm), t=tcoTR(v,pr.tr);
+ return {v:v,pmPrice:pr.pm,trPrice:pr.tr,pm:p,tr:t,
+   quoted:(pr.pm*QTY.pm+pr.tr*QTY.tr)/1e6,
+   upfront:(p.upfront*QTY.pm+t.upfront*QTY.tr)/1e6,
+   tco:(p.tco*QTY.pm+t.tco*QTY.tr)/1e6};
+}
+function rank(round,keys){
+ const ks=keys||VENDORS.map(function(v){return v.k;});
+ return ks.map(function(k){return pkg(k,round);}).sort(function(a,b){return a.tco-b.tco;});
+}
+
+/* sensitivity of TCO to a one unit change in the quoted price per tonne */
+function sens(v){
+ const a=assum(),p=v.pm;
+ const makeupSens=(p.cons/1000*a.km*a.fuel/QTY.pm)*af(a.dr,a.years);
+ return 1+p.duty/100+(p.adv/100)*a.finRate*(p.lead/12)+A.insPM*af(a.dr,a.years)
+   +makeupSens
+   -rebatePct(p.resid/100,a.years)*df(a.dr,a.years);
+}
+function targets(round){
+ const r=(round||1);
+ const all=VENDORS.map(function(v){return {k:v.k,t:tcoPM(v,PRICES[r][v.k]?PRICES[r][v.k].pm:v.pm.acq).tco};});
+ return VENDORS.map(function(v){
+  const price=PRICES[r][v.k]?PRICES[r][v.k].pm:v.pm.acq;
+  const mine=all.filter(function(x){return x.k===v.k;})[0].t;
+  const others=all.filter(function(x){return x.k!==v.k;}).map(function(x){return x.t;});
+  const batna=Math.min.apply(null,others);
+  const mdo=price*(1-0.40*v.gm/100);
+  const laa=price+(batna-mine)/sens(v);
+  return {k:v.k,v:v,price:price,tco:mine,batna:batna,mdo:mdo,laa:laa,
+    zopa:laa>mdo,width:laa-mdo};
+ });
+}
+
+/* ============================================================
+   BRIEF, PARAMETERS, INTAKE
+   ============================================================ */
+const SCOPE=[
+ ["Forged media","3,000 t initial charge","Forged steel, 40 to 80 mm, ball mill duty","Fills the mills before the makeup schedule begins"],
+ ["High-chrome media","900 t initial charge","High-chrome cast, 25 to 60 mm, ball mill duty","Loaded into the two finish mills for ore-specific duty"],
+ ["Delivery","Phased over 9 months","4 tranches","Aligned to the mill relining shutdown schedule"],
+ ["Makeup supply","3 year rate agreement","Wear-rate performance guarantee","Response time committed by region"],
+ ["Financing","Buyer arranged","Advance share negotiable","Vendor financing considered but not preferred"],
+ ["Rebate","Buyer retains","No buy-back applicable to a consumed input","Year-end volume rebate offered by all five vendors"]
+];
+const NONNEG=[
+ "Three year wear-rate performance guarantee, written into the contract with a liquidated damages clause",
+ "Supply reliability (OTIF) guarantee measured monthly, at plant level, not per shipment",
+ "No exclusivity on technical service. The buyer retains the right to third party wear audits after year one",
+ "Price validity of 120 days from best and final offer",
+ "No volume commitment beyond the tranche schedule",
+ "Consignment stock held within reach of the two main mills before first delivery"
+];
+const ROUNDS=[
+ ["Round 1","All five vendors, parallel, same day","90 minutes each",
+  "Clarify submissions, close data gaps, set the anchor, communicate urgency and competitive tension","No concession given"],
+ ["Interval","Analysis and shortlist","3 days",
+  "Re-rank on total cost of ownership, confirm the zone of agreement, release two vendors","Shortlist communicated"],
+ ["Round 2","Three shortlisted vendors, parallel","120 minutes each",
+  "Close the gap to target, trade terms against price, secure best and final","Trades opened, walk-away made credible"],
+ ["Award","Recommendation and validation","5 days",
+  "Confirm baseline, validate savings with finance, award and contract","Two runners-up held for 60 days"]
+];
+const UPF=[
+ ["Acquisition price","Vendor","Per tonne, ex works","Primary negotiation line"],
+ ["Duty and tariff","Constant by origin","0% to 9% of acquisition","Set by country of manufacture, not negotiable"],
+ ["Inbound logistics","Vendor","Port to plant, per tonne","Negotiable, varies 52 to 98"],
+ ["Financing cost","Derived","Advance share x rate x lead time","Moves with payment terms, a live lever"],
+ ["Quality certification","Constant","16 per tonne forged, 26 per tonne high-chrome","Same for all vendors"]
+];
+const OPS=[
+ ["Makeup volume","Vendor declares wear rate","Kilograms per tonne of clinker ground","Largest single line over the horizon"],
+ ["Breakage allowance","Vendor","Annual, at contracted rates","Quoted as a service package"],
+ ["Contamination provision","Benchmark plus vendor","Annual provision, oversize and tramp material","Vendor figure sense-checked against history"],
+ ["Packaging","Benchmark","Annual, by bag or bulk format","Largely vendor independent"],
+ ["Insurance","Derived","0.40% of acquisition, forged media","Falls as acquisition price falls"],
+ ["Stockout risk","Vendor declares reliability","Lost grinding contribution per day short","Converts a service promise into a number"],
+ ["Year-end volume rebate","Vendor and market","Percentage of acquisition at end of horizon","Credit, not a cost"]
+];
+const INTAKE=[
+ ["Vendor A","Structured workbook plus PDF cover","22 of 22","98%","Complete","Wear rate stated at two feed sizes, coarser used"],
+ ["Vendor B","PDF, native text","20 of 22","94%","2 gaps","No supply reliability guarantee, no rebate view"],
+ ["Vendor C","Email body plus scanned annex","17 of 22","81%","5 gaps","Scanned annex at 200 dpi, breakage table partly unreadable"],
+ ["Vendor D","Structured workbook","22 of 22","99%","Complete","Only vendor to supply a signed reliability commitment"],
+ ["Vendor E","PDF plus separate spreadsheet","21 of 22","96%","1 gap","Logistics quoted to port only, plant leg missing"]
+];
+const GAPS=[
+ ["Vendor B","Supply reliability guarantee","Not supplied","Round 1 question","Benchmark used, flagged in the comparison"],
+ ["Vendor B","Year-end rebate view","Not supplied","Round 1 question","Market rebate applied"],
+ ["Vendor C","Breakage allowance, years 2 to 3","Unreadable in the scan","Re-request","Year 1 extrapolated, flagged"],
+ ["Vendor C","Supply reliability guarantee","Stated as best efforts","Round 1 question","Treated as no guarantee"],
+ ["Vendor C","Mill liner price list","Not supplied","Round 1 question","Cannot verify breakage quote"],
+ ["Vendor C","Delivery tranche schedule","Single date only","Round 1 question","Phasing risk not priced"],
+ ["Vendor C","Financing assumption","Advance share not stated","Round 1 question","60% assumed from prior dealings"],
+ ["Vendor E","Inbound logistics, port to plant","Excluded from quote","Round 1 question","Added at our own rate, 26 per tonne"]
+];
+const QRAW="From: Sales Department\nSubject: RE: RFQ 2026-GRM-014 - Commercial Offer\n\nDear Sir/Madam,\n\nThank you for the opportunity. Please find our best offer below.\n\n  Forged steel media 40-80mm      3,000 t   USD 1,060 per t   EXW\n  High-chrome media 25-60mm         900 t   USD 1,280 per t   EXW\n\n  Payment: 60% advance with order, 40% before shipment\n  Delivery: 5 months from PO\n  Performance guarantee: 12 months or contracted wear-rate ceiling, whichever earlier\n  Wear rate: approx 0.44 kg per tonne clinker (laden, mixed feed)\n  Technical service: as per attached annex\n\n  [ attachment: annex_service_rates.pdf - scanned, 200 dpi ]\n\nWe hope to receive your kind order.\n\nBest regards";
+const QOUT=[
+ ["Forged media, unit price","USD 1,060 per t","Stated in the email body","98"],
+ ["High-chrome media, unit price","USD 1,280 per t","Stated in the email body","98"],
+ ["Incoterm","EXW","Stated. Requires a logistics adjustment","96"],
+ ["Payment terms","60% advance, 40% pre-shipment","Parsed from free text","94"],
+ ["Lead time","5 months","Parsed from free text","95"],
+ ["Performance guarantee","12 months or wear-rate ceiling","Parsed. Shortest of the five","93"],
+ ["Wear rate","0.44 kg per tonne clinker","Stated as approximate, treated as a point estimate","72"],
+ ["Supply reliability guarantee","Not stated","No commitment found in document or annex","0"],
+ ["Breakage allowance, year 1","Extracted from annex","Table read at reduced confidence","64"],
+ ["Breakage allowance, years 2 to 3","Not readable","Scan quality. Extrapolated and flagged","0"],
+ ["Year-end rebate or buy-back","Not offered","No reference in the document","0"]
+];
+const NORM=[
+ ["Incoterm","EXW on A, C, E. DAP on B, D","Restated to DAP plant","Adds 68 to 92 per tonne on three vendors"],
+ ["Logistics scope","E quoted port only","Plant leg added at our contracted rate","Adds 26 per tonne forged to E"],
+ ["Payment terms","20% to 60% advance","Financing cost calculated on each, not equalised","Worth 7 to 32 per tonne forged"],
+ ["Performance guarantee","12 to 36 months","Shortfall against 36 months priced as a contamination provision","Adds 4 to 9 per tonne per year on three vendors"],
+ ["Wear rate","Declared at different feed sizes","Restated to laden mixed feed","B and E adjusted upward"],
+ ["Supply reliability","Stated by A, D, E only","B and C treated as no guarantee, benchmark applied","Adds 13 to 31 per tonne per year"],
+ ["Currency","All quoted in USD","No adjustment","-"],
+ ["Rebate","Committed by A and D only","Market rebate applied to the rest","Reduces credit on B, C, E"]
+];
+
+/* ============================================================
+   COUNTERPARTY READS
+   ============================================================ */
+const AXES=["Pace","Assertiveness","Detail focus","Risk appetite"];
+const PEOPLE={
+A:[
+ {r:"Regional Sales Director",au:"Full, to list less 12%",init:"RSD",
+  ax:[62,74,45,55],
+  ev:[["Conduct in three prior negotiations with us","Opens high, concedes in two planned steps","High"],
+      ["Response latency on written exchanges","Median 4 hours, never overnight","High"],
+      ["Public professional record","18 years with the manufacturer, all commercial","High"],
+      ["Role incentive structure","Volume weighted, quarter-end sensitive","Medium"]],
+  mot:"Protect list price integrity across the region. Will move on terms and service before headline price.",
+  dodo:"Give them a defensible reason to move that is not a discount. Trade tranche timing.",
+  dont:"Do not open with a percentage demand. It reads as haggling and hardens the position."},
+ {r:"Product Manager, Grinding Media",au:"None, technical influence",init:"PM",
+  ax:[38,32,92,28],
+  ev:[["Written submissions","Only attendee who supplied wear data at two feed sizes unprompted","High"],
+      ["Prior meeting conduct","Corrects imprecise technical claims immediately","High"],
+      ["Role incentive structure","Specification integrity, not commercial outcome","Medium"]],
+  mot:"Wants the specification understood and respected. Will defend wear-rate figures with data.",
+  dodo:"Direct the technical questions here. They will answer accurately and in front of the commercial lead.",
+  dont:"Do not challenge the wear-rate figure without your own evidence."},
+ {r:"Technical Service Manager",au:"Limited, service rates only",init:"TSM",
+  ax:[48,41,71,35],
+  ev:[["Prior service contract negotiation","Conceded response time before conceding rate","Medium"],
+      ["Consignment stock commitments","Has delivered on two of two prior commitments","High"]],
+  mot:"Wants the service annuity. Service is their profit line, not the tonne.",
+  dodo:"The supply reliability guarantee is winnable here. It costs them less than price.",
+  dont:"Do not let service and acquisition be bundled into one number."}
+],
+B:[
+ {r:"Export Sales Manager",au:"Limited, refers above 8%",init:"ESM",
+  ax:[84,68,38,72],
+  ev:[["Response latency","Median 40 minutes, including weekends","High"],
+      ["Conduct in the tender to date","Revised the quote twice unprompted before round 1","High"],
+      ["Authority pattern","Referred upward on every prior deal above 8%","Medium"]],
+  mot:"Wants the reference win in this market. Volume matters more than margin.",
+  dodo:"Expect fast movement. Ask for the principal to be present in round 2 or the discount stalls.",
+  dont:"Do not mistake speed for authority. The number they give may not hold."},
+ {r:"Regional Director",au:"Full",init:"RD",
+  ax:[55,79,52,60],
+  ev:[["Attendance pattern","Joins only where the order exceeds a threshold","Medium"],
+      ["Prior conduct, second-hand","Reported as direct and quick to close","Low"]],
+  mot:"Market share in the region. Will buy the reference if the volume is visible.",
+  dodo:"Make the tranche schedule and the follow-on tonnage visible.",
+  dont:"Do not commit to the follow-on tonnage. Visibility is not a commitment."},
+ {r:"Technical Support Lead",au:"None",init:"TSL",
+  ax:[45,30,66,30],
+  ev:[["Submission quality","Supply reliability guarantee and rebate view both absent","High"]],
+  mot:"Supporting role. Limited influence on the outcome.",
+  dodo:"Use to close the two open data gaps in the room.",
+  dont:"Do not spend negotiation time here."}
+],
+C:[
+ {r:"General Manager, Overseas",au:"Full",init:"GM",
+  ax:[71,86,29,81],
+  ev:[["Opening position","Lowest quote of five, 11% below the median","High"],
+      ["Submission completeness","Five of twenty-two fields not supplied","High"],
+      ["Prior market conduct","Known to price aggressively then recover on liners","Medium"]],
+  mot:"Wants entry into the account. Price is the instrument, mill liners are the recovery.",
+  dodo:"Ask for the mill liner price list before discussing the headline. Their answer is the negotiation.",
+  dont:"Do not treat the low quote as a benchmark for the others until the gaps are closed."},
+ {r:"Sales Engineer",au:"None",init:"SE",
+  ax:[58,44,55,49],
+  ev:[["Document handling","Sent a scanned annex rather than the original","Medium"]],
+  mot:"Wants the deal processed. Limited technical depth on the operational lines.",
+  dodo:"Request the original annex in native format, in the room.",
+  dont:"Do not accept extrapolated breakage figures as a commitment."}
+],
+D:[
+ {r:"Key Account Director",au:"Full, to a floor set by head office",init:"KAD",
+  ax:[41,66,78,34],
+  ev:[["Submission quality","Only vendor to supply all twenty-two fields and a signed reliability commitment","High"],
+      ["Response latency","Median 26 hours, always complete","High"],
+      ["Prior conduct in this market","Holds price, moves on scope and service","High"],
+      ["Role incentive structure","Margin weighted, not volume weighted","Medium"]],
+  mot:"Defend price positioning. Willing to add value rather than remove price.",
+  dodo:"Trade scope. Extended performance guarantee, technical training, wear-analytics data and consignment stock are cheaper for them than price.",
+  dont:"Do not expect a large headline move. Repeated price demands will stall the meeting."},
+ {r:"Head of Wear Solutions",au:"Limited, service and scope",init:"HWS",
+  ax:[52,49,84,38],
+  ev:[["Prior engagement","Proposed a wear-analytics package unprompted at the site visit","Medium"],
+      ["Technical depth","Answered the reliability question with measured data","High"]],
+  mot:"Wants the total wear-cost solution rather than the tonne sale. Service attachment is the objective.",
+  dodo:"This is where the value trades are won. Bring the plant operations lead to this conversation.",
+  dont:"Do not let a solution bundle obscure the unit price."},
+ {r:"Finance Controller, Region",au:"Veto on terms",init:"FC",
+  ax:[35,58,89,22],
+  ev:[["Payment terms offered","Lowest advance share of the five, at 20%","High"],
+      ["Conduct pattern","Attends only where payment terms are in scope","Medium"]],
+  mot:"Cash conversion and credit exposure. Terms matter more here than the headline.",
+  dodo:"If price will not move, move the advance share. It is a real cost to us and a real benefit to them.",
+  dont:"Do not concede payment terms early. It is the strongest non-price lever we hold with this vendor."},
+ {r:"Regional Managing Director",au:"Full",init:"RMD",
+  ax:[46,72,48,42],
+  ev:[["Attendance","Confirmed for round 2 only","High"]],
+  mot:"Attends to close. Presence signals the deal is wanted at a senior level.",
+  dodo:"Reserve the final ask for the round they attend.",
+  dont:"Do not use the round 1 team's ceiling as the ceiling."}
+],
+E:[
+ {r:"Overseas Sales Director",au:"Full, to list less 10%",init:"OSD",
+  ax:[57,61,58,52],
+  ev:[["Prior negotiation with us, 2024","Settled at list less 8.5% after three rounds","High"],
+      ["Response latency","Median 9 hours","High"],
+      ["Submission","Complete apart from the plant logistics leg","High"]],
+  mot:"Balanced. Wants a repeatable relationship rather than a single order.",
+  dodo:"The 2024 settlement is the anchor they expect. Open below it with a reason.",
+  dont:"Do not repeat the 2024 structure. It favoured them on payment terms."},
+ {r:"Regional Service Manager",au:"Limited, service scope",init:"RSM",
+  ax:[44,38,74,33],
+  ev:[["Consignment network","Two consignment points already within range of the mills","High"],
+      ["Prior service performance with us","94% on-time response over 18 months","High"]],
+  mot:"Protect an already strong service position. Will use it as an argument against price movement.",
+  dodo:"Acknowledge the service record, then separate it from the unit price.",
+  dont:"Do not let service performance be priced twice."},
+ {r:"Commercial Analyst",au:"None",init:"CA",
+  ax:[63,35,91,26],
+  ev:[["Submission","Supplied a full cost breakdown without being asked","High"]],
+  mot:"Supporting. Provides the numbers the sales director works from.",
+  dodo:"Address the cost build-up questions here. The answers will be accurate.",
+  dont:"Do not negotiate here."}
+]};
+
+/* ============================================================
+   OUR TEAM
+   ============================================================ */
+const OURTEAM=[
+ {r:"Lead Negotiator",m:"Owns the ask, the anchor and the walk-away. Speaks to price and to the award decision.",
+  map:{A:"Regional Sales Director",B:"Regional Director",C:"General Manager, Overseas",D:"Key Account Director",E:"Overseas Sales Director"}},
+ {r:"Category Manager",m:"Owns the fact base. Presents the comparison and the gap to the theoretical best, without naming vendors.",
+  map:{A:"Regional Sales Director",B:"Export Sales Manager",C:"General Manager, Overseas",D:"Key Account Director",E:"Overseas Sales Director"}},
+ {r:"Plant Operations Lead",m:"Owns reliability, wear performance and the operating reality. Converts a service promise into a number.",
+  map:{A:"Technical Service Manager",B:"Technical Support Lead",C:"Sales Engineer",D:"Head of Wear Solutions",E:"Regional Service Manager"}},
+ {r:"Technical Lead",m:"Owns the specification. Validates wear rate, feed size and breakage intervals.",
+  map:{A:"Product Manager, Grinding Media",B:"Technical Support Lead",C:"Sales Engineer",D:"Head of Wear Solutions",E:"Commercial Analyst"}},
+ {r:"Finance Lead",m:"Owns payment terms, financing cost and the rebate treatment. Speaks only when terms are in scope.",
+  map:{A:"Regional Sales Director",B:"Regional Director",C:"General Manager, Overseas",D:"Finance Controller, Region",E:"Overseas Sales Director"}},
+ {r:"Analyst, recording",m:"Records every number and commitment. Does not speak. Updates the cockpit between rounds.",
+  map:{A:"-",B:"-",C:"-",D:"-",E:"-"}}
+];
+
+/* ============================================================
+   PLANS, TACTICS, OUTCOMES
+   ============================================================ */
+const PLAN={
+A:{1:{obj:"Confirm the two feed sizes, lock the wear-rate performance guarantee in writing, and anchor on the theoretical best package without revealing its composition.",
+    anchor:"Anchor at 1,095 per tonne forged, stated as derived from best achieved rates in this tender.",
+    ladder:[["Open","1,095 stated as the derived target, no movement offered",1095],
+            ["Hold","No concession in round 1. Restate the target after their response",1095],
+            ["Close","Request a revised written offer within 72 hours",1095]],
+    trades:["Tranche timing, we can accept a slower first tranche","Extended technical service scope in exchange for price",
+            "Wear-analytics data sharing, costs us nothing"],
+    lines:["We have five submissions on the same specification. On your own figures you are third on acquisition and first on operating cost. That combination is why you are still in the room.",
+           "Our target for this specification is 1,095 per tonne. It is not a percentage off your list, it is built from the best rate achieved in each line in this tender.",
+           "We are not asking you to respond today. We are asking for a written revision in 72 hours."]},
+  2:{obj:"Close to the target. Trade payment terms and tranche timing against unit price. Secure a best and final.",
+    anchor:"Re-anchor at 1,110, citing the round 1 movement of the field.",
+    ladder:[["Open","1,110, with the field's movement referenced but not attributed",1110],
+            ["Step 1","1,118 if the supply reliability guarantee moves to 98% at plant level",1118],
+            ["Step 2","1,118 plus a 40% advance share, our concession on terms",1118],
+            ["Walk","Above 1,135 this vendor no longer beats the next best alternative on total cost",1135]],
+    trades:["Advance share from 30% to 40%, worth roughly 6 per tonne to them",
+            "Acceptance of a 9 month delivery window rather than 7",
+            "Reference site and case study rights"],
+    lines:["The field moved in round 1. You moved least, and you are still the vendor we want. Those two facts are in tension.",
+           "We can go to a 40% advance. That is real money to you and it is the last thing we have to give.",
+           "At 1,118 with the supply reliability guarantee at 98% we have a deal today."]}},
+D:{1:{obj:"Establish that price, not scope, is the constraint. Test the head office floor. Confirm the reliability commitment is contractual.",
+    anchor:"Anchor at 1,095, the same derived target used with every vendor.",
+    ladder:[["Open","1,095 stated as the derived target",1095],
+            ["Hold","No concession. Ask what would have to be true for them to reach it",1095],
+            ["Close","Request a revised written offer within 72 hours",1095]],
+    trades:["Nothing offered in round 1"],
+    lines:["Your submission was the most complete of the five and the only one with a signed reliability commitment. That is worth something to us and we want you to know it is.",
+           "It is not worth 155 a tonne. Our derived target is 1,095.",
+           "What would have to be true for you to reach it?"]},
+  2:{obj:"Accept that the headline will not move far. Convert the gap into scope and terms. Secure the supply reliability guarantee at plant level and a longer performance guarantee period.",
+    anchor:"Re-anchor at 1,145 and move the conversation to scope within the first fifteen minutes.",
+    ladder:[["Open","1,145, with a stated willingness to discuss scope",1145],
+            ["Step 1","1,150 with 60 month performance guarantee and consignment stock commitment in contract",1150],
+            ["Step 2","1,153 with the guarantee, consignment stock, wear-analytics data and technical training included",1153],
+            ["Walk","Above 1,165 this vendor no longer beats the next best alternative on total cost",1165]],
+    trades:["Payment advance can rise from 20% to 35%, which is worth more to them than to us",
+            "Three year technical service agreement, which is their profit line",
+            "Joint case study on the programme"],
+    lines:["We know your floor is set above us. We are not going to spend the next hour asking you to breach it.",
+           "We are going to spend it on what sits around the price. Performance guarantee to 60 months, consignment stock within reach of the mills, wear-analytics data, technical training.",
+           "If that package lands, 1,153 works and we can sign this quarter."]}},
+E:{1:{obj:"Correct the logistics scope omission before it becomes a dispute. Use the 2024 settlement as a reference without conceding its structure.",
+    anchor:"Anchor at 1,095, and separately restate that the plant logistics leg is in scope.",
+    ladder:[["Open","1,095 with plant logistics included in the quoted price",1095],
+            ["Hold","No concession. Confirm the scope correction in writing",1095],
+            ["Close","Request a revised written offer including logistics within 72 hours",1095]],
+    trades:["Nothing offered in round 1"],
+    lines:["Your quote is to port. Ours is to plant. That is a 26 a tonne difference and we have applied it, so the number you are looking at is not the number we are looking at.",
+           "In 2024 we settled at list less 8.5%. That is not a precedent, it is a starting point.",
+           "Our derived target for this specification is 1,095, plant delivered."]},
+  2:{obj:"Use the narrow gap to the leader to press for the best and final. Make the walk-away credible without bluffing.",
+    anchor:"Re-anchor at 1,102. The gap to the leader is small and they should be told it is small.",
+    ladder:[["Open","1,102, plant delivered",1102],
+            ["Step 1","1,106 with the supply reliability guarantee raised to 97.5%",1106],
+            ["Step 2","1,106 held. No further movement offered",1106],
+            ["Walk","Above 1,118 this vendor no longer beats the next best alternative on total cost",1118]],
+    trades:["Advance share from 40% to 45%","Extension of the existing technical service agreement across the new tonnage",
+            "Retention of the two existing consignment points as contracted service points"],
+    lines:["You are close. Close enough that this is decided on this call and not on the next one.",
+           "Your service record over eighteen months is the reason you are still here. It is not the reason we would pay more.",
+           "1,106 plant delivered with reliability at 97.5%, and we stop here."]}},
+B:{1:{obj:"Test whether the fast movement is real authority or a referral pattern. Close the reliability and rebate gaps.",
+    anchor:"Anchor at 1,095, the derived target.",
+    ladder:[["Open","1,095 stated as the derived target",1095],
+            ["Hold","No concession",1095],
+            ["Close","Request the principal in any subsequent round",1095]],
+    trades:["Nothing offered in round 1"],
+    lines:["Two of the twenty-two fields in our request are not in your submission. Supply reliability and year-end rebate. Both are in the comparison, so both have been filled with a benchmark that is unlikely to flatter you.",
+           "Our derived target is 1,095.",
+           "If we continue, we will need the person who can approve below 8% in the room."]}},
+C:{1:{obj:"Establish whether the low price is real. Request the mill liner price list before engaging on the headline.",
+    anchor:"Do not anchor on price in this round. Anchor on completeness.",
+    ladder:[["Open","No price anchor. Five open data gaps presented",0],
+            ["Hold","Request the mill liner price list and the native annex",0],
+            ["Close","Advise that the submission cannot be scored until the gaps close",0]],
+    trades:["Nothing offered in round 1"],
+    lines:["Your price is the lowest of the five. Five of the twenty-two fields we asked for are not in your submission, and four of those five are operating cost lines.",
+           "Before we discuss the price we need the mill liner price list and the annex in its original format.",
+           "As it stands we cannot score your submission against the others. That is not a negotiating position, it is a fact about the file."]}}
+};
+const TACTICS={
+A:{1:[["Relationship leverage","Will reference the prior three deals and the service record","Acknowledge it once, then return to the derived target. Say the relationship is why they are still in the room, not why we would pay more"],
+      ["Value framing","Will argue total cost rather than price, because their total cost is genuinely best","Agree with the framing and show them we already model it. Then point out the acquisition gap is still real money"],
+      ["Quarter-end pressure","May offer a time-limited concession near quarter end","Accept the timing, never the condition. Price validity of 120 days is a non-negotiable"]],
+  2:[["Trial balloon","Will float a package at a number to test our reaction","Do not react to the number. Ask what is inside it"],
+     ["Padding","May add specification we did not ask for to justify the price","Price every addition separately and remove what we did not request"],
+     ["Reciprocity","Will ask for the advance share in exchange for a small price move","This is the trade we planned. Do not give it first"]]},
+D:{1:[["Authority ceiling","Will state that head office sets a floor they cannot breach","Test it once, then stop. Ask what is inside their discretion instead"],
+      ["Value bundling","Will present a solution package rather than a unit price","Ask for the unit price separately, in writing, before discussing the bundle"],
+      ["Reference pricing","Will cite what other operators in the market pay","Ask which operators, at what volume, on what specification. The answer is usually not comparable"]],
+  2:[["Change the negotiator","The regional managing director joins in round 2","Expect the final ask to be reserved for them. Do not spend the ceiling on the round 1 team"],
+     ["False deadline","May introduce a casting-campaign slot expiring","Ask for it in writing. Slot pressure is usually real but rarely as tight as stated"],
+     ["Incremental conversion","Will seek agreement on scope items one by one before returning to price","Agree to nothing individually until the price is on the table"]]},
+E:{1:[["Precedent anchoring","Will reference the 2024 settlement at list less 8.5%","Acknowledge the transaction, reject the structure. The 2024 terms favoured them on advance share"],
+      ["Service record","Will price their 94% response performance into the unit cost","Separate the two. Service performance is why they are shortlisted, not a price premium"],
+      ["Scope ambiguity","Quoted to port. May argue plant delivery was never in scope","The request for quotation says plant delivered. Show the clause, move on"]],
+  2:[["Nibbling","Will seek small additions after the price is agreed","Close the terms list before agreeing the price, and state that it is closed"],
+     ["Good cop bad cop","Service manager supportive, sales director firm","Name it if it appears. Address both to the same number"],
+     ["Split the difference","Will propose meeting in the middle of the remaining gap","Only accept if the middle is inside our target. Otherwise counter once and hold"]]},
+B:{1:[["Lowball then recover","Fast, large movement early, recovery through liners and service later","Ask for the mill liner price list before crediting any price movement"],
+      ["Authority ploy","Will give a number they may not be able to hold","Ask for written confirmation within 72 hours, countersigned by the regional director"],
+      ["Volume demand","Will ask for a commitment beyond the tranche schedule","Non-negotiable. Offer visibility of the follow-on tonnage, never a commitment"]]},
+C:{1:[["Lowball","Lowest quote in the field by 11% against the median","Do not use it as a benchmark for others until the operating gaps are closed"],
+      ["Incomplete submission as leverage","Gaps keep the comparison favourable to them","State plainly that unsupplied fields are filled with a benchmark that will not flatter them"],
+      ["Liner recovery","Historic pattern of recovering margin through mill liner pricing","Request the liner price list as a condition of continuing"]]}
+};
+const OUTCOME={
+A:{1:{offer:"1,163 forged, 1,343 high-chrome per tonne",move:"-2.7% on forged",
+      asked:"Advance share from 30% to 45%, and a three year rise/fall index lock",
+      read:"Moved least of the five and did so deliberately. Supply reliability guarantee confirmed as contractual at 97.5%. Willing to trade terms. Real flexibility judged at a further 3 to 4%.",
+      flex:"Medium"},
+  2:{offer:"1,118 forged, 1,298 high-chrome per tonne",move:"-3.9% on round 1",
+      asked:"40% advance share, 9 month delivery window, reference rights",
+      read:"Best and final. Supply reliability moved to 98% at plant level. Accepted the delivery window. Declined the three year technical service tie-in.",
+      flex:"Exhausted"}},
+B:{1:{offer:"1,102 forged, 1,278 high-chrome per tonne",move:"-4.2% on forged",
+      asked:"Volume commitment across the follow-on tonnage",
+      read:"Moved fastest and furthest. Supply reliability guarantee still not supplied in writing. Regional director did not commit to attending a further round. The number is not yet reliable.",
+      flex:"High but unverified"}},
+C:{1:{offer:"1,027 forged, 1,241 high-chrome per tonne",move:"-3.1% on forged",
+      asked:"Nothing. Offered a further reduction if awarded in full",
+      read:"Three of five data gaps closed in the room. Mill liner price list still not supplied. Breakage allowance for years 2 to 3 remains extrapolated. Operating cost position is unverifiable.",
+      flex:"High on price, unverifiable on cost"}},
+D:{1:{offer:"1,195 forged, 1,392 high-chrome per tonne",move:"-4.4% on forged",
+      asked:"Three year technical service agreement, wear-analytics data attachment",
+      read:"Larger headline movement than expected, which suggests the head office floor sits lower than stated. Scope offered freely: 60 month performance guarantee and a consignment stock commitment both floated without being asked.",
+      flex:"Low on price, high on scope"}},
+E:{1:{offer:"1,136 forged, 1,313 high-chrome per tonne",move:"-2.9% on forged, plant logistics now included",
+      asked:"Extension of the existing technical service agreement across the new tonnage",
+      read:"Accepted the plant delivery scope correction without argument, which removed a 26 per tonne dispute. Anchored on the 2024 settlement throughout. Supply reliability guarantee offered at 96.5%, open to 97.5%.",
+      flex:"Medium"}}
+};
+const SHORTLIST=[
+ ["A","Carried","Best total cost of ownership in the field by a wide margin, a contractual supply reliability guarantee, and a zone of agreement that exists"],
+ ["E","Carried","Second on total cost, and the smallest gap to the leader in the field. No zone of agreement at opening prices, but the gap is narrow enough that round 1 movement could open one"],
+ ["D","Carried","Behind the top two on total cost after round 1, but the best operating cost in the field and the only complete submission with a signed reliability commitment. Zone of agreement is narrow but real, and the scope trades are large"],
+ ["C","Released","Lowest quote of the five, but the mill liner price list was not supplied, so the operating cost position cannot be verified independently. Released to keep the shortlist to vendors whose full cost position is confirmed"],
+ ["B","Released","Worst on total cost of the five. Supply reliability and rebate view still unsupported after round 1, and the price given could not be confirmed by anyone with authority"]
+];
+const READUPDATE=[
+ ["A","Confidence raised","Deliberate two-step concession pattern confirmed for the third time. Terms trade confirmed as available.","Open below the round 1 close and lead with the terms trade"],
+ ["D","Profile revised","Stated head office floor was breached by their own movement. The ceiling is lower than claimed.","Test the floor once more, then move to scope where the real value sits"],
+ ["E","Confidence raised","Accepted the scope correction without argument, which indicates the quote was built to win rather than to defend.","Press on the narrow gap to the leader and make the walk-away credible"],
+ ["B","Closed","Speed was not authority. No one in the room could confirm the number.","-"],
+ ["C","Closed","Price movement continued while the cost gaps stayed open.","-"]
+];
+
+/* ============================================================
+   AWARD, REVIEW, DATA
+   ============================================================ */
+const CONCEDED=[
+ ["Advance share","30% to 40% on the forged media tranches","Costs roughly 6 per tonne in financing","Planned trade, given last"],
+ ["Delivery window","7 months to 9 months","No operational cost, the shutdown cycle absorbs it","Free concession"],
+ ["Reference rights","Case study and site visit permitted","No cost","Free concession"],
+ ["Three year technical service tie-in","Declined","Would have removed the third party wear audit right","Held, a non-negotiable"],
+ ["Volume commitment","Declined to all five vendors","Visibility given, commitment withheld","Held, a non-negotiable"]
+];
+const REVIEW=[
+ ["What worked","Anchoring on a derived target rather than a percentage","Every vendor engaged with the number rather than dismissing it"],
+ ["What worked","Refusing to score an incomplete submission","Three of five gaps closed inside the round 1 meeting"],
+ ["What worked","Separating unit price from the scope bundle","Prevented the leading vendor from pricing the same value twice"],
+ ["What to change","The plant logistics scope should have been restated in the request for quotation","One vendor built a quote to the wrong scope, costing a round"],
+ ["What to change","Supply reliability should have been a mandatory field, not a requested one","Two vendors omitted it, and benchmark substitution weakened the comparison"],
+ ["Carry forward","Both runners-up held for 60 days at their best and final","Preserves the alternative if contracting stalls"]
+];
+const SRC=[
+ ["Vendor quotations","Vendor","Five submissions in four formats","Once per round","Every price and operating line"],
+ ["Request for quotation and specification","Internal","Category and technical","Fixed","Scope, specification, non-negotiables"],
+ ["Plant wear and consumption history","Internal","Mill logs and breakage records","Monthly","Wear rate, reliability and breakage benchmarks"],
+ ["Prior negotiation records","Internal","Contract and meeting records","Per event","Conduct patterns and settlement precedents"],
+ ["Vendor financial statements","External","Published accounts","Annual","Gross margin, used to derive the target"],
+ ["Steel index","Market","Published regional index","Daily","Makeup-volume line in the operating cost"],
+ ["Ferrochrome and component indices","Market","Published series","Monthly","Sense check on acquisition price movement"],
+ ["Volume rebate guides","Market","Peer rate-contract benchmarks","Quarterly","Rebate credit at end of horizon"],
+ ["Financing rate","Internal","Treasury","Monthly","Financing cost on advance payments"],
+ ["Public professional records","External","Published professional profiles","On change","Role, tenure and remit only"]
+];
+const RULES=[
+ ["What a profile is","A behavioural read of how this person has conducted business negotiations","Not a psychological or clinical assessment"],
+ ["What it is built from","Observed conduct in prior negotiations, written response patterns, published professional record, and the incentives attached to the role","Each attribute carries its source and a confidence"],
+ ["What it excludes","Anything personal, anything inferable about protected characteristics, anything from private or social sources","Bounded to the business role"],
+ ["What it is used for","How we communicate, who we put opposite whom, and what we ask for first","Never whether we deal with a company or a person"],
+ ["Confidence handling","Low confidence attributes are shown as low confidence and are not acted on alone","Same routing principle as the data foundation"],
+ ["Review","Every profile is reviewed by the lead negotiator before the round","The tool prepares, a person decides"],
+ ["Retention","Profiles are held for the duration of the tender and the contract term","Deleted on request"]
+];
+const ASSUM=[
+ ["Contract horizon","3 years","Aligned to the current rate-agreement cycle"],
+ ["Annual clinker throughput","2,400,000 tonnes","Three year plant average"],
+ ["Steel/chrome index","100% of the reference basis","Regional index, September 2026"],
+ ["Discount rate","9.0%","Group weighted average cost of capital"],
+ ["Lost contribution per day of stockout, allocated per initial-charge tonne","USD 3,400 per day, package basis","Plant operations and finance"],
+ ["Insurance","0.40% of acquisition, forged media","Current policy rate"],
+ ["Financing rate","9.5%","Treasury, on advance payments"],
+ ["Target derivation","Acquisition price less 40% of vendor gross margin","What a vendor can give without going below their own floor"],
+ ["Walk-away derivation","The price at which this vendor stops beating the next best alternative on total cost","Computed, not assumed"],
+ ["Baseline for savings","Average of the five opening quotes on firm specification","Consistent with the savings methodology"]
+];
+
+const $=function(s){return document.querySelector(s);};
+const $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
+function n0(n){return Number(n).toLocaleString('en-US',{maximumFractionDigits:0});}
+function cur(v){ if(S.cur==='IDR'){const x=v*FX; return 'IDR '+n0(x/1000)+'k';} return '$'+n0(v);}
+function curM(v){ if(S.cur==='IDR'){const x=v*FX; return 'IDR '+(x/1000).toFixed(2)+'tn';} return '$'+v.toFixed(2)+'m';}
+function tbl(id,head,rows){
+ var h=document.getElementById(id);if(!h)return;var s='';
+ if(head)s+='<tr>'+head.map(function(c){return '<th'+((typeof c==='object'&&c.n)?' class="n"':'')+'>'+esc(typeof c==='object'?c.t:c)+'</th>';}).join('')+'</tr>';
+ rows.forEach(function(r){
+  if(r.grp){s+='<tr class="grp"><td colspan="'+(head?head.length:12)+'">'+r.grp+'</td></tr>';return;}
+  s+='<tr>'+r.map(function(c,i){
+    var cls=(head&&typeof head[i]==='object'&&head[i].n)?' class="n"':'';
+    return '<td'+cls+'>'+c+'</td>';}).join('')+'</tr>';});
+ h.innerHTML=s;
+}
+function conf(c){c=parseFloat(c);return c>=85?'var(--pos)':c>=60?'var(--warn)':'var(--neg)';}
+
+/* ================= HEADER ================= */
+function renderHeader(){
+ const r=rank(1);
+ document.getElementById('pillRound').textContent=S.round;
+ document.getElementById('pillValue').textContent='Opening quotes '+curM(Math.min.apply(null,r.map(function(x){return x.quoted;})))+' to '+curM(Math.max.apply(null,r.map(function(x){return x.quoted;})));
+ document.getElementById('pillLead').textContent='Best on TCO: '+r[0].v.n;
+ document.getElementById('pillCur').textContent=S.cur==='USD'?'USD':'IDR at '+n0(FX);
+}
+
+/* ================= BRIEF ================= */
+function renderBrief(){
+ const r=rank(1);
+ const spread=(r[r.length-1].tco-r[0].tco);
+ document.getElementById('briefStats').innerHTML=
+  '<div class="m"><div class="v a">3,900 t</div><div class="l">3,000 t forged, 900 t high-chrome, initial charge</div></div>'+
+  '<div class="m"><div class="v">5</div><div class="l">Vendors invited</div></div>'+
+  '<div class="m"><div class="v">'+curM(r[0].quoted)+'</div><div class="l">Lowest opening quote</div></div>'+
+  '<div class="m"><div class="v">3 years</div><div class="l">Evaluation horizon</div></div>'+
+  '<div class="m"><div class="v">'+curM(spread)+'</div><div class="l">Spread on total cost of ownership</div></div>';
+ tbl('tb_scope',["Element","Quantity","Specification","Note"],SCOPE.map(function(x){
+  return ['<b>'+x[0]+'</b>',x[1],x[2],x[3]];}));
+ document.getElementById('nonneg').innerHTML=NONNEG.map(function(x){return '<li>'+esc(x)+'</li>';}).join('');
+ tbl('tb_vendors',["Vendor","Origin","Scale","Established",{t:"Revenue USD m",n:1},{t:"Gross margin",n:1},{t:"Our share of their revenue",n:1},{t:"Their share of our programme spend",n:1},"Relationship"],
+  VENDORS.map(function(v){
+   return ['<b>'+v.n+'</b>',v.origin,v.scale,v.est,n0(v.rev),v.gm.toFixed(1)+'%',
+     v.ourShare.toFixed(1)+'%',v.theirShare+'%','<span class="tag acc">'+v.quad+'</span>'];}));
+ tbl('tb_rounds',["Stage","Who","Duration","Objective","Posture"],ROUNDS.map(function(x){
+  return ['<b>'+x[0]+'</b>',x[1],x[2],x[3],'<span class="tag warn">'+x[4]+'</span>'];}));
+}
+
+/* ================= PARAMS ================= */
+function renderParams(){
+ tbl('tb_upf',["Variable","Source","Basis","Note"],UPF.map(function(x){
+  return ['<b>'+x[0]+'</b>','<span class="tag '+(x[1]==='Vendor'?'info':x[1]==='Derived'?'warn':'mut')+'">'+x[1]+'</span>',x[2],x[3]];}));
+ tbl('tb_ops',["Variable","Source","Basis","Note"],OPS.map(function(x){
+  return ['<b>'+x[0]+'</b>','<span class="tag '+(x[1].indexOf('Vendor')>=0?'info':x[1]==='Derived'?'warn':'mut')+'">'+x[1]+'</span>',x[2],x[3]];}));
+ var req="DATA REQUEST - RFQ 2026-GRM-014\nRequired with your commercial offer. Incomplete fields will be\nfilled with a market benchmark for comparison purposes.\n\nUPFRONT, per tonne, both specifications\n  1  Acquisition price, ex works and DAP plant\n  2  Country of manufacture\n  3  Inbound logistics, port to plant, if quoting ex works\n  4  Payment terms: advance share and milestones\n  5  Lead time from purchase order, in months\n  6  Delivery tranche schedule\n\nOPERATIONAL, per tonne per year\n  7  Wear rate, kilograms per tonne of clinker ground, laden mixed feed\n  8  Feed size used for the wear-rate figure\n  9  Breakage allowance, years 1 to 3, at contracted rates\n 10  Re-order interval, tonnes\n 11  Contamination and oversize provision\n 12  Mill liner price list, top 40 lines by consumption\n 13  Packaging specification and format\n 14  Supply reliability (OTIF) guarantee, percentage, measured at plant level\n 15  Measurement and remedy mechanism for the guarantee\n 16  Response time commitment, by region\n 17  Nearest consignment stock point to each plant, distance\n 18  Performance guarantee period, months and wear-rate ceiling\n 19  Technical training included, days and scope\n 20  Wear-analytics data: fitted, data access, annual cost\n\nEND OF HORIZON\n 21  Year-end volume rebate view at 3 years, percentage of acquisition\n 22  Rise/fall formula proposed for the contract term";
+ document.getElementById('dataReq').textContent=req;
+}
+
+/* ================= INTAKE ================= */
+function renderIntake(){
+ document.getElementById('intakeStats').innerHTML=
+  '<div class="m"><div class="v a">5</div><div class="l">Quotes received</div></div>'+
+  '<div class="m"><div class="v">4</div><div class="l">Formats</div></div>'+
+  '<div class="m"><div class="v">102 / 110</div><div class="l">Fields extracted</div></div>'+
+  '<div class="m"><div class="v">8</div><div class="l">Gaps to close in round 1</div></div>'+
+  '<div class="m"><div class="v">94%</div><div class="l">Weighted extraction confidence</div></div>';
+ tbl('tb_intake',["Vendor","Format",{t:"Fields",n:1},{t:"Confidence",n:1},"Status","Note"],
+  INTAKE.map(function(x){
+   var c=parseFloat(x[3]);
+   return ['<b>'+x[0]+'</b>',x[1],x[2],'<span style="color:'+conf(c)+';font-weight:750">'+x[3]+'</span>',
+    '<span class="tag '+(x[4]==='Complete'?'pos':parseInt(x[4])<=2?'warn':'neg')+'">'+x[4]+'</span>',x[5]];}));
+ tbl('tb_gaps',["Vendor","Field","What happened","Action","Treatment in the comparison"],
+  GAPS.map(function(x){return ['<b>'+x[0]+'</b>',x[1],x[2],'<span class="tag warn">'+x[3]+'</span>',x[4]];}));
+ document.getElementById('qRaw').textContent=QRAW;
+ document.getElementById('qOut').innerHTML=QOUT.map(function(f){
+  var c=parseFloat(f[3]);
+  return '<div style="display:grid;grid-template-columns:1fr 70px;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)">'+
+   '<div><div style="font-size:13.5px;font-weight:640">'+esc(f[0])+': '+esc(f[1])+'</div>'+
+   '<div style="font-size:11.5px;color:var(--t4);margin-top:2px">'+esc(f[2])+'</div></div>'+
+   '<div style="text-align:right;font-weight:750;font-size:12.5px;color:'+(f[3]==='0'?'var(--neg)':conf(c))+'">'+
+   (f[3]==='0'?'absent':f[3]+'%')+'</div></div>';}).join('');
+}
+
+/* ================= NORMALISE ================= */
+function renderNormalise(){
+ tbl('tb_norm',["Item","As submitted","Adjustment applied","Effect"],NORM.map(function(x){
+  return ['<b>'+x[0]+'</b>',x[1],x[2],x[3]];}));
+ var rows=[];
+ VENDORS.forEach(function(v){
+  var raw=v.pm.acq, norm=tcoPM(v).upfront;
+  rows.push({k:v.n,v:raw,t:cur(raw),c:'var(--t4)',k2:'quoted'});
+  rows.push({k:'',v:norm,t:cur(norm),c:'var(--accent)',k2:'normalised'});});
+ document.getElementById('ch_norm').innerHTML=vbar(rows,{w:860,h:260});
+ var byQ=VENDORS.slice().sort(function(a,b){return a.pm.acq-b.pm.acq;});
+ var byN=VENDORS.slice().sort(function(a,b){return tcoPM(a).upfront-tcoPM(b).upfront;});
+ document.getElementById('normIns').querySelector('span').innerHTML=
+  'On quoted price the order is '+byQ.map(function(v){return v.k;}).join(', ')+
+  '. After normalisation for incoterm, logistics scope, payment terms and the performance guarantee it is '+
+  byN.map(function(v){return v.k;}).join(', ')+
+  '. The adjustments are worth up to <b>'+cur(tcoPM(V("E")).upfront-V("E").pm.acq)+'</b> per tonne on a single vendor, and none of them is a price concession.';
+}
+
+/* ================= COMPARE ================= */
+function cmpTable(id,item){
+ var lines=item==='pm'?
+  [["Acquisition price",function(v){return v.pm.acq;},1],
+   ["Duty and tariff",function(v){return v.pm.acq*v.pm.duty/100;},1],
+   ["Inbound logistics",function(v){return v.pm.log;},1],
+   ["Financing cost",function(v){return tcoPM(v).fin;},1],
+   ["Quality certification",function(v){return A.regPM;},1],
+   ["Total upfront",function(v){return tcoPM(v).upfront;},1],
+   ["Makeup cost, per year",function(v){return tcoPM(v).fuel;},1],
+   ["Breakage allowance, per year",function(v){return v.pm.maint;},1],
+   ["Contamination provision, per year",function(v){return v.pm.rep;},1],
+   ["Packaging, per year",function(v){return v.pm.tyre;},1],
+   ["Insurance, per year",function(v){return tcoPM(v).ins;},1],
+   ["Stockout risk, per year",function(v){return tcoPM(v).down;},1],
+   ["Total operating, per year",function(v){return tcoPM(v).opex;},1],
+   ["Year-end rebate credit",function(v){return tcoPM(v).resid;},-1],
+   ["Total cost of ownership",function(v){return tcoPM(v).tco;},1]]
+  :
+  [["Acquisition price",function(v){return v.tr.acq;},1],
+   ["Duty and tariff",function(v){return v.tr.acq*v.tr.duty/100;},1],
+   ["Inbound logistics",function(v){return v.tr.log;},1],
+   ["Total upfront",function(v){return tcoTR(v).upfront;},1],
+   ["Breakage allowance, per year",function(v){return v.tr.maint;},1],
+   ["Packaging, per year",function(v){return v.tr.tyre;},1],
+   ["Total operating, per year",function(v){return tcoTR(v).opex;},1],
+   ["Year-end rebate credit",function(v){return tcoTR(v).resid;},-1],
+   ["Total cost of ownership",function(v){return tcoTR(v).tco;},1]];
+ var rows=lines.map(function(L){
+  var vals=VENDORS.map(function(v){return L[1](v);});
+  var best=L[2]>0?Math.min.apply(null,vals):Math.max.apply(null,vals);
+  var tot=L[0].indexOf('Total')===0;
+  return [(tot?'<b>'+L[0]+'</b>':L[0])].concat(vals.map(function(x,i){
+   var mark=Math.abs(x-best)<0.5;
+   return (mark?'<b style="color:var(--pos)">':'')+cur(x)+(mark?'</b>':'');}));});
+ tbl(id,["Line"].concat(VENDORS.map(function(v){return {t:v.n,n:1};})),rows);
+}
+function renderCompare(){
+ document.getElementById('cmpHint').textContent='Normalised, '+S.yr+' year horizon, '+n0(S.km*1000)+' tonnes clinker ground per year';
+ cmpTable('tb_cmp_pm','pm');cmpTable('tb_cmp_tr','tr');
+}
+
+/* ================= RUTHLESS ================= */
+function ruthless(){
+ var lines=[
+  ["Acquisition price",function(v){return v.pm.acq;}],
+  ["Duty rate",function(v){return v.pm.acq*v.pm.duty/100;}],
+  ["Inbound logistics",function(v){return v.pm.log;}],
+  ["Financing cost",function(v){return tcoPM(v).fin;}],
+  ["Makeup cost, per year",function(v){return tcoPM(v).fuel;}],
+  ["Breakage allowance, per year",function(v){return v.pm.maint;}],
+  ["Contamination provision, per year",function(v){return v.pm.rep;}],
+  ["Packaging, per year",function(v){return v.pm.tyre;}],
+  ["Stockout risk, per year",function(v){return tcoPM(v).down;}]];
+ var out=lines.map(function(L){
+  var vals=VENDORS.map(function(v){return {k:v.k,x:L[1](v)};});
+  vals.sort(function(a,b){return a.x-b.x;});
+  return {n:L[0],best:vals[0].x,who:vals[0].k,worst:vals[vals.length-1].x,vals:vals};});
+ var resid=VENDORS.map(function(v){return {k:v.k,x:tcoPM(v).resid};}).sort(function(a,b){return b.x-a.x;});
+ out.push({n:"Year-end rebate credit",best:resid[0].x,who:resid[0].k,worst:resid[resid.length-1].x,vals:resid,credit:true});
+ var a=assum();
+ var bestUpfront=out[0].best+out[1].best+out[2].best+out[3].best+A.regPM;
+ var bestOpexYr=out[4].best+out[5].best+out[6].best+out[7].best+out[8].best+bestUpfront*A.insPM;
+ var bestTCO=bestUpfront+bestOpexYr*af(a.dr,a.years)-resid[0].x;
+ return {lines:out,upfront:bestUpfront,opex:bestOpexYr,tco:bestTCO};
+}
+function renderRuthless(){
+ var r=ruthless(), rk=rank(1);
+ var gaps=VENDORS.map(function(v){return {k:v.k,n:v.n,g:tcoPM(v).tco-r.tco};});
+ gaps.sort(function(a,b){return a.g-b.g;});
+ document.getElementById('ruthKpis').innerHTML=
+  '<div class="kpi hero"><div class="k">Theoretical best, per tonne forged</div><div class="v">'+cur(r.tco)+'</div><div class="u">assembled from the best rate in every line</div></div>'+
+  '<div class="kpi"><div class="k">Best actual vendor</div><div class="v">'+cur(tcoPM(V(rk[0].v.k)).tco)+'</div><div class="u">'+rk[0].v.n+'</div></div>'+
+  '<div class="kpi"><div class="k">Gap, best vendor to theoretical</div><div class="v">'+cur(gaps[0].g)+'</div><div class="u">'+(gaps[0].g/r.tco*100).toFixed(1)+'% above the floor</div></div>'+
+  '<div class="kpi"><div class="k">Gap, worst vendor to theoretical</div><div class="v" style="color:var(--neg)">'+cur(gaps[gaps.length-1].g)+'</div><div class="u">'+gaps[gaps.length-1].n+'</div></div>'+
+  '<div class="kpi"><div class="k">Derived negotiation target</div><div class="v">'+cur(1095)+'</div><div class="u">acquisition price, used with every vendor</div></div>';
+ tbl('tb_ruth',["Line","Best rate","Held by"].concat(VENDORS.map(function(v){return {t:v.k,n:1};})),
+  r.lines.map(function(L){
+   return ['<b>'+L.n+'</b>',cur(L.best),'<span class="tag pos">'+L.who+'</span>'].concat(
+     VENDORS.map(function(v){
+      var x=L.vals.filter(function(z){return z.k===v.k;})[0].x;
+      var d=L.credit?(L.best-x):(x-L.best);
+      return d<0.5?'<b style="color:var(--pos)">best</b>':('+'+cur(d));}));}));
+ document.getElementById('ch_ruth').innerHTML=hbar(gaps.map(function(g){
+   return {k:g.n,v:g.g,t:cur(g.g)+'  ('+(g.g/r.tco*100).toFixed(1)+'%)',
+     c:g.g===gaps[0].g?'var(--pos)':g.g>200?'var(--neg)':'var(--accent)'};}),{w:780,rh:32,padL:130});
+ document.getElementById('ruthIns').querySelector('span').innerHTML=
+  'No vendor offers this package and no vendor is shown it. It exists to answer one question in the room: what would this cost if every line were bought at the best rate already on the table. '+
+  'The best actual vendor sits <b>'+cur(gaps[0].g)+'</b> above it, and the worst sits <b>'+cur(gaps[gaps.length-1].g)+'</b> above it. '+
+  'The derived acquisition target of <b>'+cur(1095)+'</b> is set from the best acquisition, duty, logistics and financing lines, and it is stated to every vendor as a derived number rather than as a discount.';
+}
+
+/* ================= TCO ================= */
+function renderTCO(){
+ var a=assum();
+ document.getElementById('fuelV').textContent=(a.fuel*100).toFixed(0)+'%';
+ document.getElementById('kmV').textContent=(a.km/1e6).toFixed(2)+' Mt';
+ document.getElementById('yrV').textContent=a.years+' years';
+ document.getElementById('drV').textContent=(a.dr*100).toFixed(1)+'%';
+ var r=rank(1);
+ var byQ=VENDORS.slice().sort(function(x,y){return pkg(x.k,1).quoted-pkg(y.k,1).quoted;});
+ var cheapest=byQ[0], cheapPos=r.map(function(x){return x.v.k;}).indexOf(cheapest.k)+1;
+ var dearest=byQ[byQ.length-1], dearPos=r.map(function(x){return x.v.k;}).indexOf(dearest.k)+1;
+ document.getElementById('tcoKpis').innerHTML=
+  '<div class="kpi hero"><div class="k">Best on total cost</div><div class="v">'+r[0].v.n+'</div><div class="u">'+curM(r[0].tco)+' over '+a.years+' years</div></div>'+
+  '<div class="kpi"><div class="k">Cheapest quote</div><div class="v">'+cheapest.n+'</div><div class="u">finishes '+ord(cheapPos)+' on total cost</div></div>'+
+  '<div class="kpi"><div class="k">Most expensive quote</div><div class="v">'+dearest.n+'</div><div class="u">finishes '+ord(dearPos)+' on total cost</div></div>'+
+  '<div class="kpi"><div class="k">Spread on quote</div><div class="v">'+curM(pkg(byQ[byQ.length-1].k,1).quoted-pkg(byQ[0].k,1).quoted)+'</div><div class="u">across the five</div></div>'+
+  '<div class="kpi"><div class="k">Spread on total cost</div><div class="v">'+curM(r[r.length-1].tco-r[0].tco)+'</div><div class="u">'+((r[r.length-1].tco-r[0].tco)/r[0].tco*100).toFixed(1)+'% of the leader</div></div>';
+ var rows=[];
+ VENDORS.forEach(function(v){
+  var p=pkg(v.k,1);
+  rows.push({k:v.n,v:p.quoted,t:curM(p.quoted),c:'var(--t4)',k2:'quoted'});
+  rows.push({k:'',v:p.tco,t:curM(p.tco),c:v.k===r[0].v.k?'var(--pos)':'var(--accent)',k2:'TCO'});});
+ document.getElementById('ch_tco').innerHTML=vbar(rows,{w:880,h:280});
+ var wearGap=(V(cheapest.k).pm.cons-V(r[0].v.k).pm.cons)/1000*a.km*a.fuel*V(r[0].v.k).pm.acq/QTY.pm*af(a.dr,a.years);
+ document.getElementById('tcoIns').querySelector('span').innerHTML=
+  '<b>'+cheapest.n+'</b> has the lowest quoted price and finishes <b>'+ord(cheapPos)+'</b> on three-year cost. <b>'+r[0].v.n+
+  '</b> is '+ord(byQ.map(function(x){return x.k;}).indexOf(r[0].v.k)+1)+' on quote and first on total cost. '+
+  'The difference is wear rate and stockout risk: over '+a.years+' years the wear-rate gap alone is worth <b>'+
+  cur(wearGap)+'</b> per tonne of initial charge, against an acquisition gap of '+
+  cur(V(r[0].v.k).pm.acq-V(cheapest.k).pm.acq)+'. Drag throughput down or shorten the horizon and the ranking moves.';
+ var L=[["Acquisition","acq",1],["Duty and tariff","duty",1],["Inbound logistics","log",1],["Financing","fin",1],
+  ["Quality certification","reg",1],["Total upfront","upfront",1],["Makeup cost, present value","fuelPV",1],
+  ["Breakage and contamination, present value","maintPV",1],["Packaging, present value","tyrePV",1],
+  ["Insurance, present value","insPV",1],["Stockout risk, present value","downPV",1],
+  ["Total operating, present value","opexPV",1],["Year-end rebate credit","resid",-1],["Total cost of ownership","tco",1]];
+ var rows2=L.map(function(x){
+  return [(x[0].indexOf('Total')===0?'<b>'+x[0]+'</b>':x[0])].concat(VENDORS.map(function(v){
+   var t=tcoPM(v),f=af(a.dr,a.years),val;
+   if(x[1]==='fuelPV')val=t.fuel*f; else if(x[1]==='maintPV')val=(t.maint+t.rep)*f;
+   else if(x[1]==='tyrePV')val=t.tyre*f; else if(x[1]==='insPV')val=t.ins*f;
+   else if(x[1]==='downPV')val=t.down*f; else val=t[x[1]];
+   return cur(val);}));});
+ tbl('tb_tco',["Line"].concat(VENDORS.map(function(v){return {t:v.n,n:1};})),rows2);
+}
+function ord(n){return ['','first','second','third','fourth','fifth'][n]||(n+'th');}
+
+/* ================= TARGETS ================= */
+function renderTargets(){
+ var T=targets(1);
+ var all=T.map(function(t){return [t.mdo,t.laa,t.price];}).reduce(function(a,b){return a.concat(b);},[]);
+ var lo=Math.min.apply(null,all)*0.97, hi=Math.max.apply(null,all)*1.03;
+ var px=function(v){return (v-lo)/(hi-lo)*100;};
+ document.getElementById('zopaBars').innerHTML=T.map(function(t){
+  var hasZ=t.zopa;
+  return '<div style="margin-bottom:26px"><div style="display:flex;justify-content:space-between;align-items:baseline">'+
+   '<span style="font-size:15px;font-weight:700">'+esc(t.v.n)+'</span>'+
+   '<span style="font-size:13px;font-weight:700;color:'+(hasZ?'var(--pos)':'var(--neg)')+'">'+
+   (hasZ?('Zone '+cur(t.mdo)+' to '+cur(t.laa)):'No zone of agreement')+'</span></div>'+
+   '<div class="zbar"><div class="ztrack"></div>'+
+   (hasZ?'<div class="zzone" style="left:'+px(t.mdo)+'%;width:'+(px(t.laa)-px(t.mdo))+'%"></div>':'')+
+   '<div class="zmk" style="left:'+px(t.mdo)+'%;background:var(--accent)"></div>'+
+   '<div class="zlab" style="left:'+px(t.mdo)+'%;top:0;color:var(--accent)">MDO '+cur(t.mdo)+'</div>'+
+   '<div class="zmk" style="left:'+px(t.laa)+'%;background:var(--neg)"></div>'+
+   '<div class="zlab" style="left:'+px(t.laa)+'%;top:44px;color:var(--neg)">Walk-away '+cur(t.laa)+'</div>'+
+   '<div class="zmk" style="left:'+px(t.price)+'%;background:var(--t2)"></div>'+
+   '<div class="zlab" style="left:'+px(t.price)+'%;top:44px;color:var(--t2)">Quoted '+cur(t.price)+'</div>'+
+   '</div></div>';}).join('');
+ var noz=T.filter(function(t){return !t.zopa;});
+ document.getElementById('zopaIns').querySelector('span').innerHTML=
+  '<b>'+noz.length+' of 5</b> vendors have no zone of agreement on the forged media. For those, the price at which they would still beat the next best alternative on total cost sits <b>below</b> what their own gross margin allows them to offer. '+
+  'That is not a negotiating judgement, it is arithmetic: '+noz.map(function(t){return t.v.n;}).join(', ')+
+  ' cannot close the gap on price alone, because the gap is in makeup volume, stockout risk and the year-end rebate rather than in the invoice.';
+ tbl('tb_zopa',["Vendor",{t:"Quoted",n:1},{t:"Gross margin",n:1},{t:"MDO",n:1},{t:"Total cost",n:1},{t:"Next best alternative",n:1},{t:"Walk-away",n:1},"Zone"],
+  T.map(function(t){
+   return ['<b>'+t.v.n+'</b>',cur(t.price),t.v.gm.toFixed(1)+'%',cur(t.mdo),cur(t.tco),cur(t.batna),cur(t.laa),
+     t.zopa?'<span class="tag pos">'+cur(t.width)+' wide</span>':'<span class="tag neg">None</span>'];}));
+ tbl('tb_ourpos',["Element","Our position","Basis"],
+  [["Most desired outcome","Acquisition at 1,095 per tonne forged, 1,290 per tonne high-chrome","Best rate in every upfront line, assembled"],
+   ["Least acceptable agreement","The price at which the vendor stops beating the next best alternative on total cost","Computed per vendor, shown above"],
+   ["Best alternative to a negotiated agreement","Award to the next best vendor on total cost, or extend the current rate agreement by 9 months","Extension costs roughly 1.9m in additional breakage and contamination provisions"],
+   ["Opening anchor","1,095, presented as a derived target rather than a discount","Every vendor hears the same number"],
+   ["Concession plan","Nothing in round 1. Terms before price in round 2","Advance share, delivery window and reference rights"],
+   ["Walk-away trigger","No vendor inside the zone after best and final","Re-tender with a corrected scope, 11 weeks"]].map(function(r){
+    return ['<b>'+r[0]+'</b>',r[1],r[2]];}));
+}
+
+/* ================= ROUND VIEWS ================= */
+function personCard(p,vendorKey){
+ return '<div class="person"><div class="ph"><div class="av">'+esc(p.init)+'</div>'+
+  '<div><div class="pr">'+esc(p.r)+'</div><div class="pa">Authority: '+esc(p.au)+'</div></div></div>'+
+  '<div class="axes">'+AXES.map(function(a,i){
+   return '<div class="ax"><span class="al">'+a+'</span><span class="abar"><span class="afill" style="width:'+p.ax[i]+'%"></span></span><span class="av2">'+p.ax[i]+'</span></div>';}).join('')+'</div>'+
+  '<div class="evid">'+p.ev.map(function(e){
+   return '<div class="er"><span style="color:var(--t4);min-width:0">&#9679;</span><span><b>'+esc(e[0])+'</b><br>'+esc(e[1])+
+    ' <span class="tag '+(e[2]==='High'?'pos':e[2]==='Medium'?'warn':'mut')+'">'+e[2]+'</span></span></div>';}).join('')+'</div>'+
+  '<div class="pnote"><b>Motivation.</b> '+esc(p.mot)+'</div>'+
+  '<div class="pnote"><b>Do.</b> '+esc(p.dodo)+'</div>'+
+  '<div class="pnote"><b>Avoid.</b> '+esc(p.dont)+'</div></div>';
+}
+function roundBody(round,vk){
+ var v=V(vk), P=PLAN[vk]&&PLAN[vk][round], TA=TACTICS[vk]&&TACTICS[vk][round], O=OUTCOME[vk]&&OUTCOME[vk][round];
+ var T=targets(round===1?1:2).filter(function(t){return t.k===vk;})[0];
+ var p=pkg(vk,round), r=rank(round, round===1?null:SHORT);
+ var pos=r.map(function(x){return x.v.k;}).indexOf(vk)+1;
+ var h='';
+ /* profile */
+ h+='<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 21h18M5 21V8l4-3 4 3 6-2v15"/></svg></span>Vendor profile</div>'+
+  '<div class="hint">'+esc(v.origin)+' &middot; '+esc(v.scale)+' &middot; established '+v.est+'</div></div><div class="card-b">'+
+  '<div class="prof">'+
+  '<div class="pc"><div class="pv">'+cur(p.pmPrice)+'</div><div class="pl">Current forged media offer, per tonne</div></div>'+
+  '<div class="pc"><div class="pv">'+curM(p.tco)+'</div><div class="pl">Total cost of ownership, package</div></div>'+
+  '<div class="pc"><div class="pv">'+ord(pos)+'</div><div class="pl">Position on total cost</div></div>'+
+  '<div class="pc"><div class="pv">'+v.gm.toFixed(1)+'%</div><div class="pl">Gross margin, published</div></div>'+
+  '<div class="pc"><div class="pv">'+v.ourShare.toFixed(1)+'%</div><div class="pl">We are this much of their revenue</div></div>'+
+  '<div class="pc"><div class="pv">'+v.theirShare+'%</div><div class="pl">They are this much of our programme spend</div></div>'+
+  '<div class="pc"><div class="pv">'+esc(v.orderbook)+'</div><div class="pl">Order book</div></div>'+
+  '</div>'+
+  '<div class="grid2" style="margin-top:18px"><div>'+
+   '<h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin-bottom:11px">Relationship position</h5>'+
+   relMatrix(vk)+'</div><div>'+
+   '<h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin-bottom:11px">What the position implies</h5>'+
+   '<div class="insight" style="margin-top:0"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span>'+esc(quadNote(v))+'</span></div>'+
+   '<div class="insight"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span>'+
+   (T.zopa?('Zone of agreement runs from <b>'+cur(T.mdo)+'</b> to <b>'+cur(T.laa)+'</b>, a width of '+cur(T.width)+'.'):
+    ('<b>No zone of agreement.</b> Their walk-away point of '+cur(T.laa)+' sits below the '+cur(T.mdo)+' their own margin allows.'))+
+   '</span></div></div></div></div></section>';
+ /* counterparty */
+ h+='<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/></svg></span>Counterparty read</div>'+
+  '<div class="hint">Behavioural read from observed conduct. Not a psychological assessment</div></div>'+
+  '<div class="card-b"><div class="people">'+PEOPLE[vk].map(function(p){return personCard(p,vk);}).join('')+'</div>'+
+  '<p class="foot-note">Four axes scored 0 to 100 from observed negotiating conduct, written response patterns, published professional record and the incentives attached to the role. Every attribute carries its source and a confidence. Reviewed by the lead negotiator before the round. Rules of use are set out under Data and Assumptions.</p></div></section>';
+ /* team mapping */
+ h+='<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span>Our team, mapped</div>'+
+  '<div class="hint">Who speaks to whom, and what they carry</div></div><div class="card-b">'+
+  OURTEAM.map(function(t){
+   var cp=t.map[vk];
+   return '<div class="mapline"><div class="mus"><div class="mr">'+esc(t.r)+'</div><div class="mm">'+esc(t.m)+'</div></div>'+
+    '<div class="marrow">&#8594;</div><div><div class="mr">'+esc(cp==='-'?'No counterpart':cp)+'</div>'+
+    '<div class="mm">'+(cp==='-'?'Records, does not speak':esc(counterMotive(vk,cp)))+'</div></div></div>';}).join('')+
+  '</div></section>';
+ /* plan and script */
+ if(P){
+  h+='<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></span>Plan and script</div>'+
+   '<div class="hint">Round '+round+'</div></div><div class="card-b">'+
+   '<div class="insight" style="margin-top:0"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span><b>Objective.</b> '+esc(P.obj)+'</span></div>'+
+   '<h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin:20px 0 10px">Concession ladder</h5>'+
+   '<div class="ladder">'+P.ladder.map(function(l){
+     return '<div class="lrow"><span class="lstep">'+esc(l[0]).toUpperCase()+'</span><span class="ltxt">'+esc(l[1])+'</span>'+
+      '<span class="lval">'+(l[2]>0?cur(l[2]):'&mdash;')+'</span></div>';}).join('')+'</div>'+
+   '<h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin:20px 0 10px">What we can trade</h5>'+
+   '<ul class="bulletlist">'+P.trades.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul>'+
+   '<h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--t3);font-weight:750;margin:20px 0 10px">Opening lines</h5>'+
+   P.lines.map(function(l,i){
+     return '<div class="script"><div class="sl">Line '+(i+1)+'</div><p>&ldquo;'+esc(l)+'&rdquo;</p></div>';}).join('')+
+   '</div></section>';
+ }
+ /* tactics */
+ if(TA){
+  h+='<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span>Tactics and counters</div>'+
+   '<div class="hint">What this vendor is likely to use in round '+round+'</div></div>'+
+   '<div class="card-b flush"><table><tbody><tr><th>Tactic</th><th>What it looks like</th><th>Counter</th></tr>'+
+   TA.map(function(t){return '<tr><td><b>'+esc(t[0])+'</b></td><td>'+esc(t[1])+'</td><td>'+esc(t[2])+'</td></tr>';}).join('')+
+   '</tbody></table></div></section>';
+ }
+ /* outcome */
+ if(O){
+  h+='<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Outcome, round '+round+'</div></div>'+
+   '<div class="card-b flush"><table><tbody>'+
+   '<tr><th>Revised offer</th><td><b>'+esc(O.offer)+'</b></td></tr>'+
+   '<tr><th>Movement</th><td>'+esc(O.move)+'</td></tr>'+
+   '<tr><th>What they asked for</th><td>'+esc(O.asked)+'</td></tr>'+
+   '<tr><th>Read on remaining flexibility</th><td><span class="tag '+(O.flex.indexOf('High')===0?'pos':O.flex==='Exhausted'?'neg':'warn')+'">'+esc(O.flex)+'</span></td></tr>'+
+   '<tr><th>Assessment</th><td>'+esc(O.read)+'</td></tr>'+
+   '</tbody></table></div></section>';
+ } else {
+  h+='<section class="card"><div class="card-b"><div class="insight" style="margin-top:0"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/></svg><span>Outcome for this round has not been recorded yet. Use the live cockpit to capture the revised offer as it is given.</span></div></div></section>';
+ }
+ return h;
+}
+function counterMotive(vk,role){
+ var p=PEOPLE[vk].filter(function(x){return x.r===role;})[0];
+ return p?p.mot:'';
+}
+function quadNote(v){
+ var m={"Strategic partnership":"Both sides matter to each other. Value is available through joint work, and a purely price-led approach costs more than it wins.",
+  "One-sided cooperation":"They need us more than we need them. Movement will be fast, but confirm that the person giving it can hold it.",
+  "Supplier-led":"They matter to us more than we matter to them. Price movement will be limited, so the value has to come from scope and terms.",
+  "Standard negotiation":"Neither side is critical to the other. Run it commercially, and be willing to walk."};
+ return m[v.quad]||'';
+}
+function relMatrix(vk){
+ var v=V(vk);
+ var x=Math.min(95,Math.max(5,v.ourShare/10*100));
+ var y=Math.min(95,Math.max(5,v.theirShare/30*100));
+ return '<div class="matrix2">'+
+  '<div class="q" style="left:0;top:0">Supplier-led<br><span style="font-weight:500;font-size:11.5px">They matter to us, we do not matter to them</span></div>'+
+  '<div class="q" style="left:50%;top:0">Strategic partnership<br><span style="font-weight:500;font-size:11.5px">Both sides matter</span></div>'+
+  '<div class="q" style="left:0;top:50%">Standard negotiation<br><span style="font-weight:500;font-size:11.5px">Neither side is critical</span></div>'+
+  '<div class="q" style="left:50%;top:50%">One-sided cooperation<br><span style="font-weight:500;font-size:11.5px">We matter to them, they do not matter to us</span></div>'+
+  '<div style="position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line)"></div>'+
+  '<div style="position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--line)"></div>'+
+  '<div class="dotv" style="left:'+x+'%;bottom:'+y+'%"><span>'+esc(v.n)+'</span></div>'+
+  '<div style="position:absolute;bottom:-24px;left:0;right:0;text-align:center;font-size:11.5px;color:var(--t3);font-weight:650">Our importance to them &#8594;</div>'+
+  '<div style="position:absolute;left:-28px;top:0;bottom:0;display:grid;place-items:center"><span style="transform:rotate(-90deg);white-space:nowrap;font-size:11.5px;color:var(--t3);font-weight:650">Their importance to us &#8594;</span></div>'+
+  '</div>';
+}
+function renderRound(round){
+ var sel=round===1?'r1sel':'r2sel', body=round===1?'r1body':'r2body';
+ var cur2=round===1?S.r1v:S.r2v;
+ var list=round===1?VENDORS.map(function(v){return v.k;}):SHORT;
+ var dropped=round===2?VENDORS.map(function(v){return v.k;}).filter(function(k){return SHORT.indexOf(k)<0;}):[];
+ document.getElementById(sel).innerHTML=list.map(function(k){
+  var v=V(k), p=pkg(k,round);
+  return '<button class="vbtn'+(k===cur2?' on':'')+'" onclick="setV('+round+',\''+k+'\')">'+
+   '<div class="vn">'+esc(v.n)+'</div><div class="vm">'+cur(p.pmPrice)+' &middot; TCO '+curM(p.tco)+'</div></button>';}).join('')+
+  dropped.map(function(k){
+   return '<button class="vbtn out" disabled><div class="vn">'+esc(V(k).n)+'</div><div class="vm">Released after round 1</div></button>';}).join('');
+ document.getElementById(body).innerHTML=roundBody(round,cur2);
+}
+function setV(round,k){ if(round===1)S.r1v=k; else S.r2v=k; renderRound(round); }
+
+/* ================= ROUND SUMMARIES ================= */
+function renderR1Sum(){
+ var before=rank(1), after=rank(2);
+ var rows=VENDORS.map(function(v){
+  var b=pkg(v.k,1), a2=pkg(v.k,2);
+  var pb=before.map(function(x){return x.v.k;}).indexOf(v.k)+1;
+  var pa=after.map(function(x){return x.v.k;}).indexOf(v.k)+1;
+  return {v:v,b:b,a:a2,pb:pb,pa:pa,mv:(a2.pmPrice-b.pmPrice)/b.pmPrice*100,tmv:a2.tco-b.tco};});
+ var h='';
+ h+='<div class="kpis">'+
+  '<div class="kpi hero"><div class="k">Average price movement</div><div class="v">'+
+   (rows.reduce(function(s,r){return s+r.mv;},0)/rows.length).toFixed(1)+'%</div><div class="u">on forged media, across five vendors</div></div>'+
+  '<div class="kpi"><div class="k">Largest mover</div><div class="v">'+rows.slice().sort(function(a,b){return a.mv-b.mv;})[0].v.n+'</div><div class="u">'+
+   rows.slice().sort(function(a,b){return a.mv-b.mv;})[0].mv.toFixed(1)+'%</div></div>'+
+  '<div class="kpi"><div class="k">Smallest mover</div><div class="v">'+rows.slice().sort(function(a,b){return b.mv-a.mv;})[0].v.n+'</div><div class="u">'+
+   rows.slice().sort(function(a,b){return b.mv-a.mv;})[0].mv.toFixed(1)+'%</div></div>'+
+  '<div class="kpi"><div class="k">Leader after round 1</div><div class="v">'+after[0].v.n+'</div><div class="u">'+curM(after[0].tco)+' on total cost</div></div>'+
+  '<div class="kpi"><div class="k">Carried to round 2</div><div class="v">3 of 5</div><div class="u">two vendors released</div></div>'+
+  '</div>';
+ h+='<section class="card"><div class="card-h"><div class="ttl">Movement and re-ranking</div></div><div class="card-b flush">'+
+  '<table><tbody><tr><th>Vendor</th><th class="n">Opening</th><th class="n">After round 1</th><th class="n">Movement</th>'+
+  '<th class="n">TCO before</th><th class="n">TCO after</th><th class="n">Rank before</th><th class="n">Rank after</th></tr>'+
+  rows.map(function(r){
+   return '<tr><td><b>'+esc(r.v.n)+'</b></td><td class="n">'+cur(r.b.pmPrice)+'</td><td class="n">'+cur(r.a.pmPrice)+'</td>'+
+    '<td class="n"><span class="tag '+(r.mv<-4?'pos':'warn')+'">'+r.mv.toFixed(1)+'%</span></td>'+
+    '<td class="n">'+curM(r.b.tco)+'</td><td class="n">'+curM(r.a.tco)+'</td>'+
+    '<td class="n">'+r.pb+'</td><td class="n"><b>'+r.pa+'</b></td></tr>';}).join('')+
+  '</tbody></table></div></section>';
+ h+='<section class="card"><div class="card-h"><div class="ttl">Shortlist decision</div><div class="hint">Communicated three days after round 1</div></div>'+
+  '<div class="card-b flush"><table><tbody><tr><th>Vendor</th><th>Decision</th><th>Reason</th></tr>'+
+  SHORTLIST.map(function(s){
+   return '<tr><td><b>'+esc(V(s[0]).n)+'</b></td><td><span class="tag '+(s[1]==='Carried'?'pos':'neg')+'">'+s[1]+'</span></td><td>'+esc(s[2])+'</td></tr>';}).join('')+
+  '</tbody></table></div></section>';
+ h+='<section class="card"><div class="card-h"><div class="ttl">Counterparty read, updated</div>'+
+  '<div class="hint">What round 1 added, and what changes in round 2</div></div>'+
+  '<div class="card-b flush"><table><tbody><tr><th>Vendor</th><th>Change</th><th>What was observed</th><th>Implication for round 2</th></tr>'+
+  READUPDATE.map(function(u){
+   return '<tr><td><b>'+esc(V(u[0]).n)+'</b></td><td><span class="tag '+(u[1]==='Closed'?'mut':u[1]==='Profile revised'?'warn':'pos')+'">'+u[1]+'</span></td><td>'+esc(u[2])+'</td><td>'+esc(u[3])+'</td></tr>';}).join('')+
+  '</tbody></table></div></section>';
+ document.getElementById('r1sumbody').innerHTML=h;
+}
+function renderR2Sum(){
+ var before=rank(2,SHORT), after=rank(3,SHORT);
+ var T=targets(2);
+ var h='';
+ h+='<div class="kpis">'+
+  '<div class="kpi hero"><div class="k">Recommended award</div><div class="v">'+after[0].v.n+'</div><div class="u">'+curM(after[0].tco)+' on total cost of ownership</div></div>'+
+  '<div class="kpi"><div class="k">Best and final</div><div class="v">'+cur(after[0].pmPrice)+'</div><div class="u">forged media, per tonne</div></div>'+
+  '<div class="kpi"><div class="k">Margin of the decision</div><div class="v">'+curM(after[1].tco-after[0].tco)+'</div><div class="u">over the runner-up, '+((after[1].tco-after[0].tco)/after[0].tco*100).toFixed(1)+'%</div></div>'+
+  '<div class="kpi"><div class="k">Round 2 movement</div><div class="v">'+
+   (SHORT.map(function(k){return (pkg(k,3).pmPrice-pkg(k,2).pmPrice)/pkg(k,2).pmPrice*100;}).reduce(function(a,b){return a+b;},0)/3).toFixed(1)+'%</div><div class="u">average across the three</div></div>'+
+  '<div class="kpi"><div class="k">Runners-up held</div><div class="v">60 days</div><div class="u">at their best and final</div></div>'+
+  '</div>';
+ h+='<section class="card"><div class="card-h"><div class="ttl">Best and final comparison</div></div><div class="card-b flush">'+
+  '<table><tbody><tr><th>Vendor</th><th class="n">After round 1</th><th class="n">Best and final</th><th class="n">Movement</th>'+
+  '<th class="n">Total cost</th><th class="n">Rank</th><th>Against target</th></tr>'+
+  after.map(function(p,i){
+   var b=pkg(p.v.k,2), t=T.filter(function(x){return x.k===p.v.k;})[0];
+   var mv=(p.pmPrice-b.pmPrice)/b.pmPrice*100;
+   var inz=t.zopa&&p.pmPrice<=t.laa;
+   return '<tr><td><b>'+esc(p.v.n)+'</b></td><td class="n">'+cur(b.pmPrice)+'</td><td class="n"><b>'+cur(p.pmPrice)+'</b></td>'+
+    '<td class="n"><span class="tag pos">'+mv.toFixed(1)+'%</span></td><td class="n">'+curM(p.tco)+'</td><td class="n"><b>'+(i+1)+'</b></td>'+
+    '<td><span class="tag '+(inz?'pos':'warn')+'">'+(inz?'Inside the zone':'Above the walk-away')+'</span></td></tr>';}).join('')+
+  '</tbody></table></div></section>';
+ h+='<section class="card"><div class="card-h"><div class="ttl">Outcome by vendor</div></div><div class="card-b flush">'+
+  '<table><tbody><tr><th>Vendor</th><th>Revised offer</th><th>What they asked for</th><th>Assessment</th></tr>'+
+  SHORT.map(function(k){
+   var O=OUTCOME[k]&&OUTCOME[k][2];
+   if(!O)return '<tr><td><b>'+esc(V(k).n)+'</b></td><td colspan="3">Best and final recorded in the cockpit</td></tr>';
+   return '<tr><td><b>'+esc(V(k).n)+'</b></td><td>'+esc(O.offer)+'</td><td>'+esc(O.asked)+'</td><td>'+esc(O.read)+'</td></tr>';}).join('')+
+  '</tbody></table></div></section>';
+ document.getElementById('r2sumbody').innerHTML=h;
+}
+
+/* ================= COCKPIT ================= */
+function renderCockpit(){
+ var list=VENDORS.map(function(v){return v.k;});
+ document.getElementById('cockpit').innerHTML=
+  '<div class="cockrow" style="border-bottom:2px solid var(--line-2);font-size:12px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.06em">'+
+  '<div>Vendor</div><div>Forged ($/t)</div><div>High-chrome ($/t)</div><div>Total cost</div><div>Rank</div></div>'+
+  list.map(function(k){
+   var v=V(k), c=S.cock[k]||{pm:v.pm.acq,tr:v.tr.acq};
+   var p=pkg(k);
+   var r=rank(null), pos=r.map(function(x){return x.v.k;}).indexOf(k)+1;
+   return '<div class="cockrow"><div style="font-weight:700;font-size:15px">'+esc(v.n)+'</div>'+
+    '<div><input type="number" step="100" value="'+Math.round(c.pm)+'" oninput="cockSet(\''+k+'\',\'pm\',this.value)"></div>'+
+    '<div><input type="number" step="100" value="'+Math.round(c.tr)+'" oninput="cockSet(\''+k+'\',\'tr\',this.value)"></div>'+
+    '<div style="font-weight:750;font-variant-numeric:tabular-nums">'+curM(p.tco)+'</div>'+
+    '<div><span class="tag '+(pos===1?'pos':pos<=3?'warn':'mut')+'" style="font-size:14px;padding:5px 12px">'+pos+'</span></div></div>';}).join('');
+ var r=rank(null), T=targets(1);
+ var lead=r[0];
+ document.getElementById('cockKpis').innerHTML=
+  '<div class="kpi hero"><div class="k">Leading on total cost</div><div class="v">'+lead.v.n+'</div><div class="u">'+curM(lead.tco)+'</div></div>'+
+  '<div class="kpi"><div class="k">Gap to second</div><div class="v">'+curM(r[1].tco-r[0].tco)+'</div><div class="u">'+r[1].v.n+' is next</div></div>'+
+  '<div class="kpi"><div class="k">Spread across the field</div><div class="v">'+curM(r[r.length-1].tco-r[0].tco)+'</div><div class="u">on total cost of ownership</div></div>'+
+  '<div class="kpi"><div class="k">Inside the zone</div><div class="v">'+
+   r.filter(function(p){var t=T.filter(function(x){return x.k===p.v.k;})[0];return t.zopa&&p.pmPrice<=t.laa;}).length+
+   ' of '+r.length+'</div><div class="u">at the current offers</div></div>'+
+  '<div class="kpi"><div class="k">Against the derived target</div><div class="v">'+
+   ((lead.pmPrice-1095)/1095*100).toFixed(1)+'%</div><div class="u">leader against 1,095</div></div>';
+ document.getElementById('ch_cock').innerHTML=hbar(r.map(function(p){
+   return {k:p.v.n,v:p.tco,t:curM(p.tco),c:p.v.k===lead.v.k?'var(--pos)':'var(--accent)'};}),{w:800,rh:34,padL:130});
+ document.getElementById('cockIns').querySelector('span').innerHTML=
+  '<b>'+lead.v.n+'</b> leads on total cost at the offers currently entered, by <b>'+curM(r[1].tco-r[0].tco)+
+  '</b> over '+r[1].v.n+'. The leader sits <b>'+((lead.pmPrice-1095)/1095*100).toFixed(1)+
+  '%</b> against the derived target of '+cur(1095)+' on the forged media.';
+ tbl('tb_cock',["Vendor",{t:"Current offer",n:1},{t:"MDO",n:1},{t:"Walk-away",n:1},{t:"Gap to MDO",n:1},"Position"],
+  VENDORS.map(function(v){
+   var t=T.filter(function(x){return x.k===v.k;})[0];
+   var c=S.cock[v.k]||{pm:v.pm.acq};
+   var inz=t.zopa&&c.pm<=t.laa;
+   return ['<b>'+v.n+'</b>',cur(c.pm),cur(t.mdo),t.zopa?cur(t.laa):'&mdash;',cur(c.pm-t.mdo),
+     t.zopa?('<span class="tag '+(inz?'pos':'neg')+'">'+(inz?'Inside the zone':'Above walk-away')+'</span>'):
+     '<span class="tag neg">No zone exists</span>'];}));
+}
+function cockSet(k,f,val){
+ var v=V(k);
+ if(!S.cock[k])S.cock[k]={pm:v.pm.acq,tr:v.tr.acq};
+ var x=parseFloat(val); if(!isNaN(x))S.cock[k][f]=x;
+ renderCockpit();
+}
+function cockReset(){S.cock={};renderCockpit();}
+
+/* ================= AWARD ================= */
+function renderAward(){
+ var after=rank(3,SHORT), win=after[0];
+ var base=VENDORS.map(function(v){return pkg(v.k,1).quoted;}).reduce(function(a,b){return a+b;},0)/5;
+ var baseTCO=VENDORS.map(function(v){return pkg(v.k,1).tco;}).reduce(function(a,b){return a+b;},0)/5;
+ var lowest=Math.min.apply(null,VENDORS.map(function(v){return pkg(v.k,1).quoted;}));
+ document.getElementById('awardKpis').innerHTML=
+  '<div class="kpi hero"><div class="k">Award</div><div class="v">'+win.v.n+'</div><div class="u">'+cur(win.pmPrice)+' forged, '+cur(win.trPrice)+' high-chrome, per tonne</div></div>'+
+  '<div class="kpi"><div class="k">Contract value</div><div class="v">'+curM(win.quoted)+'</div><div class="u">3,900 t initial charge</div></div>'+
+  '<div class="kpi"><div class="k">Against the baseline</div><div class="v" style="color:var(--pos)">'+((base-win.quoted)/base*100).toFixed(1)+'%</div><div class="u">'+curM(base-win.quoted)+' on contract value</div></div>'+
+  '<div class="kpi"><div class="k">On total cost of ownership</div><div class="v" style="color:var(--pos)">'+((baseTCO-win.tco)/baseTCO*100).toFixed(1)+'%</div><div class="u">'+curM(baseTCO-win.tco)+' over '+S.yr+' years</div></div>'+
+  '<div class="kpi"><div class="k">Against the lowest opening quote</div><div class="v">'+curM(win.quoted-lowest)+'</div><div class="u">paid more upfront, '+curM(pkg("C",1).tco-win.tco)+' less over the horizon</div></div>';
+ document.getElementById('ch_award').innerHTML=waterfall([
+  {k:"Baseline|average of 5 quotes",v:base,t:curM(base),type:"total"},
+  {k:"Round 1|movement",v:-(base-VENDORS.map(function(v){return pkg(v.k,2).quoted;}).reduce(function(a,b){return a+b;},0)/5),
+   t:'-'+curM(base-VENDORS.map(function(v){return pkg(v.k,2).quoted;}).reduce(function(a,b){return a+b;},0)/5)},
+  {k:"Shortlist and|round 2 movement",v:-(VENDORS.map(function(v){return pkg(v.k,2).quoted;}).reduce(function(a,b){return a+b;},0)/5-win.quoted),
+   t:'-'+curM(VENDORS.map(function(v){return pkg(v.k,2).quoted;}).reduce(function(a,b){return a+b;},0)/5-win.quoted)},
+  {k:"Awarded|contract value",v:win.quoted,t:curM(win.quoted),type:"total"}],{w:820,h:270});
+ tbl('tb_sav',["Measure","Basis","Value"],
+  [["Baseline","Average of the five opening quotes on firm specification",curM(base)],
+   ["Awarded contract value","Best and final from the selected vendor",curM(win.quoted)],
+   ["Saving against baseline","Contract value basis",curM(base-win.quoted)+'  ('+((base-win.quoted)/base*100).toFixed(1)+'%)'],
+   ["Baseline, total cost of ownership","Average of the five, three years",curM(baseTCO)],
+   ["Awarded, total cost of ownership","Selected vendor, three years",curM(win.tco)],
+   ["Saving on total cost","Three year basis",curM(baseTCO-win.tco)+'  ('+((baseTCO-win.tco)/baseTCO*100).toFixed(1)+'%)'],
+   ["Validation","Reviewed with finance before recognition","Pending"]].map(function(r){
+    return ['<b>'+r[0]+'</b>',r[1],'<b>'+r[2]+'</b>'];}));
+ tbl('tb_conc',["What","Detail","Cost to us","Note"],CONCEDED.map(function(c){
+  return ['<b>'+c[0]+'</b>',c[1],c[2],'<span class="tag '+(c[3].indexOf('Held')===0?'pos':c[3]==='Free concession'?'info':'warn')+'">'+c[3]+'</span>'];}));
+ tbl('tb_review',["Category","Observation","Consequence"],REVIEW.map(function(r){
+  return ['<span class="tag '+(r[0]==='What worked'?'pos':r[0]==='What to change'?'warn':'info')+'">'+r[0]+'</span>','<b>'+r[1]+'</b>',r[2]];}));
+}
+
+/* ================= DATA ================= */
+function renderData(){
+ tbl('tb_src',["Input","Class","Source","Refresh","Used for"],SRC.map(function(r){
+  var c=r[1]==='Internal'?'info':r[1]==='Vendor'?'acc':r[1]==='Market'?'pos':'warn';
+  return ['<b>'+r[0]+'</b>','<span class="tag '+c+'">'+r[1]+'</span>',r[2],r[3],r[4]];}));
+ tbl('tb_rules',["Rule","What it means","Boundary"],RULES.map(function(r){
+  return ['<b>'+r[0]+'</b>',r[1],r[2]];}));
+ tbl('tb_assum',["Assumption","Value","Basis"],ASSUM.map(function(r){
+  return ['<b>'+r[0]+'</b>',r[1],r[2]];}));
+}
+
+/* ================= WIRE ================= */
+function renderAll(){
+ renderHeader();renderBrief();renderParams();renderIntake();renderNormalise();
+ renderCompare();renderRuthless();renderTCO();renderTargets();
+ renderRound(1);renderRound(2);renderR1Sum();renderR2Sum();
+ renderCockpit();renderAward();renderData();
+}
+function bindNeg(){
+ [["inFuel","fuel"],["inKm","km"],["inYr","yr"],["inDr","dr"]].forEach(function(p){
+  document.getElementById(p[0]).addEventListener('input',function(){
+   S[p[1]]=parseFloat(this.value);renderAll();});});
+ document.getElementById('curToggle').addEventListener('click',function(){
+  S.cur=S.cur==='USD'?'IDR':'USD';
+  document.getElementById('curSwitch').classList.toggle('on');renderAll();});
+ document.getElementById('cockReset').addEventListener('click',cockReset);
+ window.onViewChange=function(v){
+  S.round=(v==='r2'||v==='r2sum')?2:1;
+  document.getElementById('pillRound').textContent=S.round;};
+}
+bindNav();renderAll();bindNeg();
+
+</script>
+</body>
+</html>

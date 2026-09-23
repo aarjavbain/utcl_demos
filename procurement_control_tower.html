@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProcureTower &middot; Procurement Control Tower</title>
+<style>
+  :root{
+    --accent:#0C2B82;--accent-2:#12A6E6;--accent-deep:#071434;
+    --accent-soft:rgba(12,43,130,.14);--accent-glow:rgba(12,43,130,.34);
+    --pos:#17A673;--pos-soft:rgba(23,166,115,.10);
+    --neg:#E5484D;--neg-soft:rgba(229,72,77,.12);
+    --warn:#FCAF17;--warn-soft:rgba(252,175,23,.14);--info:#12A6E6;--purple:#3A68C5;
+    --bg:#070B18;--panel:#0E1428;--panel-2:#0A0F20;
+    --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.10);
+    --t1:#f4f5f7;--t2:rgba(255,255,255,.62);--t3:rgba(255,255,255,.40);--t4:rgba(255,255,255,.28);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:Arial,Helvetica,sans-serif;
+    background:radial-gradient(900px 480px at 78% -8%,rgba(12,43,130,.12),transparent 60%),
+      radial-gradient(700px 420px at 6% 4%,rgba(18,166,230,.06),transparent 55%),var(--bg);
+    color:var(--t1);-webkit-font-smoothing:antialiased;overflow:hidden;font-size:15.5px;line-height:1.45}
+  .app{display:flex;height:100vh;overflow:hidden}
+  aside{width:242px;flex-shrink:0;background:var(--panel-2);border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .brand{height:64px;display:flex;align-items:center;gap:11px;padding:0 22px;border-bottom:1px solid var(--line)}
+  .pt-logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));box-shadow:0 4px 14px var(--accent-glow);flex-shrink:0}
+  .pt-logo svg{width:17px;height:17px}
+  .pt-txt b{display:block;font-size:16px;font-weight:800;letter-spacing:1.6px;color:var(--t1);line-height:1}
+  .pt-txt span{display:block;font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--accent-2);text-transform:uppercase;margin-top:3px}
+  nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+  .nav-lbl{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:var(--t4);padding:14px 12px 6px;font-weight:700}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:11px;color:var(--t2);font-weight:500;cursor:pointer;font-size:15px;transition:.16s;position:relative}
+  .nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.8}
+  .nav-item:hover{background:rgba(255,255,255,.04);color:var(--t1)}
+  .nav-item.active{background:var(--accent-soft);color:#fff}
+  .nav-item.active svg{opacity:1;color:var(--accent-2)}
+  .nav-item.active::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--accent-2),var(--accent))}
+  .nav-item .badge{margin-left:auto;font-size:11.5px;font-weight:700;border-radius:6px;padding:1px 7px}
+  .nav-item .badge.r{background:var(--neg-soft);color:var(--neg)}
+  .nav-item .badge.a{background:var(--warn-soft);color:var(--warn)}
+  .side-foot{padding:10px 12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+  .user{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.03)}
+  .ava{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+  .user .nm{font-size:14px;font-weight:600;line-height:1.2}.user .ro{font-size:12px;color:var(--t3)}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+  header.top{height:64px;border-bottom:1px solid var(--line);background:var(--panel-2);display:flex;align-items:center;gap:10px;padding:0 26px;flex-wrap:wrap}
+  .hi{font-size:15.5px;font-weight:600}
+  .pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+  .pill .dot{width:6px;height:6px;border-radius:50%}
+  .top .spacer{flex:1}
+  .confbar{display:flex;align-items:center;gap:8px;padding:8px 26px;background:rgba(229,72,77,.08);border-bottom:1px solid rgba(229,72,77,.18);color:var(--t2);font-size:12.5px}
+  .scroll{flex:1;overflow-y:auto;padding:26px 30px 120px}
+  .wrap{max-width:1220px;margin:0 auto}
+  .view{display:none;flex-direction:column;gap:22px}.view.active{display:flex;animation:rise .4s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .vhead h1{font-size:28px;font-weight:800;letter-spacing:-.5px}
+  .vhead .date{font-size:14px;color:var(--t3);margin-top:3px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer;border-radius:11px;padding:9px 15px;transition:.16s;border:1px solid var(--line-2);background:rgba(255,255,255,.04);color:var(--t1)}
+  .btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-deep));border:none;color:#fff;font-weight:700;box-shadow:0 6px 18px var(--accent-glow)}
+  section.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 22px}
+  .card-h .ttl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16.5px}
+  .card-h .ttl .ic{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center}
+  .card-h .ttl .ic svg{width:16px;height:16px;color:var(--accent-2)}
+  .chip{font-size:12px;font-weight:700;border-radius:7px;padding:3px 9px;letter-spacing:.02em}
+  .chip.dir{background:var(--accent-soft);color:var(--accent-2)}
+  .chip.ind{background:rgba(58,104,197,.16);color:var(--purple)}
+  .chip.r{background:var(--neg-soft);color:var(--neg)}
+  .chip.a{background:var(--warn-soft);color:var(--warn)}
+  .chip.g{background:var(--pos-soft);color:var(--pos)}
+  .sub{padding:0 22px 12px;color:var(--t3);font-size:13.5px}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .stat-row .m{padding:6px 18px;border-right:1px solid var(--line)}
+  .stat-row .m:last-child{border-right:none}
+  .stat-row .v{font-size:25px;font-weight:800}
+  .stat-row .v.g{color:var(--pos)}.stat-row .v.r{color:var(--neg)}.stat-row .v.a{color:var(--warn)}
+  .stat-row .l{font-size:12.5px;color:var(--t3);margin-top:3px}
+  .tblwrap{overflow-x:auto;padding:0 22px 20px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  thead th{text-align:left;color:var(--t3);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--line-2)}
+  thead th.r{text-align:right}thead th.c{text-align:center}
+  tbody td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody td.r{text-align:right}tbody td.c{text-align:center}
+  tbody tr:last-child td{border-bottom:none}
+  .lp{font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  @media(max-width:1050px){.grid2,.grid3{grid-template-columns:1fr}.stat-row{grid-template-columns:1fr 1fr}}
+
+  /* KPI deviation cards */
+  .kpiwrap{display:flex;flex-direction:column;gap:12px;padding:6px 22px 20px}
+  .kpi{border:1px solid var(--line-2);border-radius:13px;background:rgba(255,255,255,.015);overflow:hidden;border-left-width:4px}
+  .kpi.st-r{border-left-color:var(--neg)}
+  .kpi.st-a{border-left-color:var(--warn)}
+  .kpi.st-g{border-left-color:var(--pos)}
+  .kpi-h{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer}
+  .kpi-h:hover{background:rgba(255,255,255,.02)}
+  .kpi-rank{width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.06);display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--t3);flex-shrink:0}
+  .kpi-main{flex:1;min-width:0}
+  .kpi-t{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .kpi-cat{font-size:12px;color:var(--t3);margin-top:2px}
+  .kpi-nums{display:flex;align-items:baseline;gap:14px;flex-shrink:0}
+  .kpi-dev{font-size:19px;font-weight:800}
+  .kpi-dev.bad{color:var(--neg)}.kpi-dev.good{color:var(--pos)}
+  .kpi-pl{font-size:12px;color:var(--t3);text-align:right}
+  .kpi-chev{width:18px;height:18px;color:var(--t3);transition:.2s;flex-shrink:0}
+  .kpi.open .kpi-chev{transform:rotate(180deg)}
+  .kpi-body{display:none;padding:0 18px 18px}
+  .kpi.open .kpi-body{display:block}
+  .attr{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+  .attr h5{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);margin-bottom:8px;font-weight:700}
+  .attr-row{display:flex;align-items:center;gap:10px;font-size:13px;padding:3px 0}
+  .attr-row .ab{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+  .attr-row .ab i{position:absolute;top:0;left:0;bottom:0;border-radius:4px}
+  .attr-row .av{width:56px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  .attr-row .al{flex:2;color:var(--t2)}
+  .recs h5{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);margin:2px 0 10px;font-weight:700}
+  .recgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:1050px){.recgrid{grid-template-columns:1fr}}
+  .rec{border:1px solid var(--line-2);border-radius:11px;padding:13px 14px;display:flex;flex-direction:column;gap:7px;background:rgba(255,255,255,.015)}
+  .rec.adopted{border-color:var(--pos);background:var(--pos-soft)}
+  .rec-h{display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .rec-t{font-weight:700;font-size:13.5px}
+  .risk{font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px;flex-shrink:0}
+  .risk.Low{background:var(--pos-soft);color:var(--pos)}
+  .risk.Med{background:var(--warn-soft);color:var(--warn)}
+  .risk.High{background:var(--neg-soft);color:var(--neg)}
+  .rec p{font-size:12.5px;color:var(--t2);line-height:1.5}
+  .rec p b{color:var(--t1)}
+  .rec .meta{font-size:11.5px;color:var(--t3);margin-top:2px}
+  .rec button{margin-top:auto;font-size:12.5px;font-weight:700;border-radius:8px;padding:7px 10px;border:1px solid var(--line-2);background:rgba(255,255,255,.04);color:var(--t1);cursor:pointer}
+  .rec button:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .rec.adopted button{border-color:var(--pos);color:var(--pos);background:rgba(23,166,115,.08)}
+  .favnote{background:var(--pos-soft);border:1px solid rgba(23,166,115,.25);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--t2)}
+  .favnote b{color:var(--pos)}
+
+  /* category cards (direct / indirect) */
+  .catcard{border:1px solid var(--line-2);border-radius:13px;padding:16px 18px;background:rgba(255,255,255,.015)}
+  .catcard h3{font-size:16px;font-weight:800;display:flex;align-items:center;gap:9px}
+  .catcard .spend{font-size:13px;color:var(--accent-2);font-weight:700;margin-left:auto}
+  .catcard .subs{font-size:12.5px;color:var(--t3);margin:5px 0 12px}
+  .minikpi{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px dashed var(--line)}
+  .minikpi:first-of-type{border-top:none}
+  .minikpi .k{font-size:13px;color:var(--t2)}
+  .minikpi .v{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .dot.r{background:var(--neg)}.dot.a{background:var(--warn)}.dot.g{background:var(--pos)}
+
+  /* decision log */
+  .logitem{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .logitem:last-child{border-bottom:none}
+  .logdot{width:10px;height:10px;border-radius:50%;background:var(--pos);margin-top:5px;flex-shrink:0}
+  .logmeta{font-size:12px;color:var(--t3);margin-bottom:3px}
+  .logtitle{font-weight:700;font-size:14.5px;margin-bottom:3px}
+  .logbody{font-size:13px;color:var(--t2);line-height:1.5}
+  .logempty{padding:30px;text-align:center;color:var(--t3);font-size:13.5px}
+
+  /* AI insight */
+  .aiins{margin:0 22px 14px;background:rgba(18,166,230,.06);border:1px solid rgba(18,166,230,.16);border-radius:11px;padding:13px 15px;font-size:13.5px;color:var(--t2);line-height:1.55}
+  .aiins .lab{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-2);display:block;margin-bottom:5px}
+
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--line-2);border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:10px;font-size:13.5px;box-shadow:0 12px 30px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.25s;z-index:999}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast svg{width:16px;height:16px;color:var(--pos);flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="pt-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div class="pt-txt"><b>PROCURETOWER</b><span>Control Tower</span></div>
+    </div>
+    <nav>
+      <div class="nav-lbl">Cement &middot; Group Procurement</div>
+      <div class="nav-item active" data-view="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>Spend Overview</div>
+      <div class="nav-item" data-view="cockpit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Cockpit &middot; Deviations<span class="badge r" id="navRedCount"></span></div>
+      <div class="nav-item" data-view="direct"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12l8.73-5.04M12 22.08V12"/></svg>Direct Categories</div>
+      <div class="nav-item" data-view="indirect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Indirect Categories</div>
+      <div class="nav-item" data-view="sites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-3 4 3 6-2v15"/></svg>Site Watch<span class="badge a" id="navSiteCount"></span></div>
+      <div class="nav-item" data-view="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Decision Log</div>
+    </nav>
+    <div class="side-foot">
+      <div class="user"><div class="ava">DR</div><div><div class="nm">Daniel Reyes</div><div class="ro">Group Procurement Lead</div></div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <span class="hi">Good day, Daniel!</span>
+      <div class="spacer"></div>
+      <span class="pill"><span class="dot" style="background:var(--accent)"></span>Total addressable spend <span style="color:var(--t4)">&#8250;</span> $2.10Bn</span>
+      <span class="pill">14 categories &middot; 31 sub-categories</span>
+      <span class="pill" id="pillRag">4 red &middot; 9 amber &middot; 18 green</span>
+    </header>
+    <div class="confbar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Illustrative control tower for a multi-plant cement producer. DRAFT &middot; not to be shared or forwarded without prior approval.</span></div>
+
+    <div class="scroll"><div class="wrap" id="viewsRoot"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg"></span></div>
+
+<script>
+/* ===================== DATA MODEL ===================== */
+/* Deviation-ranked KPIs for the Cockpit. Sorted by materiality, not a full scorecard.
+   Each attribution decomposes the deviation into named drivers that sum to it. */
+var KPIS = [
+  {
+    id:'k1', title:'WHRS project cost vs sanctioned budget', catType:'indirect', catName:'Capex & Engineering Procurement',
+    plan:'$42.0M sanctioned', actual:'$47.9M committed', dev:'+$5.9M', devPct:14.0, direction:'bad',
+    attribution:[
+      {label:'Structural steel price escalation, since the EPC contract has no price-variation cap', pct:9.1},
+      {label:'Scope addition: a second cooling tower approved mid-project at Unit 1', pct:3.2},
+      {label:'FX on imported turbine components', pct:1.7}
+    ],
+    recs:[
+      {label:'Invoke price-variation clause renegotiation with the EPC contractor', buys:'Recovers an estimated $2.8M of the steel escalation retroactively.', cost:'Negotiation effort, roughly 6 weeks; legal review of the PVC wording.', watchout:'Contractor may counter-claim for schedule relief in return.', risk:'Med', owner:'Capex Category Lead', revisit:'Next monthly review meeting'},
+      {label:'Absorb the overrun; cap future EPC contracts with a &#177;5% PVC band', buys:'No near-term friction with the current contractor.', cost:'Full $5.9M stays in the project cost, unrecovered.', watchout:'Sets a precedent every other in-flight EPC vendor will expect to match.', risk:'High', owner:'Capex Category Lead', revisit:'Next capex committee'},
+      {label:'Negotiate 50% retroactive recovery, apply a PVC band going forward', buys:'Partial recovery (~$1.4M) plus protection on future contracts.', cost:'Moderate negotiation effort across two workstreams.', watchout:'Still leaves roughly $1.5M of the overrun unrecovered.', risk:'Low', owner:'Capex Category Lead', revisit:'Next monthly review meeting'}
+    ]
+  },
+  {
+    id:'k2', title:'Statutory compliance (Social Security Fund) pass rate for contract labour vendors', catType:'indirect', catName:'HR, Manpower & Contract Labour',
+    plan:'100%', actual:'78%', dev:'&#8722;22 pts', devPct:-22.0, direction:'bad',
+    attribution:[
+      {label:'One regional manpower vendor across Unit 2, Unit 4 and Unit 5, recurring Social Security Fund remittance delays', pct:14},
+      {label:'A second vendor, Social Security Fund registration gaps for new hires', pct:6},
+      {label:'Documentation and audit-trail gaps at Unit 6', pct:2}
+    ],
+    recs:[
+      {label:'Issue a formal cure-notice with a 90-day corrective action plan to both vendors', buys:'Retains continuity of labour supply while compliance is repaired.', cost:'Compliance and reputational risk continues through the cure window.', watchout:'If the vendor fails to cure, contract termination mid-cycle disrupts plant operations.', risk:'Med', owner:'HR Procurement Lead', revisit:'30-day checkpoint'},
+      {label:'Terminate and parallel-source at the 2 worst-affected plants immediately', buys:'Fastest removal of compliance risk.', cost:'Transition cost plus short-term labour-availability risk during onboarding.', watchout:'Onboarding two plants at once strains HR bandwidth and risks a production disruption in peak season.', risk:'High', owner:'HR Procurement Lead', revisit:'Immediate'},
+      {label:'Cure-notice plus immediate co-employer indemnity insurance as a bridge', buys:'Limits the company&rsquo;s own statutory liability exposure while the vendor cures.', cost:'Insurance premium of roughly $0.3M per year.', watchout:'Insurance covers exposure, not the underlying vendor problem.', risk:'Low', owner:'HR Procurement Lead', revisit:'30-day checkpoint'}
+    ]
+  },
+  {
+    id:'k3', title:'Landed fuel cost per tonne of clinker (GCV-adjusted)', catType:'direct', catName:'Coal & Pet Coke',
+    plan:'$28.40/t', actual:'$30.10/t', dev:'+$1.70/t', devPct:6.0, direction:'bad',
+    attribution:[
+      {label:'Thai baht depreciation of about 4% against the contracted forward rate, a one-quarter hedge lag', pct:3.8},
+      {label:'Indonesian coal ocean freight up ~9% quarter-on-quarter', pct:2.6},
+      {label:'Favourable: higher blended GCV lowering effective tonnes needed', pct:-0.4}
+    ],
+    recs:[
+      {label:'Trigger a quarterly forex hedge review; extend the hedge horizon to 2 quarters forward', buys:'Reduces future exposure to hedge lag.', cost:'Hedge premium on the extended cover.', watchout:'Locks in the current elevated forward rate if the baht recovers.', risk:'Med', owner:'Fuel Category Lead + Treasury', revisit:'Quarterly'},
+      {label:'Rebalance import mix toward Australian coal for freight stability', buys:'Lower exposure to ocean-freight volatility on the Indonesian route.', cost:'Higher landed unit price than the Indonesian source even before freight.', watchout:'This is largely a volatility trade, not a savings trade, and net landed cost may not improve.', risk:'Med', owner:'Fuel Category Lead', revisit:'Next quarterly review'},
+      {label:'No action this cycle; absorb in P&amp;L, revisit at next contract renewal', buys:'No negotiation effort required now.', cost:'Full deviation flows through to the P&amp;L.', watchout:'Repeats next quarter if the hedge gap isn&rsquo;t addressed.', risk:'High', owner:'Fuel Category Lead', revisit:'Next contract renewal'}
+    ]
+  },
+  {
+    id:'k4', title:'Emergency / spot-buy premium as % of MRO spend', catType:'indirect', catName:'MRO & Plant Spares',
+    plan:'10%', actual:'22%', dev:'+12 pts', devPct:12.0, direction:'bad',
+    attribution:[
+      {label:'Kiln girth-gear and VFD-drive purchases with no annual rate contract, bought reactively from the OEM', pct:7},
+      {label:'Unit 3 and Unit 5 running below minimum stock triggers on fast-moving spares', pct:4},
+      {label:'One-off breakdown-driven premium at Unit 6', pct:1}
+    ],
+    recs:[
+      {label:'Convert the top 40 critical SKUs (spend + criticality) to annual rate contracts with OEMs', buys:'Removes an estimated 7 to 9 points of the premium structurally.', cost:'Negotiation cycle of roughly 10 to 12 weeks. Some SKUs may carry minimum-volume commitments.', watchout:'Locks committed volume with the OEM even if usage falls.', risk:'Low', owner:'MRO Category Lead', revisit:'Next quarterly business review'},
+      {label:'Raise minimum stock triggers plant-wide', buys:'Quick fix for the stock-out-driven share of the premium.', cost:'Working-capital increase from higher inventory carrying.', watchout:'Doesn&rsquo;t address the missing OEM rate contracts; premium recurs on non-stocked critical items.', risk:'Med', owner:'MRO Category Lead', revisit:'Next month'},
+      {label:'Treat as one-off breakdown-driven; no structural change', buys:'No effort required.', cost:'Premium is very likely to recur next cycle.', watchout:'Understates what the attribution shows is a structural, not a one-off, problem.', risk:'High', owner:'MRO Category Lead', revisit:'Next quarterly review'}
+    ]
+  },
+  {
+    id:'k5', title:'Thermal substitution rate (TSR) for alternative fuels', catType:'direct', catName:'Alternative Fuels & Resources',
+    plan:'14%', actual:'9%', dev:'&#8722;5 pts', devPct:-5.0, direction:'bad',
+    attribution:[
+      {label:'Waste-feedstock supplier onboarding delayed at Unit 3 and Unit 4, pending Department of Industrial Works clearance', pct:3.5},
+      {label:'Lower-than-planned calorific value of received waste batches at Unit 1', pct:1.5}
+    ],
+    recs:[
+      {label:'Escalate pending environmental clearances jointly with plant EHS teams', buys:'Unblocks the largest share of the gap.', cost:'Management time; possibly external regulatory counsel.', watchout:'Regulatory timelines sit outside direct procurement control.', risk:'Med', owner:'AFR Category Lead + Plant EHS', revisit:'Monthly'},
+      {label:'Substitute with an alternate waste-feedstock supplier already cleared elsewhere in the network', buys:'Faster path to volume while the primary clearance is pending.', cost:'Likely a higher cost per GCal than the delayed local supplier.', watchout:'Erodes part of the AFR cost-substitution case this builds toward.', risk:'Med', owner:'AFR Category Lead', revisit:'Next month'},
+      {label:'Pause the TSR ramp-up target for the year; revert to coal', buys:'Removes the deviation from this KPI immediately.', cost:'Forfeits the AFR cost-substitution savings and sustainability commitments.', watchout:'This resets the target rather than fixing the underlying delay.', risk:'High', owner:'AFR Category Lead', revisit:'Annual planning cycle'}
+    ]
+  },
+  {
+    id:'k6', title:'SaaS licence utilisation', catType:'indirect', catName:'IT & Digital',
+    plan:'85%', actual:'61%', dev:'&#8722;24 pts', devPct:-24.0, direction:'bad',
+    attribution:[
+      {label:'Shadow-IT subscriptions procured directly by business units, outside the central IT procurement gateway', pct:16},
+      {label:'Over-provisioned seats on 3 enterprise licences renewed on auto-renewal terms', pct:8}
+    ],
+    recs:[
+      {label:'Mandate an IT procurement gateway for all new SaaS spend above $2k', buys:'Visibility and control on all new spend going forward.', cost:'Modest process friction for business units.', watchout:'Does not recover the sunk over-provisioning already in place.', risk:'Low', owner:'IT Category Lead', revisit:'60 days'},
+      {label:'Right-size the 3 over-provisioned enterprise licences at next renewal', buys:'Direct, quantifiable savings, roughly 8 points of the gap.', cost:'Renegotiation effort with each vendor.', watchout:'Vendor may hold price-per-seat flat, eroding the expected saving.', risk:'Med', owner:'IT Category Lead', revisit:'Next renewal date'},
+      {label:'Leave as-is; review only at natural renewal dates', buys:'No near-term effort.', cost:'Shadow-IT sprawl continues to grow between now and renewal.', watchout:'The gap is very likely to widen next cycle.', risk:'High', owner:'IT Category Lead', revisit:'Next renewal date'}
+    ]
+  },
+  {
+    id:'k7', title:'Outbound freight cost per tonne-km', catType:'direct', catName:'Freight & Logistics',
+    plan:'$0.038/t-km', actual:'$0.040/t-km', dev:'+$0.002/t-km', devPct:5.3, direction:'bad',
+    attribution:[
+      {label:'Rail-rake availability shortfall shifting ~8% of planned rail volume onto road', pct:4.1},
+      {label:'Average lead distance increased as dealer geography mix shifted', pct:1.2}
+    ],
+    recs:[
+      {label:'Escalate rail wagon allocation with the State Railway of Thailand', buys:'Restores the planned rail:road mix.', cost:'Wagon-lease investment commitment (capex in rolling stock).', watchout:'Allocation approval timelines are uncertain and outside direct control.', risk:'Med', owner:'Logistics Category Lead', revisit:'Quarterly'},
+      {label:'Contract dedicated road-fleet capacity at pre-negotiated rates for the shortfall volume', buys:'Immediate mode substitution at a controlled, if not lower, cost.', cost:'Locks in road-mode economics, which are structurally costlier than rail.', watchout:'Prices around the rail shortfall rather than fixing it.', risk:'Med', owner:'Logistics Category Lead', revisit:'Next quarter'},
+      {label:'Accept the mode-mix shift as the new normal; no action', buys:'No effort required.', cost:'Premium persists and is likely to grow as the dealer geography mix keeps shifting.', watchout:'Passive response to what the attribution shows is a structural rail-capacity issue.', risk:'High', owner:'Logistics Category Lead', revisit:'Quarterly'}
+    ]
+  },
+  {
+    id:'k8', title:'Maverick (off-contract) spend', catType:'indirect', catName:'Professional & Consulting Services',
+    plan:'15%', actual:'34%', dev:'+19 pts', devPct:19.0, direction:'bad',
+    attribution:[
+      {label:'Business units self-sourcing management and strategy consultants, with no category panel to route through', pct:12},
+      {label:'Legal spend routed directly to relationship-held law firms, bypassing the legal panel', pct:7}
+    ],
+    recs:[
+      {label:'Stand up a professional-services panel (consulting + legal) with pre-negotiated rate cards', buys:'Structural fix addressing both drivers at once.', cost:'Panel-building effort of roughly 8 to 10 weeks. Some friction expected with bypassed firms.', watchout:'Business units may resist mandated routing at first.', risk:'Med', owner:'Professional Services Category Lead', revisit:'Next quarter'},
+      {label:'Mandate a PO-before-engagement policy without building a panel', buys:'Visibility and some control at point of commitment.', cost:'Does not address rate or vendor concentration.', watchout:'A partial fix. Maverick spend likely persists at similar rates, just now visible.', risk:'Med', owner:'Professional Services Category Lead', revisit:'Next quarter'},
+      {label:'No policy change; rely on year-end spend review', buys:'No near-term friction.', cost:'No control at the point of commitment all year.', watchout:'By the time it is reviewed, the spend has already happened.', risk:'High', owner:'Professional Services Category Lead', revisit:'Year-end'}
+    ]
+  },
+  {
+    id:'k9', title:'Cost per bag (HDPE/PP woven)', catType:'direct', catName:'Packaging', favourable:true,
+    plan:'$0.185/bag', actual:'$0.171/bag', dev:'&#8722;$0.014/bag', devPct:-7.6, direction:'good',
+    attribution:[
+      {label:'Resin (PP) price index fell faster than the pass-through clause captured. A one-quarter lag benefits the buyer this cycle', pct:5.1},
+      {label:'Competitive re-tender completed at Unit 2 and Unit 5, shifting volume to a more efficient converter', pct:2.5}
+    ],
+    sustainNote:'This is a favourable, largely structural move rather than a one-off. Lock in the re-tendered rates at the remaining plants before the pass-through lag reverses, since roughly two-thirds of the gain is index timing rather than a permanent shift.'
+  }
+];
+
+/* Lightweight category-level KPIs shown on the Direct / Indirect browse pages.
+   Some point back at a cockpit KPI (linkId); others are standalone. */
+var CATS_DIRECT = [
+  {name:'Coal &amp; Pet Coke', spend:780, subs:'Imported thermal coal, domestic linkage coal, pet coke', kpis:[
+    {status:'r', label:'Landed fuel cost per tonne of clinker', value:'+6.0% vs plan', linkId:'k3'},
+    {status:'g', label:'GCV compliance vs contracted spec', value:'99.2% on-spec'}
+  ]},
+  {name:'Alternative Fuels &amp; Resources', spend:45, subs:'Waste-derived fuel, co-processing, biomass', kpis:[
+    {status:'r', label:'Thermal substitution rate (TSR)', value:'9% vs 14% plan', linkId:'k5'},
+    {status:'g', label:'AFR cost per GCal vs coal', value:'18% favourable'}
+  ]},
+  {name:'Gypsum', spend:95, subs:'Imported (Oman, Laos), domestic natural gypsum', kpis:[
+    {status:'a', label:'Landed cost per tonne vs plan', value:'+3.0%'},
+    {status:'a', label:'Import quality reject rate', value:'2.1% vs 1.5% plan'}
+  ]},
+  {name:'Grinding Media &amp; Refractories', spend:110, subs:'Forged &amp; high-chrome grinding media, kiln refractories, mill liners', kpis:[
+    {status:'r', label:'Should-cost gap captured (forged media)', value:'19% vs 27% plan'},
+    {status:'g', label:'Refractory consumption rate (kg/t clinker)', value:'On plan'}
+  ]},
+  {name:'Packaging', spend:180, subs:'HDPE/PP woven bags, paper bags, jumbo bags', kpis:[
+    {status:'g', label:'Cost per bag (HDPE/PP woven)', value:'&#8722;7.6% vs plan (favourable)', linkId:'k9'},
+    {status:'g', label:'Bag reject rate', value:'0.6% vs 1.0% plan'}
+  ]},
+  {name:'Freight &amp; Logistics', spend:300, subs:'Inbound raw-material freight, outbound cement &amp; RMC dispatch', kpis:[
+    {status:'r', label:'Outbound freight cost per tonne-km', value:'+5.3% vs plan', linkId:'k7'},
+    {status:'a', label:'Rail : road dispatch mix', value:'58 : 42 vs 63 : 37 plan'}
+  ]}
+];
+
+var CATS_INDIRECT = [
+  {name:'Capex &amp; Engineering Procurement', spend:180, subs:'EPC/civil contracts, WHRS equipment, capital spares, structural steel, electricals &amp; instrumentation', kpis:[
+    {status:'r', label:'WHRS project cost vs sanctioned budget', value:'+14.0% overrun', linkId:'k1'},
+    {status:'a', label:'Average contract award cycle time', value:'68 days vs 45-day target'}
+  ]},
+  {name:'MRO &amp; Plant Spares', spend:140, subs:'Mechanical &amp; electrical spares, refractory consumables, conveyor/belting, lubricants', kpis:[
+    {status:'r', label:'Emergency / spot-buy premium', value:'22% vs 10% target', linkId:'k4'},
+    {status:'a', label:'Inventory turns', value:'2.1x vs 3.5x target'}
+  ]},
+  {name:'IT &amp; Digital', spend:45, subs:'OT/plant automation, ERP licences, cloud &amp; data centre, cybersecurity, plant telecom', kpis:[
+    {status:'r', label:'SaaS licence utilisation', value:'61% vs 85% target', linkId:'k6'},
+    {status:'g', label:'OT/automation vendor concentration', value:'Within plan'}
+  ]},
+  {name:'Professional &amp; Consulting Services', spend:35, subs:'Management consulting, legal, statutory audit, environmental &amp; safety consulting', kpis:[
+    {status:'r', label:'Maverick (off-contract) spend', value:'34% vs 15% target', linkId:'k8'},
+    {status:'a', label:'PO coverage prior to engagement', value:'71% vs 90% target'}
+  ]},
+  {name:'HR, Manpower &amp; Contract Labour', spend:95, subs:'Plant contract labour, security services, canteen &amp; facility management, on-site staff housing', kpis:[
+    {status:'r', label:'Statutory compliance (Social Security Fund) pass rate', value:'78% vs 100% target', linkId:'k2'},
+    {status:'a', label:'Contractor attrition (2 affected plants)', value:'42% vs 25% target'}
+  ]},
+  {name:'Marketing, Branding &amp; Trade Schemes', spend:60, subs:'Dealer incentive schemes, advertising &amp; media buying, retail branding, market research', kpis:[
+    {status:'a', label:'Dealer-scheme payout leakage', value:'3.2% of scheme value'},
+    {status:'a', label:'Ad-spend ROI index', value:'0.92 vs 1.0 target'}
+  ]},
+  {name:'Travel, Fleet &amp; Admin', spend:20, subs:'Employee travel, company vehicle lease, office admin, courier', kpis:[
+    {status:'g', label:'Travel policy compliance', value:'91% vs 85% target'},
+    {status:'g', label:'Fleet TCO per vehicle', value:'+2% vs plan, within tolerance'}
+  ]},
+  {name:'Facilities, Utilities &amp; Non-Process Consumables', spend:15, subs:'Water treatment chemicals, DG diesel (non-kiln), housekeeping consumables, PPE', kpis:[
+    {status:'a', label:'Utility cost per sq ft', value:'+7.0% vs plan'},
+    {status:'g', label:'PPE compliance', value:'97% vs 90% target'}
+  ]}
+];
+
+var SITES = [
+  {site:'Unit 1', initiative:'WHRS capex project (waste heat recovery)', status:'behind', weeks:9, cause:'EPC contractor is short-staffed on the structural erection crew', action:'Escalate the contractor resourcing plan and move to weekly site reviews', owner:'Capex Category Lead', link:'k1'},
+  {site:'Unit 3', initiative:'AFR feedstock onboarding', status:'behind', weeks:11, cause:'Pollution control board clearance still pending', action:'Escalate jointly with plant EHS', owner:'AFR Category Lead', link:'k5'},
+  {site:'Unit 4', initiative:'AFR feedstock onboarding', status:'behind', weeks:6, cause:'Same clearance pending at a different regional office, moving more slowly', action:'Escalate jointly with plant EHS', owner:'AFR Category Lead', link:'k5'},
+  {site:'Unit 2', initiative:'MRO stock trigger update', status:'behind', weeks:5, cause:'Minimum stock triggers were never revised after the last capacity expansion', action:'Revise stock triggers this quarter', owner:'MRO Category Lead', link:'k4'},
+  {site:'Unit 5', initiative:'MRO stock trigger update', status:'behind', weeks:3, cause:'Same cause as Unit 2, queued behind it for review', action:'Revise stock triggers this quarter', owner:'MRO Category Lead', link:'k4'},
+  {site:'Unit 2, Unit 4, Unit 5', initiative:'HR vendor compliance cure plan (primary vendor)', status:'ontrack', weeks:0, cause:'Social Security Fund remittance delays identified at the last audit', action:'Monitor at the 30-day checkpoint', owner:'HR Procurement Lead', link:'k2'},
+  {site:'Unit 6', initiative:'HR vendor compliance cure plan (documentation)', status:'ontrack', weeks:0, cause:'Documentation and audit-trail gaps found at the last audit', action:'Monitor at the 30-day checkpoint', owner:'HR Procurement Lead', link:'k2'}
+];
+
+var DECISIONS = []; // {kpiId, kpiTitle, recLabel, risk, owner, revisit, ts}
+var OPEN_KPI = null;
+
+/* ===================== SMALL CHART HELPERS ===================== */
+var C={accent:'#0C2B82',accent2:'#12A6E6',gold:'#FCAF17',pos:'#17A673',neg:'#E5484D',purple:'#3A68C5',
+       t1:'#f4f5f7',t2:'rgba(255,255,255,.62)',t3:'rgba(255,255,255,.42)',track:'rgba(255,255,255,.06)'};
+function svgTag(w,h){return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Arial,Helvetica,sans-serif">';}
+function hbars(id,data,unit){
+  var w=640,padL=210,padR=70,top=10,rowH=36,capH=unit?18:0,h=top*2+capH+data.length*rowH;
+  var max=Math.max.apply(null,data.map(function(d){return d.value;}));
+  var s=svgTag(w,h);
+  if(unit){s+='<text x="'+padL+'" y="12" fill="'+C.t3+'" font-size="11" font-weight="600">'+unit+'</text>';}
+  data.forEach(function(d,i){
+    var y=top+capH+i*rowH+rowH/2, bw=(w-padL-padR)*(d.value/max), col=d.color||C.accent2;
+    s+='<text x="'+(padL-12)+'" y="'+y+'" fill="'+C.t2+'" font-size="12.5" text-anchor="end" dominant-baseline="middle">'+d.label+'</text>';
+    s+='<rect x="'+padL+'" y="'+(y-8)+'" width="'+(w-padL-padR)+'" height="16" rx="5" fill="'+C.track+'"/>';
+    s+='<rect x="'+padL+'" y="'+(y-8)+'" width="'+Math.max(2,bw)+'" height="16" rx="5" fill="'+col+'"/>';
+    s+='<text x="'+(padL+bw+10)+'" y="'+y+'" fill="'+C.t1+'" font-size="12.5" font-weight="700" dominant-baseline="middle">'+d.val+'</text>';
+  });
+  var el=document.getElementById(id);if(el)el.innerHTML=s+'</svg>';
+}
+function donut(id,data,centerBig,centerSmall){
+  var w=280,h=280,cx=140,cy=140,r=94,ir=62;
+  var total=data.reduce(function(a,b){return a+b.value;},0),ang=-Math.PI/2,s=svgTag(w,h);
+  data.forEach(function(d){
+    var frac=d.value/total,a2=ang+frac*Math.PI*2;
+    var x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+    var xi1=cx+ir*Math.cos(a2),yi1=cy+ir*Math.sin(a2),xi2=cx+ir*Math.cos(ang),yi2=cy+ir*Math.sin(ang);
+    var large=frac>0.5?1:0;
+    s+='<path d="M'+x1+' '+y1+' A'+r+' '+r+' 0 '+large+' 1 '+x2+' '+y2+' L'+xi1+' '+yi1+' A'+ir+' '+ir+' 0 '+large+' 0 '+xi2+' '+yi2+' Z" fill="'+d.color+'"/>';
+    ang=a2;
+  });
+  s+='<text x="'+cx+'" y="'+(cy-4)+'" fill="'+C.t1+'" font-size="24" font-weight="800" text-anchor="middle">'+centerBig+'</text>';
+  s+='<text x="'+cx+'" y="'+(cy+17)+'" fill="'+C.t3+'" font-size="11.5" text-anchor="middle">'+centerSmall+'</text>';
+  var el=document.getElementById(id);if(el)el.innerHTML=s+'</svg>';
+}
+
+/* ===================== RENDERERS ===================== */
+function statusClass(direction,favourable){ if(favourable) return 'st-g'; return direction==='bad'?'st-r':'st-g'; }
+function devClass(direction){ return direction==='bad'?'bad':'good'; }
+
+function attrColor(pct){ return pct<0? C.pos : C.neg; }
+
+function renderKpiCard(k,rank){
+  var favourable=!!k.favourable;
+  var st = favourable ? 'st-g' : (Math.abs(k.devPct)>=15?'st-r':(Math.abs(k.devPct)>=6?'st-a':'st-a'));
+  // materiality bands: >=15% or >=15pts -> red, else amber (all cockpit entries are material by construction)
+  var big = Math.abs(k.devPct);
+  st = favourable ? 'st-g' : (big>=13?'st-r':'st-a');
+  var catChip = k.catType==='direct' ? '<span class="chip dir">Direct</span>' : '<span class="chip ind">Indirect</span>';
+  var isOpen = OPEN_KPI===k.id;
+  var body='';
+  var attrRows='';
+  k.attribution.forEach(function(a){
+    attrRows+='<div class="attr-row"><div class="al">'+a.label+'</div><div class="ab"><i style="width:'+Math.min(100,Math.abs(a.pct)/big*100)+'%;background:'+attrColor(a.pct)+'"></i></div><div class="av" style="color:'+attrColor(a.pct)+'">'+(a.pct>=0?'+':'')+a.pct+(k.dev.indexOf('pts')>-1?' pts':'%')+'</div></div>';
+  });
+  if(favourable){
+    body = '<div class="attr"><h5>What&rsquo;s driving the movement</h5>'+attrRows+'</div>'+
+           '<div class="favnote"><b>Favourable. Sustain it, don&rsquo;t just note it.</b> '+k.sustainNote+'</div>';
+  } else {
+    var recCards='';
+    k.recs.forEach(function(r,i){
+      var adopted = DECISIONS.some(function(d){return d.kpiId===k.id && d.recIndex===i;});
+      recCards+='<div class="rec'+(adopted?' adopted':'')+'"><div class="rec-h"><div class="rec-t">'+r.label+'</div><span class="risk '+r.risk+'">'+r.risk+' risk</span></div>'+
+        '<p><b>Buys:</b> '+r.buys+'</p><p><b>Costs:</b> '+r.cost+'</p><p><b>Watch-out:</b> '+r.watchout+'</p>'+
+        '<div class="meta">Owner: '+r.owner+' &middot; Revisit: '+r.revisit+'</div>'+
+        '<button onclick="adoptRec(\''+k.id+'\','+i+',event)">'+(adopted?'&#10003; Adopted this cycle':'Adopt this option')+'</button></div>';
+    });
+    body = '<div class="attr"><h5>Root cause, broken down</h5>'+attrRows+'</div>'+
+           '<div class="recs"><h5>Recommended options</h5><div class="recgrid">'+recCards+'</div></div>';
+  }
+  return '<div class="kpi '+st+(isOpen?' open':'')+'" id="card-'+k.id+'">'+
+    '<div class="kpi-h" onclick="toggleKpi(\''+k.id+'\')">'+
+      '<div class="kpi-rank">'+rank+'</div>'+
+      '<div class="kpi-main"><div class="kpi-t">'+k.title+' '+catChip+'</div><div class="kpi-cat">'+k.catName+'</div></div>'+
+      '<div class="kpi-nums"><div><div class="kpi-dev '+devClass(k.direction)+'">'+k.dev+'</div><div class="kpi-pl">Plan '+k.plan+' &middot; Actual '+k.actual+'</div></div>'+
+      '<svg class="kpi-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>'+
+    '</div>'+
+    '<div class="kpi-body">'+body+'</div>'+
+  '</div>';
+}
+
+function toggleKpi(id){ OPEN_KPI = (OPEN_KPI===id) ? null : id; renderCockpit(); var e=document.getElementById('card-'+id); if(e) e.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+
+function adoptRec(kpiId,recIndex,evt){
+  if(evt) evt.stopPropagation();
+  var k = KPIS.find(function(x){return x.id===kpiId;});
+  var r = k.recs[recIndex];
+  var already = DECISIONS.some(function(d){return d.kpiId===kpiId && d.recIndex===recIndex;});
+  if(!already){
+    DECISIONS.unshift({kpiId:kpiId, kpiTitle:k.title, recIndex:recIndex, recLabel:r.label, risk:r.risk, owner:r.owner, revisit:r.revisit, ts:'Just now'});
+    toast('Logged: '+r.label);
+  }
+  renderCockpit();
+  renderLog();
+}
+
+function toast(msg){
+  var el=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  el.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt=setTimeout(function(){el.classList.remove('show');},3200);
+}
+
+function renderCockpit(){
+  var sorted = KPIS.slice().sort(function(a,b){ return Math.abs(b.devPct)-Math.abs(a.devPct); });
+  var cards = sorted.map(function(k,i){ return renderKpiCard(k,i+1); }).join('');
+  var html =
+    '<div class="vhead"><div><h1>Cockpit &middot; KPI Deviations</h1><div class="date">Sorted by materiality, so this shows what broke this cycle rather than a full scorecard. Click a KPI to see what is driving it and choose a recommendation.</div></div></div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>All 31 sub-categories reported this cycle, so nothing here is stale. Marketing and Facilities still reconcile manually, so their numbers are directionally right but not broken down to the same level as the rest yet. The capex overrun and the MRO spot-buy premium come from the same underlying problem: contracts signed without price-variation or rate-contract cover, so one fix to the contract template would help both. Confidence is high on the direct categories, since that data is systematic, and lower on HR and professional services, since compliance figures are vendor-reported and not yet independently checked.</div>'+
+    '<div class="kpiwrap">'+cards+'</div>';
+  document.getElementById('view-cockpit').innerHTML = html;
+  attachToggles();
+}
+
+function attachToggles(){} // placeholder, click handlers are inline
+
+function renderCatCard(cat, type){
+  var kpiRows = cat.kpis.map(function(k){
+    return '<div class="minikpi"><span class="k"><span class="dot '+k.status+'" style="display:inline-block;margin-right:7px;vertical-align:middle"></span>'+k.label+'</span><span class="v">'+k.value+(k.linkId?' <a href="#" onclick="jumpToKpi(\''+k.linkId+'\');return false;" style="color:var(--accent-2);font-weight:700;text-decoration:none;font-size:12px;margin-left:6px">Detail &#8250;</a>':'')+'</span></div>';
+  }).join('');
+  return '<div class="catcard"><h3>'+cat.name+'<span class="spend">$'+cat.spend+'M</span></h3><div class="subs">'+cat.subs+'</div>'+kpiRows+'</div>';
+}
+
+function jumpToKpi(id){
+  OPEN_KPI = id;
+  switchView('cockpit');
+  setTimeout(function(){ var e=document.getElementById('card-'+id); if(e) e.scrollIntoView({behavior:'smooth',block:'center'}); },80);
+}
+
+function renderDirect(){
+  var html =
+    '<div class="vhead"><div><h1>Direct Categories</h1><div class="date">Materials and services that go directly into cement manufacture: fuel, raw material inputs, packaging and outbound logistics. Shown at category level, with full root-cause detail on flagged KPIs in the Cockpit.</div></div></div>'+
+    '<div class="grid2">'+CATS_DIRECT.map(function(c){return renderCatCard(c,'direct');}).join('')+'</div>';
+  document.getElementById('view-direct').innerHTML = html;
+}
+
+function renderIndirect(){
+  var html =
+    '<div class="vhead"><div><h1>Indirect Categories</h1><div class="date">Capex, MRO, IT, professional services, manpower, marketing, travel and facilities. Coverage goes deeper here than on the direct side, since this is where most of this cycle&rsquo;s deviations sit.</div></div></div>'+
+    '<div class="grid2">'+CATS_INDIRECT.map(function(c){return renderCatCard(c,'indirect');}).join('')+'</div>';
+  document.getElementById('view-indirect').innerHTML = html;
+}
+
+function renderLog(){
+  var html = '<div class="vhead"><div><h1>Decision Log</h1><div class="date">Every recommendation adopted from the Cockpit lands here, most recent first. This is the record of what was decided, not just what was reported.</div></div></div><section class="card">';
+  if(DECISIONS.length===0){
+    html += '<div class="logempty">No decisions logged yet this cycle. Adopt a recommendation from the Cockpit to start the log.</div>';
+  } else {
+    html += '<div style="padding:6px 22px 20px">' + DECISIONS.map(function(d){
+      return '<div class="logitem"><div class="logdot"></div><div><div class="logmeta">'+d.ts+' &middot; Owner: '+d.owner+' &middot; Revisit: '+d.revisit+' &middot; <span class="risk '+d.risk+'" style="margin-left:2px">'+d.risk+' risk</span></div>'+
+      '<div class="logtitle">'+d.kpiTitle+'</div><div class="logbody">'+d.recLabel+'</div></div></div>';
+    }).join('') + '</div>';
+  }
+  html += '</section>';
+  document.getElementById('view-log').innerHTML = html;
+}
+
+function renderOverview(){
+  var totalDirect = CATS_DIRECT.reduce(function(a,c){return a+c.spend;},0);
+  var totalIndirect = CATS_INDIRECT.reduce(function(a,c){return a+c.spend;},0);
+  var html =
+    '<div class="vhead"><div><h1>Spend Overview</h1><div class="date">~$'+((totalDirect+totalIndirect)/1000).toFixed(2)+'Bn total addressable procurement spend across 6 direct and 8 indirect category groups, 31 sub-categories</div></div></div>'+
+    '<div class="stat-row card" style="padding:18px 22px">'+
+      '<div class="m"><div class="v a">$'+((totalDirect+totalIndirect)/1000).toFixed(2)+'Bn</div><div class="l">Total addressable spend</div></div>'+
+      '<div class="m"><div class="v">81%</div><div class="l">Spend under active category management</div></div>'+
+      '<div class="m"><div class="v r">4 red &middot; 9 amber</div><div class="l">KPIs off plan this cycle</div></div>'+
+      '<div class="m"><div class="v g">88 / 100</div><div class="l">Category health score</div></div>'+
+    '</div>'+
+    '<div class="grid2">'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></span>Direct vs indirect spend</div></div>'+
+        '<div class="sub">Direct spend is fuel and freight heavy; indirect is where this cycle&rsquo;s deviations concentrate</div>'+
+        '<div style="display:flex;justify-content:center;padding:6px 0 20px"><div id="ch_split"></div></div>'+
+        '<div class="legend" style="display:flex;gap:16px;justify-content:center;padding-bottom:14px;font-size:13px;color:var(--t2)"><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--accent);margin-right:6px"></i>Direct &#183; $'+(totalDirect/1000).toFixed(2)+'Bn (72%)</span><span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--purple);margin-right:6px"></i>Indirect &#183; $'+(totalIndirect/1000).toFixed(2)+'Bn (28%)</span></div>'+
+        '<div class="aiins" style="margin-top:0"><span class="lab">AI insight</span>Direct spend is nearly three-quarters of the total, but it is concentrated in two categories, coal and freight, so it moves in large, predictable blocks tied to fuel and freight indices. Indirect spend is smaller in dollar terms but carries most of this cycle&rsquo;s red and amber KPIs, which is normal for a category that is more fragmented and less contract-covered.</div>'+
+      '</section>'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 4 3 4-6"/></svg></span>Spend by category</div></div>'+
+        '<div class="sub">$M, direct categories in blue, indirect in purple</div>'+
+        '<div id="ch_cats" style="padding:0 4px 16px"></div>'+
+        '<div class="aiins" style="margin-top:0"><span class="lab">AI insight</span>Coal and pet coke alone is more than a third of total spend, so a small percentage move there matters more than a large percentage move in a small category like facilities. By dollar size, capex and MRO are the two indirect categories worth watching most closely, and both already show up as red KPIs this cycle.</div>'+
+      '</section>'+
+    '</div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>Top deviations this cycle</div><span class="chip a" style="cursor:pointer" onclick="switchView(\'cockpit\')">See all in Cockpit &#8250;</span></div>'+
+      '<div class="sub">The 4 largest moves by materiality: two indirect, two direct</div>'+
+      '<div class="tblwrap"><table><thead><tr><th>KPI</th><th>Category</th><th class="r">Deviation</th><th class="c">Status</th></tr></thead><tbody>'+
+      KPIS.slice().sort(function(a,b){return Math.abs(b.devPct)-Math.abs(a.devPct);}).slice(0,4).map(function(k){
+        var chip = k.catType==='direct'?'<span class="chip dir">Direct</span>':'<span class="chip ind">Indirect</span>';
+        var stchip = Math.abs(k.devPct)>=13 ? '<span class="lp" style="background:var(--neg-soft);color:var(--neg)">Red</span>' : '<span class="lp" style="background:var(--warn-soft);color:var(--warn)">Amber</span>';
+        return '<tr><td class="cat" style="cursor:pointer;color:var(--accent-2)" onclick="jumpToKpi(\''+k.id+'\')">'+k.title+'</td><td>'+chip+' '+k.catName+'</td><td class="r">'+k.dev+'</td><td class="c">'+stchip+'</td></tr>';
+      }).join('')+
+      '</tbody></table></div>'+
+    '</section>';
+  document.getElementById('view-overview').innerHTML = html;
+  donut('ch_split',[{value:totalDirect,color:C.accent},{value:totalIndirect,color:C.purple}], '$'+((totalDirect+totalIndirect)/1000).toFixed(1)+'Bn','total spend');
+  var allCats = CATS_DIRECT.map(function(c){return {label:c.name.replace(/&amp;/g,'&'),value:c.spend,val:'$'+c.spend+'M',color:C.accent};})
+    .concat(CATS_INDIRECT.map(function(c){return {label:c.name.replace(/&amp;/g,'&'),value:c.spend,val:'$'+c.spend+'M',color:C.purple};}))
+    .sort(function(a,b){return b.value-a.value;});
+  hbars('ch_cats', allCats);
+}
+
+function renderSites(){
+  var behind = SITES.filter(function(s){return s.status==='behind';});
+  var over8 = behind.filter(function(s){return s.weeks>8;}).length;
+  var html =
+    '<div class="vhead"><div><h1>Site Watch</h1><div class="date">Which of the 6 units are behind schedule on a live initiative, and why, alongside the plants tracking to plan.</div></div></div>'+
+    '<div class="stat-row card" style="padding:18px 22px">'+
+      '<div class="m"><div class="v r">'+behind.length+' of 6</div><div class="l">Units flagged behind schedule</div></div>'+
+      '<div class="m"><div class="v a">'+over8+'</div><div class="l">More than 8 weeks behind</div></div>'+
+      '<div class="m"><div class="v">3</div><div class="l">Units on a compliance cure plan, tracking to plan</div></div>'+
+      '<div class="m"><div class="v">2</div><div class="l">Units appearing against more than one initiative</div></div>'+
+    '</div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>Unit 3 and Unit 4 account for most of the AFR delay, and both trace back to the same regulatory bottleneck rather than a plant-specific problem, so one escalation should move both. Unit 2 and Unit 5 each show up twice, once for MRO stock triggers and once for the HR cure plan, which is worth a joint site review rather than two separate ones. Unit 1 is the only site with a capex-related delay, and it is also the largest in weeks behind, so it carries the most schedule risk in raw terms.</div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l4-3 4 3 6-2v15"/></svg></span>Sites behind schedule and on cure plans</div></div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Site</th><th>Initiative</th><th class="c">Status</th><th>Root cause</th><th>Action</th><th>Owner</th></tr></thead><tbody>'+
+      SITES.slice().sort(function(a,b){ if(a.status!==b.status) return a.status==='behind'?-1:1; return b.weeks-a.weeks; }).map(function(s){
+        var stchip = s.status==='behind'
+          ? (s.weeks>8 ? '<span class="lp" style="background:var(--neg-soft);color:var(--neg)">'+s.weeks+' wks behind</span>' : '<span class="lp" style="background:var(--warn-soft);color:var(--warn)">'+s.weeks+' wks behind</span>')
+          : '<span class="lp" style="background:var(--pos-soft);color:var(--pos)">On track</span>';
+        return '<tr><td class="cat">'+s.site+'</td><td>'+s.initiative+'</td><td class="c">'+stchip+'</td><td>'+s.cause+'</td><td>'+s.action+'</td><td>'+s.owner+' <a href="#" onclick="jumpToKpi(\''+s.link+'\');return false;" style="color:var(--accent-2);font-weight:700;text-decoration:none;font-size:12px;margin-left:4px">Detail &#8250;</a></td></tr>';
+      }).join('')+
+      '</tbody></table></div>'+
+    '</section>';
+  document.getElementById('view-sites').innerHTML = html;
+}
+
+/* ===================== VIEW SHELL + NAV ===================== */
+function buildShell(){
+  var root = document.getElementById('viewsRoot');
+  root.innerHTML =
+    '<div class="view active" data-v="overview" id="view-overview"></div>'+
+    '<div class="view" data-v="cockpit" id="view-cockpit"></div>'+
+    '<div class="view" data-v="direct" id="view-direct"></div>'+
+    '<div class="view" data-v="indirect" id="view-indirect"></div>'+
+    '<div class="view" data-v="sites" id="view-sites"></div>'+
+    '<div class="view" data-v="log" id="view-log"></div>';
+}
+function switchView(v){
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.toggle('active',n.getAttribute('data-view')===v);});
+  document.querySelectorAll('.view').forEach(function(view){view.classList.toggle('active',view.getAttribute('data-v')===v);});
+  document.querySelector('.scroll').scrollTop=0;
+}
+document.querySelectorAll('.nav-item').forEach(function(it){
+  it.addEventListener('click',function(){var v=this.getAttribute('data-view');if(v)switchView(v);});
+});
+
+function updateHeaderCounts(){
+  var red = KPIS.filter(function(k){return !k.favourable && Math.abs(k.devPct)>=13;}).length +
+            CATS_DIRECT.concat(CATS_INDIRECT).reduce(function(a,c){return a+c.kpis.filter(function(k){return k.status==='r' && !k.linkId;}).length;},0);
+  document.getElementById('navRedCount').textContent = red>0 ? red : '';
+  var behind = SITES.filter(function(s){return s.status==='behind';}).length;
+  document.getElementById('navSiteCount').textContent = behind>0 ? behind : '';
+}
+
+buildShell();
+renderOverview();
+renderCockpit();
+renderDirect();
+renderIndirect();
+renderSites();
+renderLog();
+updateHeaderCounts();
+</script>
+</body>
+</html>

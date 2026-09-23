@@ -1,0 +1,1831 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newmont · Grinding Media Category Navigator</title><style>
+  :root{
+    --accent:#0C2B82;--accent-2:#12A6E6;--accent-deep:#071434;
+    --accent-soft:rgba(12,43,130,.14);--accent-glow:rgba(12,43,130,.34);
+    --pos:#17A673;--pos-soft:rgba(23,166,115,.10);
+    --neg:#E5484D;--neg-soft:rgba(229,72,77,.12);
+    --warn:#FCAF17;--info:#12A6E6;--info-soft:rgba(94,74,220,.12);--purple:#3A68C5;
+    --bg:#070B18;--panel:#0E1428;--panel-2:#0A0F20;
+    --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.10);
+    --t1:#f4f5f7;--t2:rgba(255,255,255,.62);--t3:rgba(255,255,255,.40);--t4:rgba(255,255,255,.28);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:'Arial,Helvetica,sans-serif',system-ui,sans-serif;
+    background:radial-gradient(900px 480px at 78% -8%,rgba(12,43,130,.12),transparent 60%),
+      radial-gradient(700px 420px at 6% 4%,rgba(18,166,230,.06),transparent 55%),var(--bg);
+    color:var(--t1);-webkit-font-smoothing:antialiased;overflow:hidden;font-size:15.5px;line-height:1.45}
+  .app{display:flex;height:100vh;overflow:hidden}
+  aside{width:236px;flex-shrink:0;background:var(--panel-2);border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .brand{height:64px;display:flex;align-items:center;gap:10px;padding:0 22px;border-bottom:1px solid var(--line)}
+  .logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));box-shadow:0 4px 14px var(--accent-glow);flex-shrink:0}
+  .logo svg{width:18px;height:18px}
+  .brand b{font-size:17px;font-weight:800;letter-spacing:-.2px}.brand b span{color:var(--accent)}
+  nav{flex:1;padding:14px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+  .nav-lbl{font-size:12px;text-transform:uppercase;letter-spacing:.13em;color:var(--t4);padding:14px 12px 6px;font-weight:700}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:11px;color:var(--t2);font-weight:500;cursor:pointer;font-size:15px;transition:.16s;position:relative}
+  .nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.8}
+  .nav-item:hover{background:rgba(255,255,255,.04);color:var(--t1)}
+  .nav-item.active{background:var(--accent-soft);color:#fff}
+  .nav-item.active svg{opacity:1;color:var(--accent-2)}
+  .nav-item.active::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--accent-2),var(--accent))}
+  .nav-item .badge{margin-left:auto;font-size:12px;font-weight:700;background:var(--accent);color:#FFFFFF;border-radius:6px;padding:1px 6px}
+  .nav-item.hidden-mod{display:none}.nav-item.hidden-mod.revealed{display:flex;opacity:.9}
+  .nav-item.hidden-mod .lock{margin-left:auto;width:13px;height:13px;opacity:.45}
+  .side-foot{padding:10px 12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;font-size:14px;color:var(--t2);cursor:pointer}
+  .toggle-row:hover{background:rgba(255,255,255,.04)}
+  .sw{width:34px;height:19px;border-radius:20px;background:rgba(255,255,255,.14);position:relative;transition:.2s;flex-shrink:0}
+  .sw::after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:2.5px;left:2.5px;transition:.2s}
+  .sw.on{background:linear-gradient(135deg,var(--accent-2),var(--accent))}.sw.on::after{left:17px}
+  .user{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.03)}
+  .ava{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));display:grid;place-items:center;font-weight:700;font-size:13.5px;color:#FFFFFF;flex-shrink:0}
+  .user .nm{font-size:14px;font-weight:600;line-height:1.2}.user .ro{font-size:12.5px;color:var(--t3)}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+  header.top{height:64px;border-bottom:1px solid var(--line);background:var(--panel-2);display:flex;align-items:center;gap:10px;padding:0 26px;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+  .pill .dot{width:6px;height:6px;border-radius:50%}
+  .pill.live{color:var(--accent-2);border-color:rgba(12,43,130,.3);background:var(--accent-soft)}
+  .pill.live .dot{background:var(--accent-2);box-shadow:0 0 0 3px rgba(18,166,230,.18);animation:pulse 2s infinite}
+  .pill .sep{color:var(--t4)}
+  .top .spacer{flex:1}
+  .icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--t2);display:grid;place-items:center;cursor:pointer;transition:.16s}
+  .icon-btn:hover{color:#fff;border-color:var(--line-2)}.icon-btn svg{width:17px;height:17px}
+  .scroll{flex:1;overflow-y:auto;padding:26px 30px 120px}
+  .wrap{max-width:1180px;margin:0 auto}
+  .view{display:none;flex-direction:column;gap:22px}.view.active{display:flex;animation:rise .4s cubic-bezier(.2,.7,.3,1) both}
+  .vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .vhead h1{font-size:29px;font-weight:800;letter-spacing:-.5px}
+  .vhead .date{font-size:14.5px;color:var(--t3);margin-top:3px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;cursor:pointer;border-radius:11px;padding:10px 16px;transition:.16s;border:1px solid var(--line-2);background:rgba(255,255,255,.04);color:var(--t1)}
+  .btn:hover{border-color:var(--accent);background:var(--accent-soft)}.btn svg{width:15px;height:15px}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-deep));border:none;color:#FFFFFF;font-weight:700;box-shadow:0 6px 18px var(--accent-glow)}
+  .btn.primary:hover{filter:brightness(1.06)}
+  section.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 22px}
+  .card-h .ttl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+  .card-h .ttl .ic{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center}
+  .card-h .ttl .ic svg{width:16px;height:16px;color:var(--accent-2)}
+  .chip{font-size:12.5px;font-weight:700;border-radius:7px;padding:3px 9px;letter-spacing:.02em}
+  .chip.date{background:rgba(255,255,255,.05);color:var(--t3)}
+  .chip.int{background:rgba(255,255,255,.06);color:var(--t2)}
+  .chip.ext{background:var(--accent-soft);color:var(--accent-2)}
+  .chip.risk{background:var(--neg-soft);color:var(--neg)}
+  .chip.opp{background:var(--pos-soft);color:var(--pos)}
+  .chip.reg{background:rgba(18,166,230,.10);color:var(--warn)}
+  .chip.w1{background:var(--accent-soft);color:var(--accent-2)}
+  .sub{padding:0 22px 12px;color:var(--t3);font-size:14px}
+  .link{font-size:14px;color:var(--accent-2);font-weight:600;cursor:pointer;text-decoration:none}.link:hover{text-decoration:underline}
+  .chartbox{padding:6px 18px 20px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:0 22px 12px;font-size:13px;color:var(--t2)}
+  .legend .lg{display:inline-flex;align-items:center;gap:6px}.legend .lg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .opmodel{background:linear-gradient(135deg,#181410,#121013 70%);border:1px solid rgba(12,43,130,.18);border-radius:var(--radius);padding:18px 20px}
+  .opmodel .oh{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .opmodel .oh .ic{width:28px;height:28px;border-radius:8px;background:var(--accent-soft);display:grid;place-items:center}
+  .opmodel .oh .ic svg{width:15px;height:15px;color:var(--accent-2)}
+  .opmodel .oh h3{font-size:16px;font-weight:800}
+  .opmodel .osub{font-size:13.5px;color:var(--t3);margin-bottom:14px;max-width:880px}
+  .ogrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:820px){.ogrid{grid-template-columns:repeat(2,1fr)}}
+  .omech{border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:rgba(255,255,255,.02);position:relative}
+  .omech .st{position:absolute;top:13px;right:13px;font-size:10.5px;font-weight:800;letter-spacing:.04em;border-radius:6px;padding:2px 7px;text-transform:uppercase}
+  .omech .st.live{background:var(--pos-soft);color:var(--pos)} .omech .st.form{background:rgba(18,166,230,.12);color:var(--warn)} .omech .st.des{background:var(--info-soft);color:var(--info)}
+  .omech .mn{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;margin-bottom:6px;padding-right:54px}
+  .omech .mn svg{width:15px;height:15px;color:var(--accent-2);flex-shrink:0}
+  .omech p{font-size:13px;color:var(--t3);line-height:1.45}.omech p b{color:var(--t2);font-weight:600}
+  .brief{padding:6px 18px 20px;display:flex;flex-direction:column;gap:12px}
+  .brief-item{display:flex;gap:14px;padding:16px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.018);transition:.16s}
+  .brief-item:hover{border-color:var(--line-2);background:rgba(255,255,255,.03)}
+  .num{width:24px;height:24px;border-radius:8px;background:var(--accent-soft);color:var(--accent-2);display:grid;place-items:center;font-weight:800;font-size:13.5px;flex-shrink:0;border:1px solid rgba(12,43,130,.25)}
+  .bi-body{flex:1;min-width:0}
+  .bi-top{display:flex;align-items:center;gap:9px;margin-bottom:6px;flex-wrap:wrap}.bi-top h4{font-size:16px;font-weight:700}
+  .bi-body p{color:var(--t2);font-size:14.5px;line-height:1.55}
+  .vas{display:inline-flex;align-items:center;gap:7px;margin-top:11px;font-size:13.5px;font-weight:700;color:var(--accent-2)}.vas .lbl{color:var(--t3);font-weight:500}
+  .sug{margin-top:11px;padding:11px 13px;border-radius:10px;background:rgba(255,255,255,.025);border:1px solid var(--line);font-size:14px;color:var(--t2);display:flex;gap:9px;align-items:flex-start}
+  .sug svg{width:15px;height:15px;color:var(--accent-2);flex-shrink:0;margin-top:1px}.sug b{color:var(--t1);font-weight:600}
+  .bi-act{display:flex;flex-direction:column;justify-content:center;flex-shrink:0}
+  .mini{font-size:13.5px;font-weight:700;color:#FFFFFF;background:linear-gradient(135deg,var(--accent),var(--accent-deep));border:none;border-radius:9px;padding:8px 13px;cursor:pointer;white-space:nowrap;box-shadow:0 4px 12px var(--accent-glow)}
+  .mini:hover{filter:brightness(1.06)}
+  .ai-card{position:relative;border-radius:var(--radius);padding:1.5px;background:linear-gradient(140deg,var(--accent-2),var(--accent) 55%,var(--accent-deep))}
+  .ai-inner{border-radius:14.5px;padding:22px;background:linear-gradient(150deg,#1a1610 0%,#121013 60%,#0f0e12 100%);position:relative;overflow:hidden}
+  .ai-inner::after{content:"";position:absolute;inset:0;background:radial-gradient(420px 200px at 88% -10%,var(--accent-soft),transparent 60%);pointer-events:none}
+  .ai-head{display:flex;align-items:center;gap:11px;margin-bottom:16px;position:relative}
+  .ai-orb{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));display:grid;place-items:center;box-shadow:0 4px 16px var(--accent-glow)}
+  .ai-orb svg{width:18px;height:18px;color:#FFFFFF}
+  .ai-head h3{font-size:18px;font-weight:800;flex:1}
+  .badge2{font-size:12px;font-weight:700;border-radius:7px;padding:3px 9px}
+  .badge2.conf{background:var(--pos-soft);color:var(--pos)}.badge2.hi{background:var(--neg-soft);color:var(--neg)}
+  .ai-sec h5{font-size:12.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-2);font-weight:700;margin:4px 0 9px;position:relative}
+  .ai-line{display:flex;gap:9px;font-size:14.5px;color:var(--t2);margin-bottom:8px;line-height:1.5;position:relative}
+  .ai-line b{color:var(--t1)}.ai-line .k{color:var(--accent-2);font-weight:700}
+  .ai-line::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:7px;flex-shrink:0}
+  .coi{margin-top:16px;border-radius:11px;background:var(--neg-soft);border:1px solid rgba(12,43,130,.28);padding:14px 16px;display:flex;gap:11px;position:relative}
+  .coi svg{width:18px;height:18px;color:var(--neg);flex-shrink:0;margin-top:1px}
+  .coi h6{font-size:14.5px;font-weight:700;color:var(--neg);margin-bottom:4px}.coi p{font-size:14px;color:var(--t2);line-height:1.55}.coi b{color:var(--neg)}
+  .row2{display:grid;grid-template-columns:1.45fr 1fr;gap:22px}
+  @media(max-width:980px){.row2{grid-template-columns:1fr}}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:980px){.grid2{grid-template-columns:1fr}}
+  .tasks{display:flex;flex-direction:column;gap:11px;padding:6px 18px 20px}
+  .task{display:flex;gap:13px;padding:15px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.018);transition:.16s}
+  .task:hover{border-color:var(--line-2)}
+  .task .ti{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:grid;place-items:center;background:var(--accent-soft)}
+  .task .ti svg{width:16px;height:16px;color:var(--accent-2)}
+  .task .tb{flex:1;min-width:0}.task .tb h4{font-size:15px;font-weight:700;margin-bottom:3px}.task .tb p{font-size:13.5px;color:var(--t3);line-height:1.5}
+  .task .ta{align-self:center;font-size:13px;font-weight:700;color:var(--accent-2);border:1px solid rgba(12,43,130,.3);background:var(--accent-soft);border-radius:8px;padding:7px 11px;cursor:pointer;white-space:nowrap}
+  .task .ta:hover{background:rgba(12,43,130,.18)}
+  .cnt{font-size:12.5px;font-weight:800;background:var(--accent);color:#FFFFFF;border-radius:7px;padding:2px 8px}
+  .feed{padding:6px 18px 20px;display:flex;flex-direction:column;gap:2px}
+  .fitem{display:flex;gap:12px;padding:11px 6px;border-bottom:1px solid var(--line)}.fitem:last-child{border-bottom:none}
+  .fa{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:grid;place-items:center;font-size:12px;font-weight:700;color:#FFFFFF}
+  .fitem p{font-size:14.5px;color:var(--t1);line-height:1.4}.fitem .meta{font-size:12.5px;color:var(--t3);margin-top:2px}
+  .waves{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 22px 6px}
+  @media(max-width:900px){.waves{grid-template-columns:1fr}}
+  .wave{border:1px solid var(--line);border-radius:13px;padding:16px;background:rgba(255,255,255,.018);position:relative}
+  .wave .wh{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .wave .wlabel{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+  .wave.w1 .wlabel{color:var(--accent-2)} .wave.w2 .wlabel{color:var(--info)} .wave.w3 .wlabel{color:var(--purple)}
+  .wave h4{font-size:15.5px;font-weight:800;margin:6px 0 2px}
+  .wave .wtime{font-size:12.5px;color:var(--t3);margin-bottom:8px}
+  .wave .wval{font-size:20px;font-weight:800;color:var(--accent-2);margin-bottom:10px}
+  .wave.w2 .wval{color:var(--info)} .wave.w3 .wval{color:var(--purple)}
+  .wave ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .wave li{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--t2);line-height:1.35}
+  .wave li b{color:var(--t1);font-weight:700;white-space:nowrap}
+  .wave .own{margin-top:11px;font-size:12px;color:var(--t4);border-top:1px solid var(--line);padding-top:9px}
+  .wave .wnum{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-weight:800;font-size:12.5px}
+  .wave.w1 .wnum{background:var(--accent-soft);color:var(--accent-2)} .wave.w2 .wnum{background:var(--info-soft);color:var(--info)} .wave.w3 .wnum{background:rgba(160,120,255,.12);color:var(--purple)}
+  .vd-foot{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin:16px 22px 20px;padding-top:14px;border-top:1px solid var(--line)}
+  .vd-foot .vf{display:flex;flex-direction:column}
+  .vd-foot .vf .v{font-size:20px;font-weight:800}.vd-foot .vf .v.g{color:var(--pos)}.vd-foot .vf .v.a{color:var(--accent-2)}
+  .vd-foot .vf .l{font-size:12.5px;color:var(--t3)}
+  .vd-foot .note{margin-left:auto;font-size:12.5px;color:var(--t3);max-width:300px;font-style:italic}
+  .levers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 22px 18px}
+  @media(max-width:760px){.levers{grid-template-columns:1fr}}
+  .lev{border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:rgba(255,255,255,.018)}
+  .lev .lt{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;margin-bottom:4px}
+  .lev .lt .dotc{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .lev p{font-size:12.5px;color:var(--t3);line-height:1.4}
+  .lev .conf{font-size:10.5px;font-weight:800;letter-spacing:.03em;border-radius:5px;padding:1px 6px;margin-left:auto;text-transform:uppercase}
+  .lev .conf.hi{background:var(--pos-soft);color:var(--pos)}.lev .conf.mod{background:rgba(18,166,230,.12);color:var(--warn)}
+  .stat-row{display:flex;gap:0;padding:4px 22px 16px;flex-wrap:wrap}
+  .stat-row .m{flex:1;min-width:120px;padding-right:16px;border-right:1px solid var(--line)}
+  .stat-row .m:last-child{border-right:none;padding-right:0}
+  .stat-row .m .v{font-size:22.5px;font-weight:800}.stat-row .m .v.a{color:var(--accent-2)}
+  .stat-row .m .l{font-size:12.5px;color:var(--t3);margin-top:2px}
+  .fp{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:4px 22px 18px}
+  @media(max-width:900px){.fp{grid-template-columns:repeat(2,1fr)}}
+  .fpcard{border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(255,255,255,.02)}
+  .fpcard .fv{font-size:21.5px;font-weight:800;color:var(--accent-2)}
+  .fpcard .fl{font-size:13.5px;font-weight:600;margin-top:2px}
+  .fpcard .fs{font-size:12.5px;color:var(--t3);margin-top:6px;line-height:1.4}
+  .bu-note{padding:0 22px 18px;font-size:13px;color:var(--t3);line-height:1.5}.bu-note b{color:var(--accent-2)}
+  .news .hero{position:relative;height:148px;overflow:hidden}
+  .news .hero img{width:100%;height:100%;object-fit:cover;opacity:.85}
+  .news .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,14,.1),rgba(19,19,26,.96))}
+  .news .hero .ov{position:absolute;left:18px;right:18px;bottom:14px;z-index:2}
+  .news .hero .ov .t{font-size:15.5px;font-weight:700;line-height:1.35}
+  .news .hero .ov .m{font-size:12.5px;color:var(--t3);margin-top:5px;display:flex;gap:8px;align-items:center}
+  .nlist{padding:6px 18px 18px}
+  .nitem{display:flex;gap:11px;padding:12px 4px;border-bottom:1px solid var(--line)}.nitem:last-child{border-bottom:none}
+  .nitem h4{font-size:14.5px;font-weight:600;line-height:1.4}.nitem .nm{font-size:12.5px;color:var(--t3);margin-top:4px}
+  .tblwrap{padding:4px 22px 20px;overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+  thead th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line-2)}
+  thead th.r,tbody td.r{text-align:right}thead th.c,tbody td.c{text-align:center}
+  tbody td{padding:10px;border-bottom:1px solid var(--line);color:var(--t2)}
+  tbody tr:hover td{background:rgba(255,255,255,.02)}
+  tbody td.cat{color:var(--t1);font-weight:600}
+  tbody td .td{color:var(--accent-2);font-weight:700}
+  tbody td .bu{color:var(--info);font-weight:700}
+  tbody tr.tot td{border-top:1px solid var(--line-2);border-bottom:none;font-weight:700;color:var(--t1);background:rgba(12,43,130,.05)}
+  tbody tr.tot td .td,tbody tr.tot td .bu{font-size:14.5px}
+  .lp{display:inline-block;font-size:11px;font-weight:700;background:var(--accent-soft);color:var(--accent-2);border-radius:5px;padding:1px 6px}
+  .dotr{display:inline-block;width:11px;height:11px;border-radius:50%}.dotr.s{background:var(--pos)}.dotr.m{background:var(--warn)}.dotr.w{border:2px solid var(--neg);width:9px;height:9px}
+  .ai-mini{margin:0 22px 16px;border-radius:12px;padding:1.2px;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep))}
+  .ai-mini-in{background:#16130f;border-radius:11px;padding:13px 16px;display:flex;gap:11px;align-items:flex-start}
+  .ai-mini-in svg{width:16px;height:16px;color:var(--accent-2);flex-shrink:0;margin-top:2px}
+  .ai-mini-in p{font-size:14px;color:var(--t2);line-height:1.5}.ai-mini-in b{color:var(--t1)}
+  .constraints{display:flex;flex-direction:column;gap:12px;padding:6px 18px 20px}
+  .con{display:flex;gap:14px;padding:15px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.018)}
+  .con .cn{width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent-2);display:grid;place-items:center;font-weight:800;font-size:13.5px;flex-shrink:0}
+  .con .cb{flex:1}.con .cb h4{font-size:15px;font-weight:700;margin-bottom:4px}.con .cb p{font-size:13.5px;color:var(--t3);line-height:1.5}
+  .con .resp{flex-shrink:0;width:230px;font-size:13px;color:var(--t2);background:rgba(12,43,130,.06);border:1px solid rgba(12,43,130,.18);border-radius:10px;padding:11px 12px;line-height:1.45}
+  .con .resp b{color:var(--accent-2);display:block;margin-bottom:3px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  @media(max-width:820px){.con{flex-wrap:wrap}.con .resp{width:100%}}
+  .srmgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:6px 22px 20px}
+  @media(max-width:820px){.srmgrid{grid-template-columns:1fr}}
+  .srm{border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(255,255,255,.02)}
+  .srm .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .srm .sn{font-weight:700;font-size:15px}.srm .sv{font-size:17px;font-weight:800;color:var(--accent-2)}
+  .srm .stag{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px}.srm .stag.mega{background:var(--accent-soft);color:var(--accent-2)}.srm .stag.ic{background:var(--info-soft);color:var(--info)}
+  .srm p{font-size:13px;color:var(--t3);line-height:1.45}
+  .fab{position:fixed;bottom:26px;right:26px;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));color:#FFFFFF;box-shadow:0 10px 30px var(--accent-glow);display:grid;place-items:center;z-index:50;transition:.18s}
+  .fab:hover{transform:translateY(-3px) scale(1.04)}.fab svg{width:24px;height:24px}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .scroll::-webkit-scrollbar,nav::-webkit-scrollbar{width:8px}
+  .scroll::-webkit-scrollbar-thumb,nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:8px}
+
+  .vhead .dv{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--accent-2);background:var(--accent-soft);border:1px solid rgba(12,43,130,.28);border-radius:9px;padding:7px 12px}
+  .vhead .dv svg{width:14px;height:14px}
+  .briefing{background:linear-gradient(135deg,#181410,#111014 72%);border:1px solid rgba(12,43,130,.18);border-radius:var(--radius);padding:20px 22px}
+  .briefing .bh{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .briefing .bh .lab{font-size:12.5px;font-weight:800;letter-spacing:.14em;color:var(--t3);text-transform:uppercase}
+  .briefing .bh .dt{font-size:13.5px;color:var(--t4)}
+  .chip.ai{background:var(--accent-soft);color:var(--accent-2);display:inline-flex;align-items:center;gap:5px}.chip.ai svg{width:12px;height:12px}
+  .briefing h6{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-2);font-weight:800;margin:2px 0 7px}
+  .briefing p{font-size:14.5px;color:var(--t2);line-height:1.6;margin-bottom:14px}
+  .briefing p b{color:var(--t1);font-weight:600}.briefing p .k{color:var(--accent-2);font-weight:700}
+  .mtabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:2px 0 4px}
+  .mtab{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;font-size:15px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s}
+  .mtab:hover{color:var(--t1)}
+  .mtab.active{color:#fff;border-bottom-color:var(--accent)}
+  .mtab .cb{font-size:12.5px;font-weight:800;background:var(--accent);color:#FFFFFF;border-radius:6px;padding:1px 7px}
+  .mtab svg{width:15px;height:15px}
+  .mpane{display:none}.mpane.active{display:block;animation:rise .35s ease both}
+  .ngrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media(max-width:1080px){.ngrid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.ngrid{grid-template-columns:1fr}}
+  .ncard{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.16s}
+  .ncard:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .nhero{position:relative;height:128px;overflow:hidden}
+  .nhero img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
+  .nhero.g1{background:linear-gradient(135deg,#3a2410,#FFFFFF)}
+  .nhero.g2{background:linear-gradient(135deg,#10283a,#0c1622)}
+  .nhero.g3{background:linear-gradient(135deg,#2a1a3a,#140e1c)}
+  .nhero.g4{background:linear-gradient(135deg,#10342a,#0c1c18)}
+  .nhero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,14,0),rgba(19,19,26,.55))}
+  .nbody{padding:13px 15px 16px;display:flex;flex-direction:column;gap:7px;flex:1}
+  .nbody .src{font-size:12.5px;color:var(--t3);font-weight:600}
+  .nbody h4{font-size:15px;font-weight:700;line-height:1.34}
+  .nbody p{font-size:13px;color:var(--t3);line-height:1.5}
+  .chip.tag{align-self:flex-start;display:inline-flex;align-items:center;gap:5px}.chip.tag svg{width:11px;height:11px}
+  .pricetbl thead th{padding:9px 10px}
+  .arrow{font-weight:800}.arrow.up{color:var(--neg)}.arrow.upg{color:var(--accent-2)}.arrow.flat{color:var(--t3)}
+  .pmt{color:var(--t2);font-size:13.5px}
+  .pnote{margin:0 22px 18px;border-radius:11px;background:var(--accent-soft);border:1px solid rgba(12,43,130,.2);padding:13px 15px;font-size:14px;color:var(--t2);line-height:1.55}
+  .pnote b{color:var(--accent-2)}
+
+  /* ---------- LIGHT MODE ---------- */
+  body.light{
+    --bg:#f3f4f6;--panel:#ffffff;--panel-2:#f8f9fb;
+    --line:rgba(18,22,30,.10);--line-2:rgba(18,22,30,.16);
+    --t1:#15171c;--t2:rgba(20,23,30,.66);--t3:rgba(20,23,30,.46);--t4:rgba(20,23,30,.30);
+    --accent-2:#071434;--pos:#17A673;--warn:#B58A00;
+  }
+  body.light .nav-item.active{color:var(--accent-deep)}
+  body.light .nav-item.active svg{color:var(--accent-deep)}
+  body.light .opmodel,body.light .briefing{background:linear-gradient(135deg,#fffaf3,#ffffff 72%)}
+  body.light .ai-inner{background:linear-gradient(150deg,#fffaf3,#ffffff 60%)}
+  body.light .ai-mini-in{background:#fff7ec}
+  body.light .ai-head h3,body.light .ai-line b{color:var(--t1)}
+  body.light .cb .bar{background:rgba(18,22,30,.07)}
+  body.light .pill,body.light .icon-btn,body.light .btn:not(.primary),body.light .task .ta{background:rgba(18,22,30,.03)}
+  body.light .sw{background:rgba(18,22,30,.18)}
+  body.light .pill.live,body.light .chip.w1,body.light .chip.ext{color:var(--accent-deep)}
+  body.light .ncard,body.light .rec,body.light .omech,body.light .fpcard,body.light .srm,body.light .con,body.light .lev,body.light .wave,body.light .brief-item,body.light .task{background:var(--panel)}
+  body.light .msg.bot{background:#fff}
+  /* ---------- CHATBOT ---------- */
+  .chatwin{position:fixed;bottom:96px;right:26px;width:368px;max-width:calc(100vw - 36px);height:540px;max-height:calc(100vh - 130px);
+    background:var(--panel);border:1px solid var(--line-2);border-radius:18px;box-shadow:0 26px 64px rgba(0,0,0,.45);
+    display:flex;flex-direction:column;overflow:hidden;z-index:60;opacity:0;transform:translateY(16px) scale(.98);pointer-events:none;transition:.2s cubic-bezier(.2,.7,.3,1)}
+  .chatwin.open{opacity:1;transform:none;pointer-events:auto}
+  .chathead{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,var(--accent-soft),transparent)}
+  .chathead .l{display:flex;align-items:center;gap:11px}
+  .chorb{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));display:grid;place-items:center;box-shadow:0 4px 14px var(--accent-glow);flex-shrink:0}
+  .chorb svg{width:18px;height:18px;color:#FFFFFF}
+  .chname{font-size:15.5px;font-weight:800}.chsub{font-size:12.5px;color:var(--t3)}
+  .chx{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--t2);cursor:pointer;font-size:19px;line-height:1;display:grid;place-items:center}
+  .chx:hover{color:var(--t1);border-color:var(--line-2)}
+  .chatbody{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--panel-2)}
+  .chatbody::-webkit-scrollbar{width:7px}.chatbody::-webkit-scrollbar-thumb{background:rgba(150,150,150,.3);border-radius:7px}
+  .msg{font-size:14px;line-height:1.55;padding:11px 13px;border-radius:14px;max-width:88%}
+  .msg.bot{background:var(--panel);border:1px solid var(--line);color:var(--t1);align-self:flex-start;border-bottom-left-radius:5px}
+  .msg.user{background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#FFFFFF;font-weight:600;align-self:flex-end;border-bottom-right-radius:5px}
+  .msg b{font-weight:700}.msg i{color:var(--t2);font-style:italic}
+  .prompts{display:flex;flex-direction:column;gap:7px;align-self:stretch}
+  .pchip{text-align:left;font-size:13.5px;font-weight:600;color:var(--accent-2);background:var(--accent-soft);border:1px solid rgba(12,43,130,.25);border-radius:11px;padding:10px 12px;cursor:pointer;transition:.14s}
+  .pchip:hover{background:rgba(12,43,130,.18)}
+  .dots i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--t3);margin-right:4px;animation:bd 1s infinite}
+  .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+  @keyframes bd{0%,80%,100%{opacity:.3}40%{opacity:1}}
+  .chatfoot{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel)}
+  .chatfoot input{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--t1);font-size:14px;font-family:inherit;outline:none}
+  .chatfoot input:focus{border-color:var(--accent)}
+  .chatfoot .snd{width:40px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));color:#FFFFFF;cursor:pointer;display:grid;place-items:center}
+  .chatfoot .snd svg{width:17px;height:17px}
+  /* ---------- TOAST ---------- */
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:#15171c;color:#fff;border:1px solid rgba(255,255,255,.14);
+    padding:13px 18px;border-radius:12px;font-size:14.5px;font-weight:600;box-shadow:0 18px 44px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:.25s;z-index:90;display:flex;align-items:center;gap:10px}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+  .toast svg{width:17px;height:17px;color:#17A673;flex-shrink:0}
+  /* ---------- RECOMMENDATIONS ---------- */
+  .recgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:6px 22px 20px}
+  @media(max-width:820px){.recgrid{grid-template-columns:1fr}}
+  .rec{border:1px solid var(--line);border-radius:13px;padding:15px;background:rgba(255,255,255,.018);display:flex;flex-direction:column;gap:9px}
+  .rec .rh{display:flex;align-items:center;gap:10px}
+  .rec .ri{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0}
+  .rec .ri svg{width:16px;height:16px;color:var(--accent-2)}
+  .rec h4{font-size:15px;font-weight:700}
+  .rec .rtag{margin-left:auto}
+  .rec p{font-size:13.5px;color:var(--t3);line-height:1.5;flex:1}
+  .recbtn{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:#FFFFFF;background:linear-gradient(135deg,var(--accent),var(--accent-deep));border:none;border-radius:9px;padding:9px 13px;cursor:pointer;box-shadow:0 4px 12px var(--accent-glow)}
+  .recbtn:hover{filter:brightness(1.06)}.recbtn svg{width:14px;height:14px}
+
+  .stat-row .m .v.g{color:var(--pos)}
+  .chip.w2{background:var(--info-soft);color:var(--info)}
+  .chip.w3{background:rgba(160,120,255,.12);color:var(--purple)}
+  .actwrap{padding:6px 18px 18px;display:flex;flex-direction:column;gap:10px}
+  .act{display:flex;gap:16px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.018);transition:.16s}
+  .act:hover{border-color:var(--line-2)}
+  .act .ab{flex:1;min-width:0}
+  .act .at{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+  .act .at h4{font-size:15px;font-weight:700}
+  .lvtag{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;background:var(--accent-soft);color:var(--accent-2);border-radius:6px;padding:2px 7px}
+  .act .ab p{font-size:13.5px;color:var(--t3);line-height:1.45}
+  .act .av{font-size:15px;font-weight:800;color:var(--accent-2);white-space:nowrap;flex-shrink:0;text-align:right}
+  .actbtn{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:#FFFFFF;background:linear-gradient(135deg,var(--accent),var(--accent-deep));border:none;border-radius:9px;padding:9px 13px;cursor:pointer;white-space:nowrap;box-shadow:0 4px 12px var(--accent-glow)}
+  .actbtn:hover{filter:brightness(1.06)}.actbtn svg{width:14px;height:14px}
+  @media(max-width:720px){.act{flex-wrap:wrap}.act .av{order:2}.act .actbtn{order:3}}
+  body.light .act{background:var(--panel)}
+
+  .flagbar{background:linear-gradient(135deg,rgba(12,43,130,.10),transparent 70%);border:1px solid rgba(12,43,130,.30);border-radius:var(--radius);padding:16px 18px}
+  .flagbar .fh{display:flex;align-items:center;gap:13px;margin-bottom:13px}
+  .fcount{width:34px;height:34px;border-radius:10px;background:var(--accent);color:#FFFFFF;font-weight:800;font-size:18px;display:grid;place-items:center;flex-shrink:0;box-shadow:0 4px 12px var(--accent-glow)}
+  .flagbar .ft{font-weight:700;font-size:15.5px}.flagbar .fd{font-size:13.5px;color:var(--t3);margin-top:2px}
+  .frows{display:flex;flex-direction:column;gap:9px}
+  .frow{display:flex;align-items:center;gap:13px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--panel)}
+  .frow .fn{font-weight:700;font-size:14.5px;min-width:210px}
+  .frow .fv{font-weight:800;color:var(--accent-2);font-size:14.5px;white-space:nowrap}
+  .frow .ftag{font-size:13px;color:var(--t3);flex:1}
+  @media(max-width:720px){.frow{flex-wrap:wrap}.frow .ftag{flex-basis:100%}}
+
+  .brand{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .brandsep{width:1px;height:18px;background:var(--line);display:inline-block}
+  .sunmark{font-weight:800;font-size:14.5px;letter-spacing:.05em;color:#000}
+  .hi{font-weight:700;color:var(--t1);font-size:15.5px;margin-right:4px;white-space:nowrap}
+  .aiins{margin:2px 22px 18px;border-radius:11px;background:var(--accent-soft);border:1px solid rgba(12,43,130,.18);padding:12px 14px;display:flex;gap:11px;align-items:flex-start}
+  .aiins svg{width:17px;height:17px;color:var(--accent-2);flex-shrink:0;margin-top:1px}
+  .aiins p{font-size:14px;color:var(--t2);line-height:1.55}
+  .aiins .lab{font-weight:700;color:var(--accent-2)}
+  .fpcard .fprize{font-size:13px;font-weight:700;color:var(--pos);margin-top:6px}
+  .levbar{display:flex;flex-wrap:wrap;gap:8px;padding:4px 22px 14px;align-items:center}
+  .levchip{font-size:14px;font-weight:600;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;transition:.14s;font-family:inherit}
+  .levchip:hover{border-color:var(--line-2);color:var(--t1)}
+  .levchip.active{background:var(--accent-soft);border-color:rgba(12,43,130,.45);color:var(--accent-2)}
+  .levsel{font-size:14px;font-weight:600;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer;font-family:inherit;outline:none;max-width:340px}
+  .levsel:focus{border-color:var(--accent)}
+  .levempty{padding:34px 22px;text-align:center;color:var(--t3);font-size:14.5px}
+  .levpane{display:none}.levpane.active{display:block;animation:rise .35s ease both}
+  .lphead{padding:8px 22px 0;font-size:17px;font-weight:700}
+  .dataneeded{margin:6px 22px 22px;border:1px dashed var(--line-2);border-radius:12px;padding:26px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:9px}
+  .dataneeded svg{width:32px;height:32px;color:var(--warn)}
+  .dataneeded h4{font-size:17px;font-weight:700}
+  .dataneeded p{font-size:14px;color:var(--t3);max-width:580px;line-height:1.6}
+  body.light .levchip,body.light .levsel{background:rgba(18,22,30,.03)}
+  body.light .mtab.active{color:var(--t1)}
+  .news .hero .ov .t{color:#fff}
+  .news .hero .ov .m{color:rgba(255,255,255,.74)}
+
+  .sunlogo{height:50px;width:auto;display:block}
+  body:not(.light) .sunlogo .wm-dark{fill:#f4f5f7}
+  body:not(.light) .sunlogo path[stroke="#000"]{stroke:#f4f5f7}
+  body:not(.light) .sunlogo .logo path{stroke:#FFFFFF}
+  .fpcard{position:relative}
+  .fpcard .fprize{position:absolute;top:10px;right:10px;font-size:10.5px;font-weight:800;color:var(--pos);background:var(--pos-soft);border-radius:6px;padding:3px 7px}
+  .conf.nt{background:rgba(255,255,255,.06);color:var(--t3)}
+  body.light .conf.nt{background:rgba(18,22,30,.06)}
+  .lev.nt p{color:var(--t3)}
+  .morelev{margin:14px 0 0;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--accent-2);background:var(--accent-soft);border:1px solid rgba(12,43,130,.25);border-radius:10px;padding:9px 14px;cursor:pointer;font-family:inherit}
+  .morelev:hover{filter:brightness(1.05)}
+  .morelev .aichev{transition:.2s;font-size:10px}
+  .morelev.open .aichev{transform:rotate(180deg)}
+  .aiwrap{margin:0}
+  .aibtn{margin:6px 22px 0;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--accent-2);background:var(--accent-soft);border:1px solid rgba(12,43,130,.22);border-radius:9px;padding:7px 12px;cursor:pointer;font-family:inherit}
+  .aibtn:hover{filter:brightness(1.06)}
+  .aibtn svg{width:13px;height:13px}
+  .aibtn .aichev{transition:.2s;font-size:9px}
+  .aiwrap.open .aibtn .aichev{transform:rotate(180deg)}
+  .aiins{display:none;margin:8px 22px 18px}
+  .aiwrap.open .aiins{display:flex}
+
+  .aibtn{display:inline-flex;align-items:center;gap:6px;margin:0 0 0 8px;font-size:11.5px;font-weight:700;color:var(--accent-2);background:var(--accent-soft);border:1px solid rgba(12,43,130,.22);border-radius:8px;padding:5px 9px;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .aibtn:hover{filter:brightness(1.06)}
+  .aibtn svg{width:12px;height:12px;flex-shrink:0}
+  .aibtn .aichev{font-size:8px;transition:.2s}
+  .ai-open .aibtn .aichev{transform:rotate(180deg)}
+  .aiins{display:none;margin:6px 22px 14px;padding:11px 14px;border-radius:10px;background:var(--accent-soft);border-left:3px solid var(--accent)}
+  .aiins p{font-size:12.5px;color:var(--t2);line-height:1.55}
+  .ai-open .aiins{display:block}
+  .lev[data-lev]{cursor:pointer}
+  .lev[data-lev]:hover{border-color:var(--line-2)}
+  .lev.active{border-color:rgba(12,43,130,.5);background:var(--accent-soft)}
+  .lev.nt{cursor:default}
+  .levpane{display:none}
+  .levpane.active{display:block;animation:rise .35s ease both}
+  .levempty{padding:30px 22px;text-align:center;color:var(--t3);font-size:13px;border:1px dashed var(--line);border-radius:var(--radius);margin-top:2px}
+
+  .morelev{margin:2px 22px 16px}
+  .resp,.con .resp{width:100%;flex-basis:100%;background:none;border:none;padding:0;margin:0}
+  .respbtn{margin:0}
+  .resp .aiins{display:none;margin:8px 0 0}
+  .resp.open .aiins{display:block}
+  .resp.open .aichev{transform:rotate(180deg)}
+
+  /* fix structural-constraint tile layout */
+  .con{display:grid;grid-template-columns:28px 1fr;column-gap:14px;row-gap:10px;align-items:start}
+  .con .cn{margin-top:1px}
+  .con .cb{min-width:0}
+  .con .cb h4{font-size:14px}
+  .con .resp{grid-column:2;width:100%}
+  .con .resp .aiins{margin:8px 0 0;width:100%;box-sizing:border-box}
+  .con .respbtn{margin:0}
+
+  .brand{flex-direction:column;align-items:flex-start;gap:11px;height:auto;padding:16px 22px}
+  .brandrow{display:flex;align-items:center;gap:8px}
+  .sunlogo{height:50px}
+.confbar{display:flex;align-items:center;gap:9px;padding:8px 22px;font-size:12px;font-weight:600;background:var(--accent-soft);border-bottom:1px solid var(--line);color:var(--accent-deep);letter-spacing:.005em}.confbar svg{flex:0 0 auto;opacity:.92}
+
+  /* data table for contracts */
+  .dtable{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;font-size:11.5px}
+  .dtable th{text-align:left;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--t4);padding:7px 7px;border-bottom:1px solid var(--line)}
+  .dtable td{padding:8px 7px;border-bottom:1px solid var(--line);color:var(--t2);vertical-align:middle;word-break:break-word}
+  .dtable col.c-site{width:8.5%}.dtable col.c-vendor{width:15%}.dtable col.c-spec{width:13%}.dtable col.c-price{width:11%}.dtable col.c-vol{width:6.5%}.dtable col.c-qual{width:13.5%}.dtable col.c-lead{width:9%}.dtable col.c-ci{width:5.5%}.dtable col.c-status{width:12%}
+  .dtable tr:hover td{background:rgba(255,255,255,.02)}
+  body.light .dtable tr:hover td{background:rgba(18,22,30,.02)}
+  .dtable .site{font-weight:700;color:var(--t1)}
+  .dtable .tnum{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .reg-row td{background:var(--accent-soft);color:var(--accent-deep);font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px}
+  .qchip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;border-radius:6px;padding:2px 6px;line-height:1.3}
+  .qchip .qd{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+  .q-ok{background:rgba(23,166,115,.12);color:var(--pos)}.q-ok .qd{background:var(--pos)}
+  .q-warn{background:rgba(18,166,230,.15);color:var(--accent-2)}.q-warn .qd{background:var(--accent-2)}
+  .q-bad{background:rgba(12,43,130,.13);color:var(--neg)}.q-bad .qd{background:var(--neg)}
+  .q-na{background:var(--track);color:var(--t4)}.q-na .qd{background:var(--t4)}
+  .stat-mini{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 4px}
+  .stat-mini .sm{flex:1;min-width:150px;background:var(--accent-soft);border:1px solid rgba(12,43,130,.2);border-radius:12px;padding:13px 15px}
+  .stat-mini .sm .v{font-size:21px;font-weight:800;color:var(--t1);line-height:1.1}
+  .stat-mini .sm .v.neg{color:var(--neg)}.stat-mini .sm .v.pos{color:var(--pos)}
+  .stat-mini .sm .l{font-size:11.5px;color:var(--t3);margin-top:3px}
+  /* five forces */
+  .forces{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .force{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+  .force h4{font-size:12px;font-weight:800;color:var(--t1);margin:0 0 5px;line-height:1.2}
+  .force .lvl{display:inline-block;font-size:9.5px;font-weight:800;border-radius:6px;padding:2px 7px;margin-bottom:8px;line-height:1.3}
+  .force .lvl.hi{background:rgba(23,166,115,.13);color:var(--pos)}
+  .force .lvl.med{background:rgba(18,166,230,.15);color:var(--accent-2)}
+  .force .lvl.lo{background:rgba(12,43,130,.12);color:var(--neg)}
+  .force p{font-size:10.5px;color:var(--t3);line-height:1.45;margin:0}
+  @media(max-width:1100px){.forces{grid-template-columns:repeat(2,1fr)}}
+
+  /* forged vs chrome comparison */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:4px}
+  .vs .vcol{padding:16px 18px}
+  .vs .vcol.cf{background:rgba(12,43,130,.06)}
+  .vs .vcol.cc{background:rgba(94,74,220,.05);border-left:1px solid var(--line)}
+  .vs .vcap{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+  .vs .vcap .dot{width:11px;height:11px;border-radius:3px}
+  .vs .vcap h4{font-size:15px;font-weight:800;color:var(--t1);margin:0}
+  .vs .vcap .vsh{font-size:11px;color:var(--t3);margin-left:auto;font-weight:600}
+  .vmet{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .vmet:last-child{border-bottom:none}
+  .vmet .ml{font-size:11.5px;color:var(--t3)}
+  .vmet .mv{font-size:13.5px;font-weight:700;color:var(--t1);text-align:right}
+  .vmet .mv small{display:block;font-size:10px;font-weight:600;color:var(--t3)}
+  .winwhen{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .winwhen .ww{border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .winwhen .ww h5{font-size:12px;font-weight:800;margin:0 0 6px;color:var(--t1)}
+  .winwhen .ww p{font-size:11.5px;color:var(--t3);line-height:1.5;margin:0}
+
+  /* rise/fall simulator */
+  .rf{display:grid;grid-template-columns:300px 1fr;gap:20px;margin-top:6px}
+  .rf-ctrl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .rf-ctrl .ch{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--t4);margin:0 0 10px}
+  .rf-seg{display:flex;gap:6px;margin-bottom:14px}
+  .rf-seg button{flex:1;font:inherit;font-size:12px;font-weight:700;padding:7px 0;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--t2);cursor:pointer}
+  .rf-seg button.on{background:var(--accent);border-color:var(--accent);color:#FFFFFF}
+  .rf-row{margin-bottom:13px}
+  .rf-row .rl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+  .rf-row .rl span:first-child{color:var(--t2)}
+  .rf-row .rl .rv{font-weight:800;color:var(--accent-2);font-variant-numeric:tabular-nums}
+  .rf-row input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+  .rf-row.dim{opacity:.4;pointer-events:none}
+  .rf-presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .rf-presets button{font:inherit;font-size:10.5px;font-weight:700;padding:5px 9px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--t3);cursor:pointer}
+  .rf-presets button:hover{color:var(--accent-2);border-color:rgba(12,43,130,.4)}
+  .rf-out{display:flex;flex-direction:column;gap:14px}
+  .rf-hero{background:var(--accent-soft);border:1px solid rgba(12,43,130,.25);border-radius:14px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end}
+  .rf-hero .big{font-size:40px;font-weight:800;line-height:1;color:var(--t1)}
+  .rf-hero .big.up{color:var(--neg)}.rf-hero .big.down{color:var(--pos)}
+  .rf-hero .bl{font-size:11.5px;color:var(--t3);margin-top:4px}
+  .rf-hero .sec .v{font-size:22px;font-weight:800;color:var(--t1)}
+  .rf-bars{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .rf-bars .ch{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--t4);margin:0 0 12px}
+  .rfbar{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:12px}
+  .rfbar .lbl{width:118px;color:var(--t2);flex-shrink:0}
+  .rfbar .track{flex:1;height:14px;background:var(--track);border-radius:7px;position:relative;overflow:hidden}
+  .rfbar .fill{position:absolute;top:0;bottom:0;border-radius:7px}
+  .rfbar .pts{width:62px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;color:var(--t1);flex-shrink:0}
+  .rf-note{font-size:11.5px;color:var(--t3);line-height:1.5}
+  .rf-cmp{display:flex;gap:10px;flex-wrap:wrap}
+  .rf-cmp .cc2{flex:1;min-width:150px;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .rf-cmp .cc2 .v{font-size:18px;font-weight:800;color:var(--t1)}
+  .rf-cmp .cc2 .l{font-size:11px;color:var(--t3);margin-top:3px}
+  @media(max-width:900px){.rf{grid-template-columns:1fr}.vs,.winwhen{grid-template-columns:1fr}}
+
+  /* rebate tier strip */
+  .rebate-tiers{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+  .rebate-tiers .rt{flex:1;min-width:78px;border:1px solid var(--line);border-radius:11px;padding:11px 8px;text-align:center;background:var(--accent-soft)}
+  .rebate-tiers .rt.hl{background:var(--accent);border-color:var(--accent)}
+  .rebate-tiers .rt.hl .rtv,.rebate-tiers .rt.hl .rtl{color:#fff}
+  .rebate-tiers .rtv{font-size:19px;font-weight:800;color:var(--accent)}
+  .rebate-tiers .rtl{font-size:10.5px;color:var(--t3);margin-top:3px;font-weight:600}
+
+  /* supplier intelligence cards */
+  .sups{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .sup{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--panel)}
+  .sup-h{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .sup-h h4{font-size:15px;font-weight:800;color:var(--t1);margin:0}
+  .sup-h .tg{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:6px;padding:2px 8px}
+  .sup-h .tg.hc{background:rgba(94,74,220,.14);color:var(--info)}
+  .sup-h .tg.fg{background:var(--accent-soft);color:var(--accent)}
+  .sup-h .post{margin-left:auto;font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 8px}
+  .sup-h .post.off{background:rgba(23,166,115,.14);color:var(--pos)}
+  .sup-h .post.def{background:rgba(12,43,130,.12);color:var(--accent)}
+  .sup .pos1{font-size:12px;color:var(--t2);line-height:1.5;margin:6px 0 11px}
+  .sup .srow{display:flex;gap:8px;font-size:11.5px;padding:5px 0;border-top:1px dashed var(--line)}
+  .sup .srow .k{color:var(--t3);width:92px;flex-shrink:0}
+  .sup .srow .v{color:var(--t1);font-weight:600}
+  @media(max-width:1000px){.sups{grid-template-columns:1fr}}
+
+  /* NEWMONT sidebar wordmark */
+  .nm-logo{display:flex;align-items:center;gap:11px}
+  .nm-logo svg{flex-shrink:0;filter:drop-shadow(0 3px 8px rgba(18,166,230,.28))}
+  .nm-txt b{display:block;font-size:16px;font-weight:800;letter-spacing:1.8px;color:var(--t1);line-height:1}
+  .nm-txt span{display:block;font-size:9px;font-weight:700;letter-spacing:1.4px;color:var(--accent-2);text-transform:uppercase;margin-top:3px}
+
+  /* ---- interactive charts ---- */
+  .chartbox svg .ib{cursor:pointer;transition:opacity .16s ease, filter .16s ease}
+  .chartbox svg .ib:hover{opacity:.82;filter:brightness(1.08)}
+  .chartbox svg .ib.flash{animation:ibflash .45s ease}
+  @keyframes ibflash{0%{opacity:.45}50%{opacity:1;filter:brightness(1.25)}100%{opacity:1}}
+  .chartbox svg{animation:chartIn .55s cubic-bezier(.22,1,.36,1) both}
+  @keyframes chartIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  #tooltip{position:fixed;z-index:9999;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s ease;background:var(--panel);border:1px solid var(--line-2);border-radius:10px;padding:9px 12px;box-shadow:0 10px 30px rgba(0,0,0,.28);font-size:12.5px;color:var(--t1);max-width:260px}
+  #tooltip.show{opacity:1;transform:none}
+  #tooltip .tt-t{font-weight:800;margin-bottom:3px;font-size:12px}
+  #tooltip .tt-v{color:var(--accent-2);font-weight:800}
+  #tooltip .tt-s{color:var(--t3);font-size:11px;margin-top:2px}
+</style>
+</head>
+<body class="light">
+<div id="tooltip"></div>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="nm-logo"><svg viewBox="0 0 32 28" width="30" height="26" aria-label="Newmont"><defs><linearGradient id="nmg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12A6E6"/><stop offset="1" stop-color="#0C2B82"/></linearGradient></defs><path d="M16 3 L30 25 L2 25 Z" fill="url(#nmg)"/><path d="M16 3 L23 14.5 L16 11 L9 14.5 Z" fill="#FCAF17"/></svg>
+      <div class="nm-txt"><b>NEWMONT</b><span>Grinding Media</span></div></div>
+    </div>
+    <nav>
+      <div class="nav-lbl">Category Cockpit</div>
+      <div class="nav-item active" data-view="baseline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>Spend Baseline</div>
+      <div class="nav-item" data-view="contracts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-3"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M8 11h8M8 15h5"/></svg>Contracts &amp; Demand</div>
+      <div class="nav-item" data-view="value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c3-6 6-6 9 0s6 6 9 0"/></svg>Value Delivery</div>
+      <div class="nav-item" data-view="towers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Category Strategy</div>
+      <div class="nav-item" data-view="gov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>Governance</div>
+      <div class="nav-item" data-view="market"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 13l3-3 3 2 5-6"/><circle cx="21" cy="6" r="1.5" fill="currentColor"/></svg>Market Intelligence</div>
+      <div class="nav-item" data-view="actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>Recommended Actions</div>
+      <div class="nav-item" id="initTracker" data-view="init"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>RFP Roadmap</div>
+    </nav>
+    <div class="side-foot">
+      <div class="toggle-row" id="dmToggle"><span>Dark mode</span><span class="sw" id="dmSwitch"></span></div>
+      <div class="user"><div class="ava">IA</div><div><div class="nm">Isaac Amoah</div><div class="ro">Grinding Media · Category Lead</div></div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <span class="hi">Good day, Isaac!</span>
+      <div class="spacer"></div>
+      <span class="pill"><span class="dot" style="background:var(--accent)"></span>Grinding Media Spend <span class="sep">&#8250;</span> $101M (LTM)</span>
+      <span class="pill">10 operations &#183; 5 regions</span>
+      <span class="pill">Multi-regional RFP &#183; Launch Q3&#8217;24</span>
+    </header>
+
+    <div class="confbar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Newmont Corporation &#183; grinding media category strategy (post-Newcrest synergy view). DRAFT &#183; not to be shared or forwarded without prior approval.</span></div>
+
+    <div class="scroll"><div class="wrap">
+      
+<!-- ============ SPEND BASELINE ============ -->
+<div class="view active" data-v="baseline">
+  <div class="vhead"><div><h1>Spend Baseline</h1><div class="date">~$101M combined LTM grinding-media spend &#183; ~116K MT/yr &#183; 10 operations across LATAC, Australia, Canada, PNG &amp; Ghana &#183; post-divestiture</div></div></div>
+  <div class="stat-row card" style="padding:18px 22px">
+    <div class="m"><div class="v a">$101M</div><div class="l">Combined LTM spend (post-divestiture)</div></div>
+    <div class="m"><div class="v">~116K MT</div><div class="l">Annual volume (per SKU tables)</div></div>
+    <div class="m"><div class="v">~97%</div><div class="l">Spend with top 4 suppliers</div></div>
+    <div class="m"><div class="v">10 / 6</div><div class="l">Operations / active suppliers</div></div>
+  </div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 4 3 4-6"/></svg></span>How the baseline was built</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>After the six divested assets are removed, spend reconciles to ~$101.5M combined LTM. LATAC is now the largest block at ~$40M (40%), dominated by Penasquito (~$35M); Australia (~$39M, led by Cadia and Boddington) is a close second. On a rough split, ~$57M is legacy Newmont (bought regionally) and ~$44M legacy Newcrest (bought globally) &#8212; the post-merger case for a single multi-regional process.</p></div>
+    <div class="sub">Regional build-up of the combined LTM baseline; site prices are EXW/DDP, normalised for benchmarking</div>
+    <div class="chartbox" id="ch_waterfall"></div>
+  </section>
+  <div class="grid2">
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Spend by region</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>Spend concentrates in LATAC (~40%) and Australia (~38%), together ~78% of the leaner base, with Canada (~16%) third. Ghana (~$2.6M, Ahafo) carries local-content considerations, but the bulk of the ~$101M is globally contestable &#8212; the addressable pool for one multi-regional RFP. PNG is a small tail; the US exits with CC&amp;V.</p></div>
+      <div class="chartbox" id="ch_cat"></div>
+    </section>
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l4-3 4 3 6-2v15"/></svg></span>Spend by site</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>Penasquito (~$35M) and Cadia (~$23M) are now the two largest sites; Red Chris (~$14M) and Boddington (~$14M) follow. With Telfer divested, Cadia becomes the anchor Australian contract. Several sites run a single dominant incumbent, while others split across two suppliers &#8212; so both cross-site pooling and within-site tension are live levers.</p></div>
+      <div class="chartbox" id="ch_bu"></div>
+      </section>
+  </div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M6 16c4-1 6-9 14-11"/></svg></span>Supplier concentration</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>Concentration tightens post-divestiture: the top 4 suppliers hold ~97% of the base, and Molycop is ~$48M (~47%) as the forged incumbent across Australia, Canada, PNG and Mexico. ME Elecmetal (~$28M) and Vega (~$19M) follow; Magotteaux drops to ~$4.5M once Eleonore and Porcupine exit, and Gerdau and Altasteel leave the panel entirely. Six suppliers remain. Pooling that volume through one RFP anchors the synergy case.</p></div>
+    <div class="sub">6 suppliers serve the category; ~97% of spend sits with the top 4 &#8212; Molycop dominant (~47%) as the forged incumbent</div>
+    <div class="chartbox" id="ch_pareto"></div>
+  </section>
+</div>
+<div class="view" data-v="contracts">
+  <div class="vhead"><div><h1>Contracts &amp; Demand</h1><div class="date">Current contract coverage, product performance, SKU mix and the forward demand profile that the RFP must serve</div></div></div>
+  <div class="mtabs">
+    <div class="mtab active" data-mtab="ct_contracts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>Current contracts</div>
+    <div class="mtab" data-mtab="ct_skus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 4"/></svg>SKU &amp; spec mix</div>
+    <div class="mtab" data-mtab="ct_demand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 13l3 3 7-8"/></svg>Demand forecast</div>
+  </div>
+
+  <div class="mpane active" data-mpane="ct_contracts">
+    <div class="stat-mini">
+      <div class="sm"><div class="v">~$43M</div><div class="l">Spend on contracts expiring 31 Dec 2024 &#8212; the RFP timing anchor</div></div>
+      <div class="sm"><div class="v">~$19M</div><div class="l">Cadia (Molycop AUS) &#8212; openable now with charges (Telfer divested)</div></div>
+      <div class="sm"><div class="v">Red Chris</div><div class="l">Forged&#8594;high-chrome trial &#8212; ~$14M spend, ~42% / ~$6M prize</div></div>
+    </div>
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>Contract &amp; performance register by site</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>The timing is unusually clean. A large block &#8212; Penasquito (~$35M), Cerro Negro, Ahafo and Tanami (~$43M in all) &#8212; expires 31 Dec 2024, and Boddington&rsquo;s Vega deal lapses 30 Sep 2024. With Telfer divested, Cadia (Molycop AUS, ~$19M) is now the main contract openable now, with charges. Almost every SKU already carries a named competitor, so the RFP starts with real contestability. The standout spend-better play sits at Red Chris (retained), where a forged&#8594;high-chrome switch on ~$14M of spend is modelled at ~42% / ~$6M by the Newcrest team.</p></div>
+      <div class="sub">Price is EXW/DDP per tonne; annual volume in MT; competitor = credible alternate bidder. Red = near-term expiry. Source: combined contract register &amp; price schedule</div>
+      <table class="dtable">
+        <colgroup><col class="c-site"><col class="c-vendor"><col class="c-spec"><col class="c-price"><col class="c-vol"><col class="c-qual"><col class="c-lead"><col class="c-status"></colgroup>
+        <thead><tr><th>Site</th><th>Supplier</th><th>Spec</th><th class="tnum">Price $/MT</th><th class="tnum">Vol (MT)</th><th>Competitor</th><th>Expiry</th><th>Open?</th></tr></thead>
+        <tbody>
+          <tr class="reg-row"><td colspan="8">Australia &#183; ~$38.9M</td></tr>
+          <tr><td class="site">Boddington</td><td>Vega</td><td>HC 17mm</td><td class="tnum">$1,488</td><td class="tnum">17,877</td><td>Magotteaux, Molycop</td><td><span class="qchip q-bad"><span class="qd"></span>9/30/2024</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Tanami</td><td>Vega</td><td>HC 30&#8211;90mm</td><td class="tnum">$1,642</td><td class="tnum">1,453</td><td>Magotteaux, Molycop</td><td><span class="qchip q-bad"><span class="qd"></span>12/31/2024</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Cadia</td><td>Molycop AUS</td><td>Forged 65&#8211;140mm</td><td class="tnum">$1,055&#8211;1,140</td><td class="tnum">22,016</td><td>ME Elecmetal</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-ok"><span class="qd"></span>Openable w/ charges</span></td></tr>
+          <tr><td class="site">Cadia</td><td>Magotteaux</td><td>HC 80mm</td><td class="tnum">$1,301</td><td class="tnum">4,500</td><td>Vega</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr class="reg-row"><td colspan="8">PNG &#183; ~$3.7M</td></tr>
+          <tr><td class="site">Lihir</td><td>Vega</td><td>HC 50&#8211;80mm</td><td class="tnum">$1,045</td><td class="tnum">2,400</td><td>Magotteaux, Molycop</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Lihir</td><td>Molycop AUS</td><td>Forged 125mm</td><td class="tnum">$1,073</td><td class="tnum">2,584</td><td>ME Elecmetal</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr class="reg-row"><td colspan="8">Canada &#183; ~$16.1M</td></tr>
+          <tr><td class="site">Red Chris</td><td>Molycop Canada</td><td>Forged + white iron</td><td class="tnum">&#8212;</td><td class="tnum">~13,460</td><td>ME Elecmetal, Gerdau</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-ok"><span class="qd"></span>HC-switch trial</span></td></tr>
+          <tr><td class="site">Brucejack</td><td>Molycop Canada</td><td>Forged 2&#8211;5in</td><td class="tnum">&#8212;</td><td class="tnum">920</td><td>ME-E, Gerdau</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr class="reg-row"><td colspan="8">LATAC &#183; ~$40.2M</td></tr>
+          <tr><td class="site">Penasquito</td><td>ME Elecmetal</td><td>Forged 3&#8211;5.5in</td><td class="tnum">$1,098&#8211;1,343</td><td class="tnum">21,600</td><td>Molycop Mexico</td><td><span class="qchip q-bad"><span class="qd"></span>12/31/2024</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Penasquito</td><td>Molycop Mexico</td><td>Forged</td><td class="tnum">&#8212;</td><td class="tnum">&#8212;</td><td>ME Elecmetal</td><td><span class="qchip q-bad"><span class="qd"></span>12/31/2024</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Penasquito</td><td>Magotteaux</td><td>HC 1in</td><td class="tnum">$1,890</td><td class="tnum">160</td><td>Molycop Mexico</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Merian</td><td>ME Elecmetal</td><td>Forged 2&#8211;4in</td><td class="tnum">$1,235&#8211;1,387</td><td class="tnum">12,140</td><td>Vega, Magotteaux</td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Cerro Negro</td><td>Molycop Chile</td><td>Forged 3&#8211;5in</td><td class="tnum">$1,365&#8211;1,467</td><td class="tnum">2,824</td><td>ME Elecmetal</td><td><span class="qchip q-bad"><span class="qd"></span>12/31/2024</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr class="reg-row"><td colspan="8">Ghana &#183; ~$2.6M &#183; local-content requirements</td></tr>
+          <tr><td class="site">Ahafo</td><td>Wafor</td><td>Forged 50mm</td><td class="tnum">$1,810</td><td class="tnum">5,841</td><td>Vega, Magotteaux SA</td><td><span class="qchip q-bad"><span class="qd"></span>12/31/2024</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+          <tr><td class="site">Ahafo</td><td>Africhem / GMSA</td><td>Forged 125mm</td><td class="tnum">$1,554</td><td class="tnum">8,041</td><td>ME Elecmetal</td><td><span class="qchip q-bad"><span class="qd"></span>12/31/2024</span></td><td><span class="qchip q-na"><span class="qd"></span>&#8212;</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <div class="mpane" data-mpane="ct_skus">
+    <div class="grid2">
+      <section class="card">
+        <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 4"/></svg></span>Material mix by volume</div></div>
+        <div class="aiwrap"><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+        <div class="aiins"><p>Forged steel is ~75% of volume and high-chrome ~23% (triangulated from the SKU tables), with white iron ~2% at Red Chris. High-chrome runs 15&#8211;25% more per tonne but can deliver lower wear-rate TCO &#8212; the efficiency case to be solicited through the RFP. The forged-to-HC switching question is the single biggest spec lever, gated by Technical Services trials.</p></div>
+        <div class="chartbox" id="ch_matmix"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/></svg></span>Volume by major SKU</div></div>
+        <div class="sub">Forged 125mm is the single most-common spec at ~28% of total volume; most large SKUs are concentrated, aiding bundling</div>
+        <div class="chartbox" id="ch_specvol"></div>
+      </section>
+    </div>
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Spec consolidation by site</div></div>
+      <div class="sub">Variability is driven by rock composition and site infrastructure &#8212; not all of it is addressable</div>
+      <div class="stat-mini" style="margin-top:8px">
+        <div class="sm"><div class="v">4 sites</div><div class="l">run three or more specifications &#8212; Cadia, Red Chris, Penasquito, Merian</div></div>
+        <div class="sm"><div class="v">3 sites</div><div class="l">run essentially one spec family &#8212; Boddington (HC), Tanami (HC), Ahafo (forged)</div></div>
+        <div class="sm"><div class="v">~28%</div><div class="l">Of total volume is Forged 125mm &#8212; the most common single spec</div></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="mpane" data-mpane="ct_demand">
+    <div class="stat-mini">
+      <div class="sm"><div class="v pos">~+0.7%/yr</div><div class="l">Assumed flat portfolio demand 2024&#8211;27 &#8212; the pack carries no bottom-up site forecast</div></div>
+      <div class="sm"><div class="v">~70%</div><div class="l">Four sites &#8212; Cadia, Penasquito, Boddington, Red Chris &#8212; drive ~70% of volume</div></div>
+      <div class="sm"><div class="v">~116K MT</div><div class="l">Annual volume envelope the RFP can commit (per SKU tables)</div></div>
+    </div>
+    <div class="grid2">
+      <section class="card">
+        <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 13l3 3 7-8"/></svg></span>Total volume by year</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+        <div class="aiins"><p>The pack is an LTM snapshot with no bottom-up forward forecast, so this view holds each site at the portfolio flat-demand assumption (~+0.7%/yr) &#8212; 2024 is actual (per the SKU tables), 2025 and 2027 are projected. The takeaway is deliberately flat: demand is not the swing factor here, concentration is. Four sites (Cadia, Penasquito, Boddington, Red Chris) carry ~70% of volume, so pooling that committed tonnage through one multi-regional RFP is what gives Newmont the negotiating leverage &#8212; not demand growth. Replace with real site forecasts when the pack provides them.</p></div>
+        <div class="sub">2024 volumes per the SKU tables; 2025 &amp; 2027 held at the assumed ~+0.7%/yr flat-demand rate &#8212; the pack carries no bottom-up site forecast</div>
+        <div class="chartbox" id="ch_fcyear"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M12 3v18"/></svg></span>Demand CAGR by site (2024&#8211;27)</div></div>
+        <div class="sub">Ghana and LATAC carry the steepest landed-cost premiums (Ahafo ~+22%, Cerro Negro ~+19%) as DDP freight stacks on EXW; the largest annual volumes sit at Cadia, Penasquito and Boddington</div>
+        <div class="chartbox" id="ch_fccagr"></div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="view" data-v="towers">
+  <div class="vhead"><div><h1>Category Strategy</h1><div class="date">The forged-vs-chrome spec decision, tested savings levers and the wider lever universe across the ~$101M base</div></div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/></svg></span>Forged vs. high-chrome &#8212; the headline spec lever</div><span class="chip opp">strategic</span><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>The headline example is Red Chris: switching ~$14M of forged spend to high-chrome is modelled at ~42% / ~$6M by the Newcrest team &#8212; the single largest spend-better prize in the category. The logic generalises: high-chrome costs more per tonne and carries a thinner supplier margin (~10% vs ~27% forged), but in abrasive ores it wears far slower, so fewer tonnes of media are consumed per tonne of ore. With ~75% of volume still forged, even a partial, ore-specific shift &#8212; Cadia is the next candidate at ~$15M / ~3% &#8212; is a large prize, gated by Technical Services trials and de-risked with supplier performance guarantees. Value sized by soliciting wear-rate data through the RFP.</p></div>
+    <div class="sub">Per-tonne economics favour forged; total-cost-of-grinding can favour high-chrome where ore abrasiveness is high</div>
+    <div class="vs">
+      <div class="vcol cf">
+        <div class="vcap"><span class="dot" style="background:var(--accent)"></span><h4>Forged steel</h4><span class="vsh">~75% of volume</span></div>
+        <div class="vmet"><span class="ml">Annual volume</span><span class="mv">~87K MT</span></div>
+        <div class="vmet"><span class="ml">Avg. price paid</span><span class="mv">~$1,100/MT EXW<small>$1,053&#8211;1,554 across regions</small></span></div>
+        <div class="vmet"><span class="ml">China should-cost</span><span class="mv">~$862/MT</span></div>
+        <div class="vmet"><span class="ml">Implied supplier margin</span><span class="mv">~27%</span></div>
+        <div class="vmet"><span class="ml">Wear rate</span><span class="mv">Baseline<small>higher consumption / t ore</small></span></div>
+        <div class="vmet"><span class="ml">Best fit</span><span class="mv">General / lower-abrasion ore</span></div>
+        <div class="vmet"><span class="ml">Switching gate</span><span class="mv">&#8212; incumbent</span></div>
+      </div>
+      <div class="vcol cc">
+        <div class="vcap"><span class="dot" style="background:var(--info)"></span><h4>High chrome</h4><span class="vsh">~23% of volume</span></div>
+        <div class="vmet"><span class="ml">Annual volume</span><span class="mv">~26K MT</span></div>
+        <div class="vmet"><span class="ml">Avg. price paid</span><span class="mv">~$1,450/MT<small>15&#8211;25% premium &#183; $1,045&#8211;1,890</small></span></div>
+        <div class="vmet"><span class="ml">China should-cost</span><span class="mv">~$1,105/MT<small>chrome ~50% of raw-mat cost</small></span></div>
+        <div class="vmet"><span class="ml">Implied supplier margin</span><span class="mv">~10%</span></div>
+        <div class="vmet"><span class="ml">Wear rate</span><span class="mv">Lower<small>fewer t media / t ore (TBD)</small></span></div>
+        <div class="vmet"><span class="ml">Best fit</span><span class="mv">High-abrasion, ore-specific</span></div>
+        <div class="vmet"><span class="ml">Switching gate</span><span class="mv">TS trials + perf. guarantee</span></div>
+      </div>
+    </div>
+    <div class="winwhen">
+      <div class="ww"><h5>When forged wins</h5><p>Lower-abrasion ores where wear-rate gains are small &#8212; the ~8% price premium and trial cost of high-chrome are not recovered. Keep forged, focus value on price, rebates and logistics.</p></div>
+      <div class="ww"><h5>When high-chrome wins</h5><p>Abrasive ores where slower wear cuts media consumed per tonne of ore enough to beat the premium &#8212; lower total cost of grinding despite higher unit price. Test under guarantee, then scale.</p></div>
+    </div>
+    <div class="sub" style="margin-top:14px">Decision to be made ore body by ore body; efficiency data solicited via RFP. Red Chris (~$6M) and Cadia (~$0.5M) are the lead switch candidates; further sites screened across the ~$87M balance</div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9h18M9 21V9"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span>Region fingerprint</div></div>
+    <div class="fp">
+      <div class="fpcard"><div class="fprize" title="Indicative savings potential">$3&#8211;4M</div><div class="fv">$40.2M</div><div class="fl">LATAC</div><div class="fs">Penasquito, Merian, Cerro Negro &#183; ME Elecmetal, Molycop</div></div>
+      <div class="fpcard"><div class="fprize" title="Indicative savings potential">$3&#8211;5M</div><div class="fv">$38.9M</div><div class="fl">Australia</div><div class="fs">Cadia, Boddington, Tanami &#183; Molycop, Vega, Magotteaux</div></div>
+      <div class="fpcard"><div class="fprize" title="Indicative savings potential">~$6M</div><div class="fv">$16.1M</div><div class="fl">Canada</div><div class="fs">Red Chris, Brucejack &#183; Molycop &#183; Red Chris HC-switch prize</div></div>
+      <div class="fpcard"><div class="fprize" title="Indicative savings potential">$0.2&#8211;0.4M</div><div class="fv">$2.6M</div><div class="fl">Ghana + PNG</div><div class="fs">Ahafo, Lihir &#183; Wafor, B5 Plus, Vega &#183; local content</div></div>
+      <div class="fpcard"><div class="fprize" title="Volume mix">75 / 23%</div><div class="fv">~116K MT</div><div class="fl">Forged vs High Chrome</div><div class="fs">Per SKU tables &#183; Forged 2&#8211;5.5in &#183; HC 1&#8211;3in / 17mm &#183; white iron ~2%</div></div>
+    </div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>6 tested levers</div><span class="chip opp">Select a lever to view its analysis</span></div>
+    <div class="levers">
+      <div class="lev" data-lev="shift" onclick="selLever('shift')"><div class="lt"><span class="dotc" style="background:var(--pos)"></span>Should-Cost Price Reset<span class="conf hi">High</span></div><p>Forged EXW ranges $1,053&#8211;1,554 across regions &#8212; benchmark to lowest-cost like-for-like.</p></div>
+      <div class="lev" data-lev="mega" onclick="selLever('mega')"><div class="lt"><span class="dotc" style="background:var(--pos)"></span>Volume Rebates / Consolidation<span class="conf hi">High</span></div><p>Graduated $/tonne rebate tiers on the combined ~$101M post-divestiture volume.</p></div>
+      <div class="lev" data-lev="bundle" onclick="selLever('bundle')"><div class="lt"><span class="dotc" style="background:var(--pos)"></span>Regional Volume Pooling<span class="conf hi">High</span></div><p>Pool site volume regionally; leverage the combined post-merger scale.</p></div>
+      <div class="lev" data-lev="consol" onclick="selLever('consol')"><div class="lt"><span class="dotc" style="background:var(--pos)"></span>Supplier Consolidation<span class="conf hi">High</span></div><p>8 suppliers, Molycop ~52%; consolidate or add tension where local content allows.</p></div>
+      <div class="lev" data-lev="tail" onclick="selLever('tail')"><div class="lt"><span class="dotc" style="background:var(--pos)"></span>Logistics / Incoterm Optimisation<span class="conf mod">Mixed</span></div><p>EXW&#8594;DDP premiums up to ~$300/t (Ghana, Canada); take ownership earlier.</p></div>
+      <div class="lev" data-lev="sku" onclick="selLever('sku')"><div class="lt"><span class="dotc" style="background:var(--pos)"></span>SKU / Spec Optimisation<span class="conf mod">Mixed</span></div><p>Red Chris forged&#8594;HC ~$6M; test switches &amp; ball-mix for TCO gains.</p></div>
+    </div>
+    <button class="morelev" id="moreLevBtn" type="button" onclick="toggleMoreLevers()">Show all levers <span class="aichev">&#9662;</span></button>
+    <div class="levers" id="moreLevers" style="display:none;margin-top:12px">
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Rise/Fall Index Optimisation<span class="conf nt">Future / TBD</span></div><p>Use lowest-cost regional steel index; clear price-decrease language.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Performance Guarantees<span class="conf nt">Future / TBD</span></div><p>Supplier-underwritten efficiency guarantees on new SKUs.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Re-engineer Waste<span class="conf nt">Future / TBD</span></div><p>Re-use worn balls as smaller diameters to cut new purchases.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Packaging Type (bulk vs drums)<span class="conf nt">Future / TBD</span></div><p>~$750K in packaging; ~40% bought in barrels &#8212; shift to bulk.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Owned vs Consigned Inventory<span class="conf nt">Future / TBD</span></div><p>Negotiate lower consignment rates &amp; terms.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Transport Volume Consolidation<span class="conf nt">Future / TBD</span></div><p>Bundle Australia/Ghana final-mile in-house delivery.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Commodity Hedging<span class="conf nt">Future / TBD</span></div><p>Time purchases vs steel-index forecasts via a buy desk.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Payment-Terms Optimisation<span class="conf nt">Future / TBD</span></div><p>Early-payment discounts within Net 30&#8211;60 day terms.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>KPIs / SLAs &amp; CI<span class="conf nt">Future / TBD</span></div><p>Tie bonuses to KPIs; eliminate &#8216;automatic 100%&#8217;.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Rate Structure Standardisation<span class="conf nt">Future / TBD</span></div><p>Consistent unit rates &amp; applications across same suppliers.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Specification Simplification<span class="conf nt">Future / TBD</span></div><p>Rationalise ball mix and sizes where TS approves.</p></div>
+      <div class="lev nt"><div class="lt"><span class="dotc" style="background:var(--t3)"></span>Termination for Convenience<span class="conf nt">Future / TBD</span></div><p>Build contract flexibility &amp; trial volumes for the future.</p></div>
+    </div>
+  </section>
+  <div class="levempty" id="levEmpty">Select one of the six tested levers above to view its visualisation.</div>
+
+  <section class="card levpane" data-lev="shift">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 12h16"/></svg></span>Should-Cost Price Reset</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>Directional should-cost modelling for China puts forged media at ~$862/MT and high-chrome at ~$1,105/MT, implying current forged prices carry a ~27% margin and high-chrome ~10%. Across Newmont sites, forged EXW ranges $1,053&#8211;1,554 and high-chrome $1,045&#8211;1,890 &#8212; benchmarking to lowest-cost like-for-like is the reset. Newmont forged prices range from ~$1,053 (Penasquito EXW) to ~$1,554 (Ghana DDP) &#8212; all above the modelled floor. Raw material is 64&#8211;86% of cost and index-linked, so the lever is to anchor RFP negotiations on the should-cost build and secure favourable rise/fall indices, not to expect large absolute cuts.</p></div>
+    <div class="sub">Forged price paid by site vs modelled China should-cost floor ($862/MT); high-chrome shown at avg ($/MT)</div>
+    <div class="chartbox" id="ch_hpdell"></div>
+    <div class="legend" style="justify-content:center"><span class="lg"><i style="background:var(--accent)"></i>Current price paid</span><span class="lg"><i style="background:var(--info)"></i>Should-cost (modelled)</span></div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>Should-cost driver (forged, China)</th><th class="r">$/MT</th><th class="r">% of cost</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td class="cat">Steel (raw material)</td><td class="r">$499</td><td class="r">57.9%</td><td>Index-linked; varies heavily by region</td></tr>
+          <tr><td class="cat">Other / indirect</td><td class="r">$233</td><td class="r">30.4%</td><td>Overheads &amp; conversion</td></tr>
+          <tr><td class="cat">Utilities (power, coal, water)</td><td class="r">$73</td><td class="r">8.4%</td><td>Electricity index relevant for rise/fall</td></tr>
+          <tr><td class="cat">Labour (LCCS)</td><td class="r">$29</td><td class="r">3.3%</td><td>Small in China, larger in NA/Europe</td></tr>
+          <tr><td class="cat">Packaging</td><td class="r">$29</td><td class="r">3.3%</td><td>Bulk vs drum is a secondary lever</td></tr>
+          <tr class="tot"><td>Modelled total</td><td class="r"><span class="td">$862</span></td><td class="r">100%</td><td>vs ~$1,179 forged price paid &#8594; ~27% margin</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card levpane" data-lev="mega">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M6 21V10M12 21V4M18 21v-8"/></svg></span>Volume Rebates / Consolidation</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>Volume rebates are largely uncontested. Newcrest already holds a Molycop rebate (150 AUD/t in Australia, 115 AUD/t in Canada); the proposal extends this to a graduated $/tonne structure ($10/t at 5&#8211;10kt up to $50/t at 60k+) on combined volume. Molycop, ME Elecmetal, Vega and Magotteaux each supply multiple sites, so pooling holistic volume is the route to the ~$2M+ volume-discount prize on top of price.</p></div>
+    <div class="sub">Estimated spend by supplier ($ M), allocated from site spend and the contract register; top 4 hold ~65% &#8212; the pool for global rebate leverage</div>
+    <div class="chartbox" id="ch_mega"></div>
+    <div class="legend" style="justify-content:center"><span class="lg"><i style="background:var(--accent)"></i>Supplier spend ($ M)</span></div>
+    <div class="sub" style="margin-top:16px">Benchmarked global volume-discount structure &#8212; per-tonne rebate rises with committed annual volume (proven in a recent global gold-miner RFP)</div>
+    <div class="rebate-tiers">
+      <div class="rt"><div class="rtv">$10</div><div class="rtl">5&#8211;10k t</div></div>
+      <div class="rt"><div class="rtv">$15</div><div class="rtl">10&#8211;20k t</div></div>
+      <div class="rt"><div class="rtv">$20</div><div class="rtl">20&#8211;30k t</div></div>
+      <div class="rt"><div class="rtv">$25</div><div class="rtl">30&#8211;40k t</div></div>
+      <div class="rt"><div class="rtv">$30</div><div class="rtl">40&#8211;50k t</div></div>
+      <div class="rt"><div class="rtv">$35</div><div class="rtl">50&#8211;60k t</div></div>
+      <div class="rt hl"><div class="rtv">$50</div><div class="rtl">60k+ t</div></div>
+    </div>
+    <div class="rf-note" style="margin-top:10px">Per-tonne discount ($/t off base price) by committed annual volume band. Holistic, multi-site volume pooling is what unlocks the deeper bands &#8212; the case for a single global award structure (with local carve-outs where mandated).</div>
+  </section>
+
+  <section class="card levpane" data-lev="bundle">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg></span>Regional Volume Pooling</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>Individual site volumes swing sharply year-on-year while combined Newmont + Newcrest volume is far steadier &#8212; so pooling demand regionally lets a single contract absorb site-level peaks and troughs and reduces supplier visibility to volatility. Pooling across Australia, LATAC and Canada, and combining Newmont with Newcrest global volume, is the basis for global volume discounts.</p></div>
+    <div class="sub">Spend available for pooling by region ($ M); Africa constrained by Ghana local content</div>
+    <div class="chartbox" id="ch_bundle"></div>
+  </section>
+
+  <section class="card levpane" data-lev="consol">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M7 12h10M10 19h4"/></svg></span>Supplier Consolidation</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>The category is top-heavy &#8212; the top 4 of 12 suppliers hold ~65% of spend &#8212; while a tail of local Ghana suppliers and others competes for the rest. Full consolidation to one global supplier is not feasible because of local-content rules, so the likely outcome is a hybrid: consolidate and grow share with global suppliers to create regional competition, while awarding to local suppliers where mandated and benchmarking them against global references.</p></div>
+    <div class="sub">Top suppliers vs the fragmented tail ($ M)</div>
+    <div class="chartbox" id="ch_consol"></div>
+    <div class="legend" style="justify-content:center"><span class="lg"><i style="background:var(--accent)"></i>Top 4 suppliers (~65%)</span><span class="lg"><i style="background:var(--t3)"></i>8 tail suppliers</span></div>
+  </section>
+
+  <section class="card levpane" data-lev="tail">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18l-7 8v5l-4 2v-7z"/></svg></span>Logistics / Incoterm Optimisation</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>EXW&#8594;DDP premiums stack up to ~$300/t in Ghana and Canada &#8212; pass-through freight and hidden margins Newmont can reclaim by taking ownership earlier and pooling logistics across sites. ~12% of spend is logistics; shifting from under-leveraged rates to negotiated freight contracts yields ~5&#8211;8% on that slice. CFR costs ~80% of DDP and FOB ~20%, so Incoterm choice materially moves landed cost.</p></div>
+    <div class="sub">Estimated landed-cost split: media vs freight by region ($ M), from EXW&#8594;DDP premiums; Ghana carries the steepest premium</div>
+    <div class="chartbox" id="ch_tail"></div>
+    <div class="legend" style="justify-content:center"><span class="lg"><i style="background:var(--accent)"></i>Media (ex-works)</span><span class="lg"><i style="background:var(--t3)"></i>Logistics / freight</span></div>
+  </section>
+
+  <section class="card levpane" data-lev="sku">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 20h8M12 18v2"/></svg></span>SKU / Spec Optimisation</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>Forged 125mm is the single most common spec (~28% of volume); high-chrome is ~42% of volume and ~8% dearer per tonne but can lower TCO through efficiency in some ore-specific operations. The lever is to solicit efficiency data through the RFP and trial forged&#8594;high-chrome or adjusted ball-mix under supplier performance guarantees, so specs can be tested without financial loss. Value to be sized via the market exercise.</p></div>
+    <div class="sub">2024 volume by major spec (000 MT); forged 125mm dominates, high-chrome 40mm is the largest HC line</div>
+    <div class="chartbox" id="ch_sku"></div>
+    <div class="legend" style="justify-content:center"><span class="lg"><i style="background:var(--accent)"></i>Forged steel</span><span class="lg"><i style="background:var(--t3)"></i>High chrome</span></div>
+  </section>
+</div>
+<div class="view" data-v="value">
+  <div class="vhead"><div><h1>Value Delivery</h1><div class="date">$8&#8211;12M multi-regional RFP synergy (~8&#8211;12% of ~$101M) &#183; Red Chris forged&#8594;HC is the largest single play &#183; further upside from logistics &amp; CI levers</div></div></div>
+  <div class="grid2">
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M6 6v4M12 6v8M18 6v12"/></svg></span>The value waterfall</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>Starting from the ~$101.5M post-divestiture baseline, the RFP drives value in stages: direct price negotiation (~$4M, ~4%), a global volume discount (~$2M), then the forged&#8594;high-chrome spec switch at Red Chris (~$6M &#8212; kept post-divestiture). Because Red Chris is now a larger share of a leaner base, total synergy is ~$12M, or ~12% of ~$101M. Optimised spend lands around ~$90M.</p></div>
+      <div class="sub">Bridge from the combined LTM baseline to optimised spend &#8212; the Red Chris spec switch and rebates outweigh raw price cuts</div>
+      <div class="chartbox" id="ch_valwf"></div>
+    </section>
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12l5-5"/></svg></span>Savings potential</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>The validated, bookable core is ~$8&#8211;12M on the leaner ~$101M base: direct-negotiation price (~$4M, ~4%), a global volume discount (~$2M) and the Red Chris forged&#8594;high-chrome switch (~$6M). Quick-win BIB price/discount matches (~$0.7M) can start in Q1 2024. A useful cross-check: the deck also finds a 17mm-ball unit-price gap (10&#8211;20%, ~$450K) and a 65mm gap (8&#8211;12%, ~$248K) between Newmont and Newcrest in Australia &#8212; Boddington (17mm) is retained, so that harmonisation quick win survives divestiture.</p></div>
+      <div class="sub">Validated RFP core shown as the bookable band within total potential</div>
+      <div class="chartbox" id="ch_gauge"></div>
+      <div class="legend" style="justify-content:center"><span class="lg"><i style="background:var(--pos)"></i>Validated &#183; bookable ($8&#8211;12M)</span><span class="lg"><i style="background:rgba(12,43,130,.35)"></i>Further upside (SKU, CI, rise/fall)</span></div>
+    </section>
+  </div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c3-6 6-6 9 0s6 6 9 0"/></svg></span>Phased by wave</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>Wave 1 (Buy Better) is the global RFP itself &#8212; price negotiation and volume rebates &#8212; bookable in 2026 and fully supported by this diagnostic. Wave 2 (Spend Better) tackles logistics, Incoterms and packaging through 2026&#8211;27. Wave 3 (Future Levers) covers the slower, structural levers &#8212; SKU performance guarantees, rise/fall optimisation, hedging and waste re-engineering &#8212; that need trials and Technical Services alignment before value lands.</p></div>
+    <div class="waves">
+      <div class="wave w1"><div class="wh"><span class="wlabel">Buy Better &#183; RFP-led</span><span class="wnum">1</span></div><h4>Wave 1</h4><div class="wtime">2024 &#183; Bookable</div><div class="wval">~$6&#8211;7M</div>
+        <ul><li>RFP price negotiation<b>~$4M</b></li><li>Global volume discount<b>~$2M</b></li><li>BIB price/discount quick wins<b>~$0.7M</b></li></ul>
+        <div class="own">Owner: Global Category Lead / TCO &#183; RFP, negotiation, rebate structure</div></div>
+      <div class="wave w2"><div class="wh"><span class="wlabel">Spend Better &#183; TCO + Sites</span><span class="wnum">2</span></div><h4>Wave 2</h4><div class="wtime">2024&#8211;25 &#183; Validated</div><div class="wval">~$6&#8211;7M</div>
+        <ul><li>Logistics / Incoterm optimisation<b>0.2&#8211;0.4M</b></li><li>Transport consolidation (AUS/Ghana)<b>0.11&#8211;0.22M</b></li><li>Owned vs consigned inventory<b>TBD</b></li></ul>
+        <div class="own">Owner: TCO team + site supply chain &#183; freight, Incoterms, consignment</div></div>
+      <div class="wave w3"><div class="wh"><span class="wlabel">Future Levers &#183; TS + Sites</span><span class="wnum">3</span></div><h4>Wave 3</h4><div class="wtime">2027+ &#183; Directional</div><div class="wval">Cost avoidance + TBD</div>
+        <ul><li>SKU performance guarantees<b>TBD</b></li><li>Rise/fall index optimisation<b>Avoidance</b></li><li>Hedging &amp; waste re-engineering<b>TBD</b></li></ul>
+        <div class="own">Owner: Technical Services + sites + TCO &#183; trials, CI, buy desk</div></div>
+    </div>
+    <div class="vd-foot">
+      <div class="vf"><span class="v g">$8&#8211;12M</span><span class="l">RFP synergy (Waves 1&#8211;2)</span></div>
+      <div class="vf"><span class="v a">~$12M</span><span class="l">Midpoint estimate</span></div>
+      <div class="vf"><span class="v">~8&#8211;12%</span><span class="l">Savings rate of baseline spend</span></div>
+      <div class="note">Rise/fall indices favourable &#183; rebates structured &#183; logistics owned earlier &#183; specs trialled under guarantees.</div>
+    </div>
+  </section>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Savings by lever</div><span class="chip int">RFP scope</span><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+    <div class="aiins"><p>The forged&#8594;high-chrome switch at Red Chris is the single largest lever (~$6M), followed by direct price negotiation (~$4M) and a global volume discount (~$2M). Together these carry the bulk of the high-confidence value and land in 2024&#8211;25. Logistics/Incoterm and the remaining spend-better levers are smaller, while SKU performance, rise/fall optimisation and hedging stay as sized-later upside because they hinge on RFP responses and Technical Services trials. Sequencing: anchor the case on the Red Chris switch, price and the volume discount; treat everything below the line as roadmap.</p></div>
+    <div class="sub">Top-down = typical commodity savings ranges on addressable spend &#183; Bottom-up = sized on the ~$101M post-divestiture base</div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>Lever</th><th class="r">Range %</th><th class="r">Value</th><th class="c">Year</th><th class="c">Confidence</th></tr></thead>
+        <tbody>
+          <tr><td class="cat">Red Chris forged&#8594;high-chrome switch</td><td class="r">~42%</td><td class="r"><span class="td">~$6M</span></td><td class="c">2025</td><td class="c"><span class="lp">High</span></td></tr>
+          <tr><td class="cat">Direct price negotiation (all sites)</td><td class="r">~4%</td><td class="r"><span class="td">~$4M</span></td><td class="c">2024</td><td class="c"><span class="lp">High</span></td></tr>
+          <tr><td class="cat">Global volume discount</td><td class="r">~2%</td><td class="r"><span class="td">~$2M</span></td><td class="c">2024</td><td class="c"><span class="lp">Med</span></td></tr>
+          <tr><td class="cat">BIB price/discount quick wins</td><td class="r">~9&#8211;11%</td><td class="r"><span class="td">~$0.7M</span></td><td class="c">2024</td><td class="c"><span class="lp">High</span></td></tr>
+          <tr><td class="cat">Logistics optimisation</td><td class="r">5&#8211;8%</td><td class="r"><span class="td">$0.2&#8211;0.4M</span></td><td class="c">2027</td><td class="c"><span class="lp">Med</span></td></tr>
+          <tr><td class="cat">AUS 17mm / 65mm unit-price harmonisation</td><td class="r">8&#8211;20%</td><td class="r"><span class="td">~$0.7M</span></td><td class="c">2024</td><td class="c"><span class="lp">Med</span></td></tr>
+          <tr><td class="cat">Cadia forged&#8594;high-chrome switch</td><td class="r">~3%</td><td class="r"><span class="td">~$0.5M</span></td><td class="c">2025</td><td class="c"><span class="lp">Med</span></td></tr>
+          <tr><td class="cat">SKU performance / rise-fall / hedging</td><td class="r">TBD</td><td class="r"><span class="td">Upside</span></td><td class="c">2027+</td><td class="c"><span class="lp">Future</span></td></tr>
+          <tr class="tot"><td>Total (RFP)</td><td class="r">~8&#8211;12%</td><td class="r"><span class="td">~$8&#8211;12M</span></td><td class="c">2024&#8211;25</td><td class="c"><span class="lp">&#8212;</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+<!-- ============ GOVERNANCE ============ -->
+<div class="view" data-v="gov">
+  <div class="vhead"><div><h1>Governance</h1><div class="date">A single global supplier is not feasible &#8212; four structural constraints shape how the RFP and savings are sequenced</div></div></div>
+  <div class="opmodel">
+    <div class="oh"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span><h3>Operating mechanisms</h3></div>
+    <div class="osub">Governance is part of the value case &#8212; the global category lead captains the RFP and coordinates through site supply-chain managers, with Directorate review before launch.</div>
+    <div class="ogrid">
+      <div class="omech"><span class="st form">Forming</span><div class="mn">Directorate Review</div><p>Category strategy signed off by the Directorate <b>before RFP launch</b>; global category lead captains.</p></div>
+      <div class="omech"><span class="st live">Live</span><div class="mn">RFP scoping</div><p><b>All 10 retained operations mapped.</b> Register re-based after the six 2024&#8211;25 divestitures; competitor set confirmed.</p></div>
+      <div class="omech"><span class="st live">Live</span><div class="mn">Contract Expiry Tracker</div><p>Most site contracts expired or rolling; tracker sequences RFP awards to site timing.</p></div>
+      <div class="omech"><span class="st des">In design</span><div class="mn">Vendor Management / SRM</div><p>Standard KPIs, SLAs &amp; review cadence across sites; performance guarantees &amp; CI incentives.</p></div>
+    </div>
+  </div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>Structural constraints</div></div>
+    <div class="constraints">
+      <div class="con"><div class="cn">1</div><div class="cb"><h4>Local-content rules limit consolidation (Ghana)</h4><p>Ghana requires locally-sourced grinding media, so a single global supplier cannot serve all sites. Ability to pool volume is constrained at the remaining Ghana site (Ahafo); Akyem has since been divested.</p></div><div class="resp"><button class="aibtn respbtn" type="button" onclick="toggleResp(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A7 7 0 0 0 12 2z"/></svg>Response<span class="aichev">&#9662;</span></button><div class="aiins"><p>Hybrid award &#8212; consolidate &amp; grow share with global suppliers to create regional competition, award locally where mandated and benchmark against global references.</p></div></div></div>
+      <div class="con"><div class="cn">2</div><div class="cb"><h4>Spec switching needs trials &amp; Technical Services sign-off</h4><p>Switching specifications (e.g. forged&#8594;high-chrome, ball mix) requires extensive trial periods and alignment with sites and Technical Services. Optimal award scenarios can be constrained by these approvals.</p></div><div class="resp"><button class="aibtn respbtn" type="button" onclick="toggleResp(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A7 7 0 0 0 12 2z"/></svg>Response<span class="aichev">&#9662;</span></button><div class="aiins"><p>Performance guarantees underwritten by suppliers so Newmont can trial specs without financial loss; build trial volumes and contract flexibility into the RFP.</p></div></div></div>
+      <div class="con"><div class="cn">3</div><div class="cb"><h4>Raw material is 64&#8211;86% of price &amp; index-linked</h4><p>Pricing is closely tied to regional steel indices, electricity and logistics, limiting absolute price flexibility. Steel prices are expected to rise into 2026.</p></div><div class="resp"><button class="aibtn respbtn" type="button" onclick="toggleResp(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A7 7 0 0 0 12 2z"/></svg>Response<span class="aichev">&#9662;</span></button><div class="aiins"><p>Negotiate a clear weighted rise/fall formula on the lowest-cost regional index, with explicit price-decrease language and bi-annual resets to limit volatility.</p></div></div></div>
+      <div class="con"><div class="cn">4</div><div class="cb"><h4>Site volume volatility (&#8722;46% to +109% YoY)</h4><p>Individual site volumes swing sharply year-on-year even though combined volume is far steadier, driven by stock-holding and excess inventory.</p></div><div class="resp"><button class="aibtn respbtn" type="button" onclick="toggleResp(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A7 7 0 0 0 12 2z"/></svg>Response<span class="aichev">&#9662;</span></button><div class="aiins"><p>Strategic regional bundling so total contract value absorbs site peaks/troughs and reduces supplier visibility to volatility; standardised rise/fall mechanisms.</p></div></div></div>
+    </div>
+  </section>
+</div>
+<!-- ============ RFP ROADMAP ============ -->
+<div class="view" data-v="init">
+  <div class="vhead"><div><h1>RFP Roadmap</h1><div class="date">~$101M multi-regional tender (post-divestiture) &#183; phased by contract timing &#183; site-level awards &#183; launch Q3 2024</div></div></div>
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>RFP phases &amp; site initiatives</div><span class="chip int">2025&#8211;27</span></div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>Phase / initiative</th><th class="c">Window</th><th>Owner</th><th class="r">Scope / value</th><th class="c">Status</th></tr></thead>
+        <tbody>
+          <tr><td class="cat">Pre-RFP: data &amp; register validation</td><td class="c">Q2 2024</td><td>Category lead</td><td class="r"><span class="td">Combined register</span></td><td class="c"><span class="dotr s"></span> Active</td></tr>
+          <tr><td class="cat">Category strategy &amp; Directorate sign-off</td><td class="c">Aug&#8217;25</td><td>Category lead</td><td class="r"><span class="td">Levers &amp; supplier list</span></td><td class="c"><span class="dotr s"></span> Active</td></tr>
+          <tr><td class="cat">RFP in market (Q&amp;A, normalisation)</td><td class="c">Sep&#8211;Oct&#8217;25</td><td>TCO team</td><td class="r"><span class="td">~$60M scope</span></td><td class="c"><span class="dotr m"></span> Scoping</td></tr>
+          <tr><td class="cat">Bid analysis &amp; negotiation</td><td class="c">Oct&#8211;Nov&#8217;25</td><td>TCO + sites</td><td class="r"><span class="td">Should-cost / R&amp;F</span></td><td class="c"><span class="dotr m"></span> Scoping</td></tr>
+          <tr><td class="cat">RFP price negotiation</td><td class="c">2024</td><td>Category lead</td><td class="r"><span class="td">~$4M</span></td><td class="c"><span class="dotr w"></span> Planned</td></tr>
+          <tr><td class="cat">Global volume discount</td><td class="c">2024</td><td>Category lead</td><td class="r"><span class="td">~$2M</span></td><td class="c"><span class="dotr w"></span> Planned</td></tr>
+          <tr><td class="cat">Award decision &amp; MIC approval</td><td class="c">Q4 2024</td><td>Directorate</td><td class="r"><span class="td">MIC &#8212; TBD</span></td><td class="c"><span class="dotr w"></span> Planned</td></tr>
+          <tr><td class="cat">Logistics / Incoterm optimisation</td><td class="c">2027</td><td>TCO + sites</td><td class="r"><span class="td">$0.2&#8211;0.4M</span></td><td class="c"><span class="dotr w"></span> Planned</td></tr>
+          <tr><td class="cat">Transport consolidation (AUS/Ghana)</td><td class="c">2026</td><td>Sites</td><td class="r"><span class="td">$0.11&#8211;0.22M</span></td><td class="c"><span class="dotr w"></span> Directional</td></tr>
+          <tr><td class="cat">SKU performance guarantees</td><td class="c">2027</td><td>Tech Services</td><td class="r"><span class="td">TBD (trials)</span></td><td class="c"><span class="dotr w"></span> Directional</td></tr>
+          <tr><td class="cat">Rise/fall &amp; hedging (cost avoidance)</td><td class="c">2026&#8211;27</td><td>TCO</td><td class="r"><span class="td">Avoidance</span></td><td class="c"><span class="dotr w"></span> Directional</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+<div class="view" data-v="market">
+  <div class="vhead">
+    <div><h1>Market Intelligence</h1><div class="date">Grinding-media &amp; steel market signals mapped to Newmont&#8217;s category levers</div></div>
+  </div>
+
+  <div class="briefing">
+    <div class="bh"><span class="lab">Market Briefing</span><span class="dt">| August 2025</span><span class="chip ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>AI-Augmented</span></div>
+    <p>The grinding-media market is a buyer&#8217;s market &#8212; <span class="k">global capacity ~9.1 MMT exceeds demand</span> and Newmont is only ~1% of it &#8212; yet <span class="k">steel prices are expected to rise into 2026</span>, and steel is 64&#8211;86% of media cost. APAC capacity is expanding fast: <b>Magotteaux (Thailand), Molycop (Indonesia, 50k&#8594;100k MT SAG)</b> and <b>Elecmetal (Indonesia, 130&#8211;140k MT flagged for Australia)</b> all widen sourcing options and lower-cost benchmarks.</p>
+    <h6>Analysis</h6>
+    <p>The window favours Newmont: run the global RFP to capture price and volume-rebate value <b>before steel indices re-baseline higher</b>, and lock a favourable weighted rise/fall formula. Use should-cost (forged ~$862/MT, high-chrome ~$1,105/MT in China) to anchor negotiations &#8212; current prices carry ~10&#8211;27% margin. Buyer power is high everywhere except Ghana, where <span class="k">local-content rules</span> require a hybrid award.</p>
+  </div>
+
+  <div class="mtabs">
+    <div class="mtab active" data-mtab="news"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>News <span class="cb">8</span></div>
+    <div class="mtab" data-mtab="price"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Cost &amp; market outlook</div>
+    <div class="mtab" data-mtab="scost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="9" width="3" height="9"/><rect x="13" y="5" width="3" height="13"/></svg>Should-cost teardown</div>
+    <div class="mtab" data-mtab="forces"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg>Five forces</div>
+    <div class="mtab" data-mtab="rf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg>Rise/fall model</div>
+    <div class="mtab" data-mtab="sup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Supplier intel</div>
+  </div>
+
+  <div class="mpane active" data-mpane="news">
+    <div class="ngrid"><div class="ncard"><div class="nhero g1"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag risk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Steel pricing</span><div class="src">Beroe &middot; market intel &middot; 2 days ago</div><h4>Steel prices expected to rise into 2026, lifting grinding-media cost base</h4><p>Grinding-media pricing tracks steel, which is 64&#8211;86% of cost and varies by region. Rise/fall mechanisms and the right index base are the primary defence &#8212; a core RFP negotiation item.</p></div></div><div class="ncard"><div class="nhero g2"><img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag opp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>Capacity expansion</span><div class="src">Magotteaux &middot; 1 week ago</div><h4>Magotteaux invests in new Thailand production capacity</h4><p>Strategic growth in APAC widens Newmont&#8217;s sourcing options and lower-cost benchmarks for the Australian and Ghanaian sites &#8212; useful leverage in the global tender.</p></div></div><div class="ncard"><div class="nhero g2"><img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag opp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>Capacity expansion</span><div class="src">Molycop &middot; 1 week ago</div><h4>Molycop doubles SAG ball capacity 50k&#8594;100k MT with new Indonesia line</h4><p>Additional Southeast-Asia supply improves competitive tension and supports lower-cost APAC benchmarks for forged media across the portfolio.</p></div></div><div class="ncard"><div class="nhero g4"><img src="https://images.unsplash.com/photo-1473445730015-841f29a9490b?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag opp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>Capacity expansion</span><div class="src">Elecmetal &middot; 2 weeks ago</div><h4>Elecmetal Indonesia facility flags 130&#8211;140k MT (65&#8211;70%) for Australia export</h4><p>New export-oriented capacity aimed at Australia strengthens the buyer position at Boddington and Cadia &#8212; a direct alternative to incumbent supply.</p></div></div><div class="ncard"><div class="nhero g1"><img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag risk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Trade / tariffs</span><div class="src">Industry &middot; 1 week ago</div><h4>Anti-dumping duties shape APAC sourcing: Shandong 2.1&#8211;27.1% into Australia</h4><p>Tariffs on Chinese forged media into Australia, and within Brazil, constrain the lowest-cost benchmarks at some sites &#8212; factor into award scenarios and landed cost.</p></div></div><div class="ncard"><div class="nhero g3"><img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag opp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>Demand driver</span><div class="src">Beroe &middot; 2 weeks ago</div><h4>Declining ore head grades push grinding-media consumption higher industry-wide</h4><p>Lower grades increase media use in mineral processing, lifting demand &#8212; but global capacity still exceeds demand, keeping buyer power high through the near term.</p></div></div><div class="ncard"><div class="nhero g3"><img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag opp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>Buyer power</span><div class="src">Beroe &middot; market dynamics &middot; 3 weeks ago</div><h4>Global grinding-media capacity (~9.1 MMT) continues to exceed demand</h4><p>Newmont is ~1.5% of a fragmented ~9.1 MMT market growing ~2% to 10.5 MMT by 2027. Multiple sourcing options in every region (bar Africa) give buyers strong negotiating leverage.</p></div></div><div class="ncard"><div class="nhero g4"><img src="https://images.unsplash.com/photo-1610552050890-fe99536c2615?w=700&q=80&auto=format&fit=crop" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="nbody"><span class="chip tag reg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>Cost structure</span><div class="src">Beroe &middot; should-cost &middot; 3 weeks ago</div><h4>China raw-material cost basis ~17% lower than North America &amp; Europe</h4><p>Raw materials are ~64% of China&#8217;s cost vs ~86% in NA &#8212; sourcing steel/chrome from low-cost regions, and negotiating the right index base, is the core should-cost lever.</p></div></div></div>
+  </div>
+
+  <div class="mpane" data-mpane="price">
+    <div class="grid2">
+      <section class="card">
+        <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg></span>Raw-material share of cost by region</div><span class="chip risk">should-cost</span><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+        <div class="aiins"><p>Raw material dominates the cost structure everywhere, but its share &#8212; and therefore exposure to steel-index moves &#8212; is highest in North America (~86%) and lowest in China (~64%). That ~17-point gap is why sourcing steel/chrome from low-cost regions and negotiating the right index base is the single biggest should-cost lever. China also runs the thinnest average margin (5&#8211;15%) vs 15&#8211;20% in NA/Europe.</p></div>
+        <div class="sub">Raw material as a % of total production cost &#8212; the higher the share, the more index-linked the price</div>
+        <div class="chartbox" id="ch_mem"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></span>What it means for Newmont</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+        <div class="aiins"><p>Three signals point to acting now via the RFP: steel prices are set to rise into 2026, APAC capacity is expanding (more competitive tension), and the market remains over-supplied (buyer power high). The plays are to lock a weighted rise/fall formula on the lowest-cost regional index, secure global volume rebates, and use should-cost to challenge incumbent margin &#8212; while respecting Ghana local-content constraints.</p></div>
+        <div class="tblwrap">
+          <table>
+            <thead><tr><th>Indicator</th><th class="c">Direction</th><th>Action for the category</th></tr></thead>
+            <tbody>
+              <tr><td class="cat">Regional steel indices</td><td class="c"><span class="arrow up">&#9650; into 2026</span></td><td>Lock weighted rise/fall on lowest-cost index now</td></tr>
+              <tr><td class="cat">APAC media capacity</td><td class="c"><span class="arrow upg">&#9650; expanding</span></td><td>Use APAC benchmarks to challenge incumbent pricing</td></tr>
+              <tr><td class="cat">Global capacity vs demand</td><td class="c"><span class="arrow upg">&#9650; oversupply</span></td><td>Press buyer power; institute volume rebates</td></tr>
+              <tr><td class="cat">Australia anti-dumping</td><td class="c"><span class="arrow up">&#9650; 2&#8211;27%</span></td><td>Factor duties into AUS award &amp; landed cost</td></tr>
+              <tr><td class="cat">Ghana local content</td><td class="c"><span class="arrow flat">&#8212; mandated</span></td><td>Hybrid award; benchmark local vs global</td></tr>
+              <tr><td class="cat">Ore head grades</td><td class="c"><span class="arrow upg">&#9650; demand</span></td><td>Solicit efficiency data; trial HC under guarantees</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="mpane" data-mpane="scost">
+    <div class="stat-mini">
+      <div class="sm"><div class="v neg">~27%</div><div class="l">Estimated forged supplier margin vs China should-cost ($862 build / $1,179 paid)</div></div>
+      <div class="sm"><div class="v">~10%</div><div class="l">Estimated high-chrome margin ($1,105 build / $1,227 paid) &#8212; thinner, chrome-driven</div></div>
+      <div class="sm"><div class="v">~50%</div><div class="l">Of HC raw-material cost is chrome despite being only ~20% of input by mass</div></div>
+    </div>
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="9" width="3" height="9"/><rect x="13" y="5" width="3" height="13"/></svg></span>China should-cost build-up vs price paid</div><span class="chip risk">directional</span><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>A zero-based teardown puts forged media at ~$862/MT to build in China against ~$1,179 paid &#8212; a ~27% implied margin and the clearest target for RFP-driven price reduction. High-chrome is tighter at ~10% because chrome is expensive: it is only ~20% of input mass but ~50% of raw-material cost. Steel and chrome together dominate, so the rise/fall index base and low-cost-region sourcing matter far more than conversion cost. These are directional and to be validated through the market exercise.</p></div>
+      <div class="sub">USD/MT, ex-works, China basis; dashed cap is implied supplier margin to current price paid. Source: should-cost model (methodology validated on a peer global-miner precedent)</div>
+      <div class="chartbox" id="ch_scstack"></div>
+    </section>
+  </div>
+
+  <div class="mpane" data-mpane="forces">
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></span>Porter's Five Forces &#8212; grinding media</div><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>The structure favours Newmont as a buyer: a fragmented supplier base, multiple sourcing options in every region except Ghana, low switching barriers and an over-supplied market all push buyer power high. The mining downturn and weak commodity prices add further leverage. The main checks are Ghana's limited local-supplier pool (local content) and rising rivalry as suppliers expand APAC capacity &#8212; both arguments for a global tender that creates competitive tension while preserving local awards where mandated.</p></div>
+      <div class="sub">Colour reflects favourability to Newmont as a buyer &#8212; green is advantageous, red is constraining</div>
+      <div class="forces" style="margin-top:6px">
+        <div class="force"><h4>Supplier power</h4><span class="lvl hi">Low&#8211;Med &#183; favourable</span><p>Fragmented market with several regional suppliers and local manufacturing. Africa is the exception &#8212; a limited supplier pool.</p></div>
+        <div class="force"><h4>Buyer power</h4><span class="lvl hi">High &#183; favourable</span><p>Multiple sourcing options and a fragmented market; the mining downturn and weak commodities hand buyers extra pricing leverage.</p></div>
+        <div class="force"><h4>Barriers to entry</h4><span class="lvl med">Low &#183; neutral</span><p>Low capital needs and a supply-deficit pull encourage new entrants &#8212; especially in China &#8212; but technical know-how remains a barrier.</p></div>
+        <div class="force"><h4>Intensity of rivalry</h4><span class="lvl lo">High &#183; constraining</span><p>Manufacturers compete hard for mining contracts and are consolidating via capacity expansions and acquisitions.</p></div>
+        <div class="force"><h4>Threat of substitutes</h4><span class="lvl med">Low &#183; neutral</span><p>Forged steel balls are cheap and effective; high-chrome is the main alternative for ore-specific TCO gains.</p></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="mpane" data-mpane="rf">
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg></span>Rise/fall price simulator</div><span class="chip int">interactive</span><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>Grinding-media price doesn&rsquo;t move one-for-one with steel &#8212; it moves by the weighted rise/fall formula applied to the supplier&rsquo;s cost structure. This model takes forecast index moves (steel is the big driver at ~58% of forged cost) and flows them through the cost-weighted formula to a net media-price change, then onto annual spend. The two levers Newmont controls: the index basis (pick the lowest-cost regional steel index, not US CPI) and the fixed / un-indexed share (a higher fixed portion dampens pass-through). Compare the weighted formula against a naive 100% steel pass-through to see the volatility Newmont avoids by structuring the formula well.</p></div>
+      <div class="sub">Adjust forecast index movements; the formula weights are the China should-cost shares. Directional &#8212; to be calibrated on final supplier cost structures</div>
+      <div class="rf">
+        <div class="rf-ctrl">
+          <div class="ch">Material</div>
+          <div class="rf-seg"><button id="rfMatF" class="on" onclick="rfSetMat('f')">Forged</button><button id="rfMatC" onclick="rfSetMat('c')">High chrome</button></div>
+          <div class="ch">Forecast index movement</div>
+          <div class="rf-row"><div class="rl"><span>Steel index</span><span class="rv" id="rfvSteel">+10%</span></div><input type="range" id="rfSteel" min="-20" max="40" value="10" step="1" oninput="rfCalc()"></div>
+          <div class="rf-row" id="rfRowChrome"><div class="rl"><span>Chrome index</span><span class="rv" id="rfvChrome">+5%</span></div><input type="range" id="rfChrome" min="-20" max="40" value="5" step="1" oninput="rfCalc()"></div>
+          <div class="rf-row"><div class="rl"><span>Electricity / utilities</span><span class="rv" id="rfvElec">+3%</span></div><input type="range" id="rfElec" min="-15" max="30" value="3" step="1" oninput="rfCalc()"></div>
+          <div class="rf-row"><div class="rl"><span>Labour index</span><span class="rv" id="rfvLab">+4%</span></div><input type="range" id="rfLab" min="-10" max="25" value="4" step="1" oninput="rfCalc()"></div>
+          <div class="ch" style="margin-top:16px">Formula structure (Newmont lever)</div>
+          <div class="rf-row"><div class="rl"><span>Fixed / un-indexed share</span><span class="rv" id="rfvFix">10%</span></div><input type="range" id="rfFix" min="0" max="50" value="10" step="1" oninput="rfCalc()"></div>
+          <div class="rf-presets">
+            <button onclick="rfPreset(10,5,3,4)">Steel +10% (2026 base)</button>
+            <button onclick="rfPreset(0,0,0,0)">All flat</button>
+            <button onclick="rfPreset(-5,-3,0,2)">Steel &#8722;5%</button>
+            <button onclick="rfPreset(25,12,8,6)">High inflation</button>
+          </div>
+        </div>
+        <div class="rf-out">
+          <div class="rf-hero">
+            <div><div class="big up" id="rfNet">+5.6%</div><div class="bl">Net grinding-media price change</div></div>
+            <div class="sec"><div class="v" id="rfPrice">$1,373</div><div class="bl">New avg. price ($/MT)</div></div>
+            <div class="sec"><div class="v" id="rfImpact">+$1.8M</div><div class="bl">Annual spend impact</div></div>
+          </div>
+          <div class="rf-bars">
+            <div class="ch">Contribution to net change (pts)</div>
+            <div id="rfBars"></div>
+          </div>
+          <div class="rf-cmp">
+            <div class="cc2"><div class="v" id="rfWeighted">+5.6%</div><div class="l">Weighted formula (regional index, with fixed buffer)</div></div>
+            <div class="cc2"><div class="v" id="rfNaive">+10.0%</div><div class="l">Naive 100% steel pass-through (e.g. US index)</div></div>
+            <div class="cc2"><div class="v" id="rfAvoid" style="color:var(--pos)">4.4 pts</div><div class="l">Volatility avoided by structuring the formula</div></div>
+          </div>
+          <p class="rf-note">Weights (share of should-cost): forged &#8212; steel 58%, utilities 8%, labour 3%, fixed/other 31%; high chrome &#8212; steel 36%, chrome 31%, utilities 7%, labour 3%, fixed/other 23%. Net change = (1 &#8722; fixed share) &times; &Sigma; (weight &times; index move). Spend base: forged ~$32M, high chrome ~$23M.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="mpane" data-mpane="sup">
+    <section class="card">
+      <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/></svg></span>Supplier intelligence &amp; competitive tension</div><span class="chip opp">benchmarked</span><button class="aibtn" type="button" onclick="toggleAI(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.6L18 9l-4.4 1.4L12 15l-1.6-4.6L6 9z"/><path d="M19 14l.7 2L22 17l-2.3.6L19 20l-.7-2L16 17.3z"/></svg>AI insight<span class="aichev">&#9662;</span></button></div>
+      <div class="aiins"><p>The leverage in this category comes from a simple structural fact: every major position has a credible challenger. On forged, Molycop&rsquo;s big incumbencies are under live attack from a hungrier, often tariff-advantaged ME Elecmetal; on high-chrome, Vega and Magotteaux are near-mirror specialists trading sites at low-single-digit TCO gaps. A global RFP that pits incumbents against challengers &#8212; and lets high-chrome bids (Magotteaux/Vega) contest forged incumbencies via the spec switch &#8212; is what converts that tension into price. Patterns below are benchmarked from a recent global gold-miner grinding-media RFP; supplier roles are general category dynamics.</p></div>
+      <div class="sub">Incumbent vs challenger posture, battlegrounds and rise/fall basis by supplier</div>
+      <div class="sups" style="margin-top:6px">
+        <div class="sup">
+          <div class="sup-h"><h4>Molycop</h4><span class="tg fg">Forged leader</span><span class="post def">Defending</span></div>
+          <p class="pos1">Broadest global forged footprint (Australia, Canada, Mexico, Chile; Indonesia SAG expansion). Holds the largest forged incumbencies.</p>
+          <div class="srow"><span class="k">Incumbent on</span><span class="v">Biggest forged contracts (~$30M, ~$26M, ~$20M sites)</span></div>
+          <div class="srow"><span class="k">2024 posture</span><span class="v">Defensive &#8212; raised incumbent prices up to ~8%; at risk to ME Elecmetal</span></div>
+          <div class="srow"><span class="k">Battleground</span><span class="v">Forged vs ME Elecmetal; exposed to high-chrome switch on its largest sites</span></div>
+          <div class="srow"><span class="k">Rise/fall</span><span class="v">Steel index (forged); Fe + scrap-steel coefficient (HC)</span></div>
+        </div>
+        <div class="sup">
+          <div class="sup-h"><h4>ME Elecmetal</h4><span class="tg fg">Forged challenger</span><span class="post off">Attacking</span></div>
+          <p class="pos1">Cost-competitive forged challenger, strong in the Americas and on tariff-advantaged routes; actively buying share.</p>
+          <div class="srow"><span class="k">Incumbent on</span><span class="v">A few forged sites; large growth runway</span></div>
+          <div class="srow"><span class="k">2024 posture</span><span class="v">Aggressive &#8212; gaining vs Molycop (~5&#8211;15% TCO at several sites)</span></div>
+          <div class="srow"><span class="k">Battleground</span><span class="v">Displacing Molycop on forged across LATAM &amp; Canada</span></div>
+          <div class="srow"><span class="k">Rise/fall</span><span class="v">CRUspi long steel index</span></div>
+        </div>
+        <div class="sup">
+          <div class="sup-h"><h4>Vega</h4><span class="tg hc">High-chrome</span><span class="post def">Mixed</span></div>
+          <p class="pos1">High-chrome specialist; incumbent across several HC sites (~$40M). Price-aggressive to hold share against Magotteaux.</p>
+          <div class="srow"><span class="k">Incumbent on</span><span class="v">~5 HC sites; at risk of losing 3 to Magotteaux</span></div>
+          <div class="srow"><span class="k">2024 posture</span><span class="v">Defending (cut ~17% at one site) yet gaining elsewhere; AUS anti-dumping +9% hurts competitiveness</span></div>
+          <div class="srow"><span class="k">Battleground</span><span class="v">High-chrome vs Magotteaux (low-single-digit TCO gaps)</span></div>
+          <div class="srow"><span class="k">Rise/fall</span><span class="v">Fe + scrap-steel coefficient (HC content based)</span></div>
+        </div>
+        <div class="sup">
+          <div class="sup-h"><h4>Magotteaux</h4><span class="tg hc">High-chrome</span><span class="post off">Attacking</span></div>
+          <p class="pos1">High-chrome technology specialist; leans on wear-performance / TCO and champions the forged&#8594;high-chrome switch.</p>
+          <div class="srow"><span class="k">Incumbent on</span><span class="v">Several HC sites; at risk of losing 2 of 3 to Vega</span></div>
+          <div class="srow"><span class="k">2024 posture</span><span class="v">On the offensive &#8212; gaining vs Vega (~2&#8211;5%) and winning HC-switch bids vs Molycop (~9%)</span></div>
+          <div class="srow"><span class="k">Battleground</span><span class="v">High-chrome vs Vega; pressures forged incumbents via TCO switch</span></div>
+          <div class="srow"><span class="k">Rise/fall</span><span class="v">Fe + scrap-steel coefficient (HC content based)</span></div>
+        </div>
+      </div>
+      <div class="winwhen" style="margin-top:14px">
+        <div class="ww"><h5>Forged battleground</h5><p>Molycop (incumbent) vs ME Elecmetal (challenger). Hold a credible ME Elecmetal alternative live on Molycop&rsquo;s largest sites to discipline forged pricing &#8212; and use the high-chrome switch as a second pressure point.</p></div>
+        <div class="ww"><h5>High-chrome battleground</h5><p>Vega vs Magotteaux trade sites at low-single-digit TCO gaps. Run them against each other site-by-site; Magotteaux&rsquo;s HC-switch bids also let high-chrome contest forged incumbencies.</p></div>
+      </div>
+    </section>
+  </div>
+</div>
+<div class="view" data-v="actions">
+  <div class="vhead"><div><h1>Recommended Actions</h1><div class="date">Operationalising the strategy &#8212; every action maps to a tested lever and a value wave</div></div></div>
+
+  <div class="stat-row card" style="padding:18px 22px">
+    <div class="m"><div class="v g">$8&#8211;12M</div><div class="l">RFP synergy (Waves 1&#8211;2)</div></div>
+    <div class="m"><div class="v a">~$3.3M</div><div class="l">Midpoint target</div></div>
+    <div class="m"><div class="v">11</div><div class="l">Initiatives across phases</div></div>
+    <div class="m"><div class="v">6</div><div class="l">Levers tested high-confidence</div></div>
+  </div>
+
+  <section class="card">
+    <div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c3-6 6-6 9 0s6 6 9 0"/></svg></span>Value delivery by wave</div><span class="chip int">Sequenced by ownership</span></div>
+    <div class="mtabs">
+      <div class="mtab active" data-mtab="w1">Wave 1 &middot; Buy Better <span class="cb">1.7&ndash;3.9M</span></div>
+      <div class="mtab" data-mtab="w2">Wave 2 &middot; Spend Better <span class="cb">0.3&ndash;0.7M</span></div>
+      <div class="mtab" data-mtab="w3">Wave 3 &middot; Future Levers <span class="cb">Upside</span></div>
+    </div>
+    <div class="mpane active" data-mpane="w1">
+      <div class="sub">2026 &middot; RFP-led &middot; $1.7&ndash;3.9M &middot; bookable, fully supported by the diagnostic</div>
+      <div class="actwrap">
+      <div class="act"><div class="ab"><div class="at"><h4>RFP price negotiation</h4><span class="lvtag">Should-cost reset</span></div><p>Anchor on modelled should-cost (forged ~$862/MT, HC ~$1,105/MT); current prices carry ~10&#8211;27% margin. Direct-negotiate incumbent prices ~4% across all sites.</p></div><div class="av">~$4M</div><button class="actbtn" onclick="recAct('rfq')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Launch should-cost RFQ</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Global volume rebates</h4><span class="lvtag">Volume rebates</span></div><p>Introduce a graduated $/tonne structure ($10&#8211;$50/t across volume bands) on combined volume; Molycop, ME Elecmetal, Vega and Magotteaux each supply multiple sites.</p></div><div class="av">~$2M</div><button class="actbtn" onclick="recAct('reseller')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Request rebate structures</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Regional volume bundling</h4><span class="lvtag">Bundling / aggregation</span></div><p>Pool Australia, LATAC and Canada volume to win global discounts and dampen site-level volatility.</p></div><div class="av">Within rebates</div><button class="actbtn" onclick="recAct('rfp')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Open global tender</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Hybrid award design</h4><span class="lvtag">Supplier consolidation</span></div><p>Consolidate &amp; grow share with global suppliers while awarding locally where Ghana mandates; structure contracts for reallocation.</p></div><div class="av">Enabler</div><button class="actbtn" onclick="recAct('panel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Set award scenarios</button></div>
+      </div>
+    </div>
+    <div class="mpane" data-mpane="w2">
+      <div class="sub">2026&ndash;27 &middot; TCO + sites &middot; $0.3&ndash;0.7M &middot; validated, dependent on Incoterm shift</div>
+      <div class="actwrap">
+      <div class="act"><div class="ab"><div class="at"><h4>Logistics / Incoterm optimisation</h4><span class="lvtag">Logistics</span></div><p>EXW vs DDP delta ~$4.2M; take ownership earlier in the chain and negotiate freight contracts (5&#8211;8% on the ~12% logistics slice).</p></div><div class="av">$0.2&ndash;0.4M</div><button class="actbtn" onclick="recAct('showback')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Model Incoterm shift</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Transport consolidation (AUS/Ghana)</h4><span class="lvtag">Transport</span></div><p>Bundle final-mile delivery in-house for nearby sites and consolidate with a single supplier for additional discount.</p></div><div class="av">$0.11&ndash;0.22M</div><button class="actbtn" onclick="recAct('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Scope in-house transport</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Packaging: bulk vs drum</h4><span class="lvtag">Packaging</span></div><p>~$750K in packaging; ~40% bought in barrels. Shift to bulk where sites can receive it (3&#8211;6%).</p></div><div class="av">$0.02&ndash;0.05M</div><button class="actbtn" onclick="recAct('catalogue')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Assess bulk packaging</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Owned vs consigned inventory</h4><span class="lvtag">Consignment</span></div><p>Renegotiate consignment rates and terms across sites holding supplier stock.</p></div><div class="av">TBD</div><button class="actbtn" onclick="recAct('cyber')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Review consignment</button></div>
+      </div>
+    </div>
+    <div class="mpane" data-mpane="w3">
+      <div class="sub">2027+ &middot; Technical Services + sites + TCO &middot; directional / cost avoidance</div>
+      <div class="actwrap">
+      <div class="act"><div class="ab"><div class="at"><h4>SKU performance guarantees</h4><span class="lvtag">SKU optimisation</span></div><p>Solicit efficiency data and trial forged&#8594;high-chrome / ball-mix under supplier-underwritten guarantees, so specs test without financial loss.</p></div><div class="av">TBD (trials)</div><button class="actbtn" onclick="recAct('apprat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Solicit efficiency data</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Rise/fall index optimisation</h4><span class="lvtag">Rise/fall formula</span></div><p>Adopt the lowest-cost regional steel index with clear price-decrease language and bi-annual resets to limit volatility.</p></div><div class="av">Cost avoidance</div><button class="actbtn" onclick="recAct('chargeback')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Draft rise/fall formula</button></div>
+      <div class="act"><div class="ab"><div class="at"><h4>Commodity hedging / buy desk</h4><span class="lvtag">Hedging</span></div><p>Stand up a buy desk to time purchases against steel-index forecasts and strategically hold inventory.</p></div><div class="av">Cost avoidance</div><button class="actbtn" onclick="recAct('demand')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Evaluate buy desk</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+    </div></div>
+  </div>
+</div>
+
+<button class="fab" id="chatFab" title="Ask the Category Assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.6-.8L3 21l1.8-5.9A8.5 8.5 0 1 1 21 11.5z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></button>
+<div class="chatwin" id="chatWin">
+  <div class="chathead"><div class="l"><span class="chorb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2 2M16.4 16.4l2 2M18.4 5.6l-2 2M7.6 16.4l-2 2"/><circle cx="12" cy="12" r="3.4"/></svg></span><div><div class="chname">Category Assistant</div><div class="chsub">Grinding media copilot</div></div></div><button class="chx" id="chatClose">&times;</button></div>
+  <div class="chatbody" id="chatBody">
+    <div class="msg bot">Hi Isaac &mdash; I can help with the ~$101M post-divestiture baseline, the tested levers, should-cost and supplier strategy ahead of the multi-regional RFP. Try one of these:</div>
+    <div class="prompts">
+      <button class="pchip" data-q="save">Where can we save the most through the RFP?</button>
+      <button class="pchip" data-q="hpdell">How big is the should-cost gap?</button>
+      <button class="pchip" data-q="90day">What are the key risks to the RFP?</button>
+      <button class="pchip" data-q="ic">Draft the rise/fall index request to suppliers</button>
+    </div>
+  </div>
+  <div class="chatfoot"><input id="chatInput" placeholder="Ask about spend, levers, should-cost…" autocomplete="off"><button class="snd" id="chatSend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="tmsg"></span></div>
+
+<script>
+
+var C={accent:'#0C2B82',gold:'#FCAF17',deep:'#071434',info:'#12A6E6',pos:'#17A673',neg:'#E5484D',purple:'#3A68C5',
+       grid:'rgba(255,255,255,.07)',t1:'#f4f5f7',t2:'rgba(255,255,255,.62)',t3:'rgba(255,255,255,.42)',track:'rgba(255,255,255,.05)',muted:'rgba(255,255,255,.24)'};
+function lbl(t,x,y,fill,size,anchor,maxc){
+  maxc=maxc||13;var words=String(t).split(' '),lines=[],cur='';
+  words.forEach(function(w){ if((cur+' '+w).trim().length>maxc){lines.push(cur.trim());cur=w;} else cur=(cur+' '+w).trim(); });
+  if(cur)lines.push(cur);lines=lines.slice(0,2);
+  var s='<text x="'+x+'" y="'+y+'" fill="'+fill+'" font-size="'+size+'" text-anchor="'+anchor+'" font-family="Arial,Helvetica,sans-serif">';
+  lines.forEach(function(ln,i){ s+='<tspan x="'+x+'" dy="'+(i===0?0:size+1)+'">'+ln+'</tspan>'; });
+  return s+'</text>';
+}
+function svg(w,h){return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Arial,Helvetica,sans-serif">';}
+
+/* horizontal bars */
+function hbars(id,data,unit){
+  if(!unit&&(id==='ch_cat'||id==='ch_bu'))unit='$M';
+  var w=660,padL=176,padR=70,top=10,rowH=40,capH=unit?20:0,h=top*2+capH+data.length*rowH;
+  var max=Math.max.apply(null,data.map(function(d){return d.value;}));
+  var s=svg(w,h);
+  if(unit){s+='<text x="'+padL+'" y="14" fill="'+C.t3+'" font-size="11" font-weight="600">'+unit+'</text>';}
+  data.forEach(function(d,i){
+    var y=top+capH+i*rowH+rowH/2, bw=(w-padL-padR)*(d.value/max), col=d.color||C.accent;
+    s+='<text x="'+(padL-12)+'" y="'+y+'" fill="'+C.t2+'" font-size="12.5" text-anchor="end" dominant-baseline="middle">'+d.label+'</text>';
+    s+='<rect x="'+padL+'" y="'+(y-8)+'" width="'+(w-padL-padR)+'" height="16" rx="5" fill="'+C.track+'"/>';
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+d.label+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;'+d.val+'&lt;/span&gt;'+(d.pct?' &#183; '+d.pct:'')+(unit==='$M'||!unit?'':'')+'&lt;/div&gt;" x="'+padL+'" y="'+(y-8)+'" width="'+Math.max(2,bw)+'" height="16" rx="5" fill="'+col+'"/>';
+    s+='<text x="'+(padL+bw+10)+'" y="'+y+'" fill="'+C.t1+'" font-size="12.5" font-weight="700" dominant-baseline="middle">'+d.val+(d.pct?' <tspan fill="'+C.t3+'" font-weight="400">'+d.pct+'</tspan>':'')+'</text>';
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+/* waterfall */
+function waterfall(id,steps,opts){
+  opts=opts||{};var w=700,h=opts.h||320,padB=58,padT=26,padL=14,padR=14;
+  var run=0,calc=[],maxV=0;
+  steps.forEach(function(st){
+    var from,to;
+    if(st.type==='start'||st.type==='total'){from=0;to=st.value;run=st.value;}
+    else if(st.type==='pos'){from=run;to=run+st.value;run+=st.value;}
+    else {from=run;to=run-st.value;run-=st.value;}
+    calc.push({label:st.label,from:from,to:to,type:st.type,disp:st.disp});
+    maxV=Math.max(maxV,from,to);
+  });
+  maxV*=1.12;var plotH=h-padB-padT,plotW=w-padL-padR,n=steps.length,gap=14,bw=(plotW-gap*(n-1))/n;
+  var sc=function(v){return plotH*(v/maxV);};var base=padT+plotH;
+  var s=svg(w,h);
+  if(id==='ch_waterfall'){s+='<text x="'+padL+'" y="16" fill="'+C.t3+'" font-size="11" font-weight="600">$M</text>';}
+  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(w-padR)+'" y2="'+base+'" stroke="'+C.grid+'"/>';
+  calc.forEach(function(a,i){
+    var x=padL+i*(bw+gap),hi=Math.max(a.from,a.to),lo=Math.min(a.from,a.to);
+    var yTop=base-sc(hi),bh=Math.max(3,sc(hi-lo));
+    var col=a.type==='start'?C.accent:a.type==='total'?C.deep:a.type==='pos'?C.info:C.neg;
+    if(i>0 && a.type!=='total'){var px=padL+(i-1)*(bw+gap);s+='<line x1="'+px+'" y1="'+(base-sc(a.from))+'" x2="'+x+'" y2="'+(base-sc(a.from))+'" stroke="'+C.muted+'" stroke-dasharray="3 3"/>';}
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+a.label+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;'+a.disp+'&lt;/span&gt; $M&lt;/div&gt;" x="'+x+'" y="'+yTop+'" width="'+bw+'" height="'+bh+'" rx="3" fill="'+col+'"/>';
+    s+='<text x="'+(x+bw/2)+'" y="'+(yTop-7)+'" fill="'+C.t1+'" font-size="12.5" font-weight="700" text-anchor="middle">'+a.disp+'</text>';
+    s+=lbl(a.label,x+bw/2,base+18,C.t3,10.5,'middle',14);
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+/* pareto: bars + cumulative line */
+function pareto(id,bars){
+  var w=700,h=300,padB=30,padT=24,padL=40,padR=44;
+  var total=bars.reduce(function(a,b){return a+b;},0),maxBar=Math.max.apply(null,bars);
+  var plotH=h-padB-padT,plotW=w-padL-padR,n=bars.length,bw=plotW/n*0.7,gap=plotW/n*0.3;
+  var s=svg(w,h);
+  s+='<text x="'+padL+'" y="14" fill="'+C.t3+'" font-size="11" font-weight="600">Pareto &#183; % cumulative</text>';
+  [0,25,50,75,100].forEach(function(g){var y=padT+plotH-plotH*g/100;s+='<line x1="'+padL+'" y1="'+y+'" x2="'+(w-padR)+'" y2="'+y+'" stroke="'+C.grid+'"/>';s+='<text x="'+(w-padR+6)+'" y="'+(y+3)+'" fill="'+C.t3+'" font-size="9">'+g+'%</text>';});
+  var cum=0,pts=[];
+  bars.forEach(function(v,i){
+    var x=padL+i*(plotW/n)+gap/2,bh=plotH*(v/maxBar),y=padT+plotH-bh;
+    var col=i<3?C.accent:(i<9?C.gold:C.muted);
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;Rank #'+(i+1)+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;$'+v+'M&lt;/span&gt; &#183; '+Math.round(cum/total*100)+'% cum.&lt;/div&gt;" x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="2" fill="'+col+'"/>';
+    cum+=v;pts.push([x+bw/2,padT+plotH-plotH*(cum/total)]);
+  });
+  var d='M '+pts.map(function(p){return p[0]+' '+p[1];}).join(' L ');
+  s+='<path d="'+d+'" fill="none" stroke="'+C.pos+'" stroke-width="2.5"/>';
+  pts.forEach(function(p){s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.6" fill="'+C.pos+'"/>';});
+  // 80% marker
+  var y80=padT+plotH-plotH*0.8;s+='<line x1="'+padL+'" y1="'+y80+'" x2="'+(w-padR)+'" y2="'+y80+'" stroke="'+C.neg+'" stroke-dasharray="5 4" stroke-width="1.3"/>';
+  s+='<text x="'+(padL+4)+'" y="'+(y80-5)+'" fill="'+C.neg+'" font-size="10" font-weight="700">80% of spend</text>';
+  s+='<text x="'+padL+'" y="'+(h-8)+'" fill="'+C.t3+'" font-size="10">Suppliers ranked by spend (top &#8594; tail)</text>';
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+/* gauge */
+function gauge(id){
+  var w=320,h=190,cx=160,cy=158,r=120,max=25;
+  function pt(p){var a=Math.PI*(1-p/max);return [cx+r*Math.cos(a),cy-r*Math.sin(a)];}
+  function arc(p0,p1,col,wid){var a=pt(p0),b=pt(p1);return '<path d="M '+a[0]+' '+a[1]+' A '+r+' '+r+' 0 0 1 '+b[0]+' '+b[1]+'" stroke="'+col+'" stroke-width="'+wid+'" fill="none" stroke-linecap="round"/>';}
+  var s=svg(w,h);
+  s+=arc(0,max,C.track,16);
+  s+=arc(0,4,C.pos,16);          // validated ~4%
+  s+=arc(8,17,C.accent,16);      // top-down band 8-17
+  // ticks
+  [0,5,10,15,20,25].forEach(function(t){var a=pt(t);s+='<text x="'+a[0]+'" y="'+(a[1]+ (t<=0?4: (t>=25?4:-6)))+'" fill="'+C.t3+'" font-size="9" text-anchor="middle">'+t+'%</text>';});
+  s+='<text x="'+cx+'" y="'+(cy-34)+'" fill="'+C.accent+'" font-size="30" font-weight="800" text-anchor="middle">8&#8211;17%</text>';
+  s+='<text x="'+cx+'" y="'+(cy-14)+'" fill="'+C.t3+'" font-size="11" text-anchor="middle">$8&#8211;17M of in-scope spend</text>';
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+/* grouped bars (price paid vs should-cost) */
+function groupBars(id,groups){
+  var w=700,h=300,padB=64,padT=26,padL=20,padR=20;
+  var max=Math.max.apply(null,groups.map(function(g){return Math.max(g.a,g.b);}))*1.15;
+  var plotH=h-padB-padT,plotW=w-padL-padR,n=groups.length,gw=plotW/n,bw=gw*0.3;
+  var s=svg(w,h),base=padT+plotH;
+  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(w-padR)+'" y2="'+base+'" stroke="'+C.grid+'"/>';
+  groups.forEach(function(g,i){
+    var cx=padL+i*gw+gw/2;
+    var ya=base-plotH*(g.a/max),yb=base-plotH*(g.b/max);
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+g.label+'&lt;/div&gt;&lt;div&gt;Should-cost &lt;span class=&quot;tt-v&quot;&gt;$'+g.b+'/t&lt;/span&gt;&lt;/div&gt;" x="'+(cx-bw-3)+'" y="'+yb+'" width="'+bw+'" height="'+(base-yb)+'" rx="2" fill="'+C.info+'"/>';
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+g.label+'&lt;/div&gt;&lt;div&gt;Price paid &lt;span class=&quot;tt-v&quot;&gt;$'+g.a+'/t&lt;/span&gt; &#183; +'+Math.round((g.a/g.b-1)*100)+'%&lt;/div&gt;" x="'+(cx+3)+'" y="'+ya+'" width="'+bw+'" height="'+(base-ya)+'" rx="2" fill="'+C.accent+'"/>';
+    s+='<text x="'+(cx-bw/2-3)+'" y="'+(yb-5)+'" fill="'+C.t2+'" font-size="9.5" text-anchor="middle">'+g.b+'</text>';
+    s+='<text x="'+(cx+bw/2+3)+'" y="'+(ya-5)+'" fill="'+C.t2+'" font-size="9.5" text-anchor="middle">'+g.a+'</text>';
+    s+=lbl(g.label,cx,base+16,C.t3,9.5,'middle',16);
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+/* SKU: spend bars with SKU-count badge */
+function skuChart(id,data){
+  var w=700,h=300,padB=66,padT=30,padL=20,padR=20;
+  var max=Math.max.apply(null,data.map(function(d){return d.spend;}))*1.2;
+  var plotH=h-padB-padT,plotW=w-padL-padR,n=data.length,gw=plotW/n,bw=gw*0.56;
+  var s=svg(w,h),base=padT+plotH;
+  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(w-padR)+'" y2="'+base+'" stroke="'+C.grid+'"/>';
+  data.forEach(function(d,i){
+    var cx=padL+i*gw+gw/2,bh=plotH*(d.spend/max),y=base-bh;
+    var col=d.skus>=4?C.accent:C.muted;
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+d.label+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;$'+d.spend+'M&lt;/span&gt; est. annual spend&lt;/div&gt;" x="'+(cx-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="3" fill="'+col+'"/>';
+    s+='<text x="'+cx+'" y="'+(y-22)+'" fill="'+C.t1+'" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">'+d.spend+'M</text>';
+    s+='<rect x="'+(cx-15)+'" y="'+(y-17)+'" width="30" height="14" rx="7" fill="'+(d.skus>=4?'rgba(12,43,130,.2)':C.track)+'"/>';
+    s+='<text x="'+cx+'" y="'+(y-7)+'" fill="'+(d.skus>=4?C.accent:C.t3)+'" font-size="9.5" font-weight="700" text-anchor="middle">'+d.skus+' SKU</text>';
+    s+=lbl(d.label,cx,base+16,C.t3,9.5,'middle',13);
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+/* stacked: top vs tail (tail spend) */
+function tailChart(id,data){
+  var w=700,h=300,padB=64,padT=24,padL=20,padR=20;
+  var max=Math.max.apply(null,data.map(function(d){return d.top+d.tail;}))*1.12;
+  var plotH=h-padB-padT,plotW=w-padL-padR,n=data.length,gw=plotW/n,bw=gw*0.5;
+  var s=svg(w,h),base=padT+plotH;
+  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(w-padR)+'" y2="'+base+'" stroke="'+C.grid+'"/>';
+  data.forEach(function(d,i){
+    var cx=padL+i*gw+gw/2,th=plotH*(d.top/max),lh=plotH*(d.tail/max);
+    var yTop=base-th;s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+d.label+'&lt;/div&gt;&lt;div&gt;Media &lt;span class=&quot;tt-v&quot;&gt;$'+d.top+'M&lt;/span&gt; + freight '+d.tailL.replace(/~|\\$|M freight/g,'')+'M&lt;/div&gt;" x="'+(cx-bw/2)+'" y="'+yTop+'" width="'+bw+'" height="'+th+'" rx="3" fill="'+C.accent+'"/>';
+    var yT=yTop-lh;s+='<rect x="'+(cx-bw/2)+'" y="'+yT+'" width="'+bw+'" height="'+lh+'" rx="3" fill="'+C.muted+'"/>';
+    s+='<text x="'+cx+'" y="'+(yT-6)+'" fill="'+C.t2+'" font-size="10" text-anchor="middle">tail '+d.tailL+'</text>';
+    s+=lbl(d.label,cx,base+16,C.t3,9.5,'middle',16);
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+function savingsBar(id){
+  var w=700,h=150,padL=22,padR=22,axisMax=16;
+  var x0=padL, x1=w-padR, span=x1-x0, by=64, bh=40;
+  function X(v){return x0+span*(v/axisMax);}
+  var s=svg(w,h);
+  s+='<rect x="'+x0+'" y="'+by+'" width="'+span+'" height="'+bh+'" rx="9" fill="'+C.track+'"/>';
+  s+='<defs><linearGradient id="sbg" x1="0" x2="1"><stop offset="0" stop-color="'+C.accent+'" stop-opacity=".42"/><stop offset="1" stop-color="'+C.accent+'" stop-opacity=".16"/></linearGradient></defs>';
+  // upside band: validated ceiling (14) -> stretch incl. spec switch (~17)
+  s+='<rect x="'+X(12)+'" y="'+by+'" width="'+(X(14)-X(12))+'" height="'+bh+'" rx="9" fill="url(#sbg)"/>';
+  // validated bookable core 10 -> 14 (solid)
+  s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;Validated RFP synergy&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;$8&#8211;12M&lt;/span&gt; &#183; ~8&#8211;12% of $101M&lt;/div&gt;" x="'+X(8)+'" y="'+by+'" width="'+(X(12)-X(8))+'" height="'+bh+'" rx="9" fill="'+C.pos+'"/>';
+  s+='<text x="'+((X(8)+X(12))/2)+'" y="'+(by+bh/2)+'" fill="#06231c" font-size="11.5" font-weight="800" text-anchor="middle" dominant-baseline="middle" pointer-events="none">$8\u201312M</text>';
+  // markers: direct-negotiation floor (6) and stretch ceiling incl. HC switch (17)
+  [{v:6,l:'$6M price+volume floor'},{v:14,l:'$14M stretch (further HC switches)'}].forEach(function(m){
+    s+='<line x1="'+X(m.v)+'" y1="'+(by-10)+'" x2="'+X(m.v)+'" y2="'+(by+bh+10)+'" stroke="'+C.accent+'" stroke-width="1.5" stroke-dasharray="3 3"/>';
+    s+='<text x="'+X(m.v)+'" y="'+(by-16)+'" fill="'+C.t2+'" font-size="11" font-weight="700" text-anchor="middle">'+m.l+'</text>';
+  });
+  s+='<text x="'+(X(14)+6)+'" y="'+(by+bh+30)+'" fill="'+C.t3+'" font-size="11" text-anchor="end">Further forged&#8594;HC upside</text>';
+  [0,4,8,12,16].forEach(function(t){
+    s+='<text x="'+X(t)+'" y="'+(h-6)+'" fill="'+C.t3+'" font-size="10" text-anchor="middle">'+t+'</text>';
+  });
+  s+='<text x="'+x0+'" y="22" fill="'+C.t1+'" font-size="13" font-weight="700">$8\u201312M multi-regional RFP synergy ($ M)</text>';
+  s+='<text x="'+x1+'" y="22" fill="'+C.pos+'" font-size="12" font-weight="800" text-anchor="end">~8\u201312% of base</text>';
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+function coverageBars(id,data){
+  var w=660,padL=212,padR=94,top=30,rowH=50;
+  var h=top+data.length*rowH+6;
+  var max=Math.max.apply(null,data.map(function(d){return d.spend;}));
+  var barW=w-padL-padR;
+  var s=svg(w,h);
+  s+='<text x="0" y="13" fill="'+C.t3+'" font-size="11" font-weight="600">Supplier coverage</text>';
+  s+='<text x="'+padL+'" y="13" fill="'+C.t3+'" font-size="11" font-weight="600">Spend ($M)</text>';
+  s+='<line x1="0" y1="21" x2="'+w+'" y2="21" stroke="'+C.grid+'"/>';
+  data.forEach(function(d,i){
+    var mid=top+i*rowH+rowH/2;
+    s+='<text x="0" y="'+(mid-3)+'" fill="'+C.t1+'" font-size="13" font-weight="700">'+d.band+'</text>';
+    s+='<text x="0" y="'+(mid+14)+'" fill="'+C.t3+'" font-size="11">'+d.sub+'</text>';
+    var bh=20,by=mid-bh/2;
+    s+='<rect x="'+padL+'" y="'+by+'" width="'+barW+'" height="'+bh+'" rx="6" fill="'+C.track+'"/>';
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+d.band+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;$'+d.spend+'M&lt;/span&gt; pooled&lt;/div&gt;&lt;div class=&quot;tt-s&quot;&gt;'+d.sub+'&lt;/div&gt;" x="'+padL+'" y="'+by+'" width="'+(barW*(d.spend/max))+'" height="'+bh+'" rx="6" fill="'+(d.color||C.accent)+'"/>';
+    s+='<text x="'+w+'" y="'+(mid+4)+'" fill="'+C.t1+'" font-size="13.5" font-weight="700" text-anchor="end">$'+d.spend+'M</text>';
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+
+/* stacked cost-driver bars with margin cap to price-paid */
+function stackBars(id,cols,segs){
+  var w=700,h=330,padB=72,padT=34,padL=30,padR=150;
+  var totals=cols.map(function(c){return c.paid;});
+  var max=Math.max.apply(null,totals)*1.16;
+  var plotH=h-padB-padT,plotW=w-padL-padR,n=cols.length,gw=plotW/n,bw=Math.min(110,gw*0.46);
+  var s=svg(w,h),base=padT+plotH;
+  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(w-padR)+'" y2="'+base+'" stroke="'+C.grid+'"/>';
+  cols.forEach(function(c,i){
+    var cx=padL+i*gw+gw/2,y=base;
+    c.segs.forEach(function(v,j){
+      var bh=plotH*(v/max);y-=bh;
+      s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+c.label+' &#183; '+segs[j].name+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;$'+v+'/t&lt;/span&gt;&lt;/div&gt;" x="'+(cx-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+bh+'" fill="'+segs[j].color+'"/>';
+    });
+    var mh=plotH*(c.margin/max);y-=mh;
+    s+='<rect x="'+(cx-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+mh+'" fill="rgba(12,43,130,.16)" stroke="'+C.neg+'" stroke-width="1.3" stroke-dasharray="4 3"/>';
+    s+='<text x="'+cx+'" y="'+(y-9)+'" fill="'+C.neg+'" font-size="12" font-weight="800" text-anchor="middle">'+c.marginPct+' margin</text>';
+    s+='<text x="'+cx+'" y="'+(base+17)+'" fill="'+C.t1+'" font-size="12" font-weight="800" text-anchor="middle">'+c.label+'</text>';
+    s+='<text x="'+cx+'" y="'+(base+33)+'" fill="'+C.t3+'" font-size="9.5" text-anchor="middle">should-cost $'+c.sc+' \u00b7 paid $'+c.paid+'</text>';
+  });
+  var ly=padT+4;
+  segs.forEach(function(g){
+    s+='<rect x="'+(w-padR+16)+'" y="'+ly+'" width="11" height="11" rx="2" fill="'+g.color+'"/>';
+    s+='<text x="'+(w-padR+33)+'" y="'+(ly+9.5)+'" fill="'+C.t2+'" font-size="10.5">'+g.name+'</text>';ly+=19;
+  });
+  s+='<rect x="'+(w-padR+16)+'" y="'+ly+'" width="11" height="11" rx="2" fill="rgba(12,43,130,.16)" stroke="'+C.neg+'" stroke-dasharray="3 2"/>';
+  s+='<text x="'+(w-padR+33)+'" y="'+(ly+9.5)+'" fill="'+C.t2+'" font-size="10.5">Supplier margin</text>';
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+/* donut with centre label + legend */
+function donut(id,data,centre,sub){
+  var w=360,h=240,cx=112,cy=120,r=88,ir=52;
+  var tot=data.reduce(function(a,b){return a+b.value;},0),ang=-Math.PI/2;
+  var s=svg(w,h);
+  data.forEach(function(d){
+    var a2=ang+d.value/tot*Math.PI*2;
+    var x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+    var xi2=cx+ir*Math.cos(a2),yi2=cy+ir*Math.sin(a2),xi1=cx+ir*Math.cos(ang),yi1=cy+ir*Math.sin(ang);
+    var lg=(a2-ang)>Math.PI?1:0;
+    s+='<path class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+d.label+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;'+d.val+'&lt;/span&gt;&lt;/div&gt;" d="M'+x1+' '+y1+' A'+r+' '+r+' 0 '+lg+' 1 '+x2+' '+y2+' L'+xi2+' '+yi2+' A'+ir+' '+ir+' 0 '+lg+' 0 '+xi1+' '+yi1+' Z" fill="'+d.color+'"/>';
+    ang=a2;
+  });
+  s+='<text x="'+cx+'" y="'+(cy-2)+'" fill="'+C.t1+'" font-size="20" font-weight="800" text-anchor="middle">'+centre+'</text>';
+  s+='<text x="'+cx+'" y="'+(cy+15)+'" fill="'+C.t3+'" font-size="10" text-anchor="middle">'+sub+'</text>';
+  var ly=58;
+  data.forEach(function(d){
+    s+='<rect x="232" y="'+ly+'" width="12" height="12" rx="3" fill="'+d.color+'"/>';
+    s+='<text x="250" y="'+(ly+10)+'" fill="'+C.t2+'" font-size="11.5" font-weight="600">'+d.label+'</text>';
+    s+='<text x="250" y="'+(ly+25)+'" fill="'+C.t3+'" font-size="10">'+d.val+'</text>';ly+=42;
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+/* simple year bars (forecast) */
+function yearBars(id,data){
+  var w=700,h=270,padB=46,padT=42,padL=24,padR=24;
+  var max=Math.max.apply(null,data.map(function(d){return d.value;}))*1.2;
+  var plotH=h-padB-padT,plotW=w-padL-padR,n=data.length,gw=plotW/n,bw=gw*0.42;
+  var s=svg(w,h),base=padT+plotH;
+  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(w-padR)+'" y2="'+base+'" stroke="'+C.grid+'"/>';
+  data.forEach(function(d,i){
+    var cx=padL+i*gw+gw/2,bh=plotH*(d.value/max),y=base-bh;
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+d.year+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;'+d.disp+'&lt;/span&gt; MT/yr&lt;/div&gt;" x="'+(cx-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="3" fill="'+(d.f?C.gold:C.accent)+'"/>';
+    s+='<text x="'+cx+'" y="'+(y-8)+'" fill="'+C.t1+'" font-size="12.5" font-weight="700" text-anchor="middle">'+d.disp+'</text>';
+    s+='<text x="'+cx+'" y="'+(base+18)+'" fill="'+C.t3+'" font-size="11" text-anchor="middle">'+d.year+'</text>';
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+/* year-over-year grouped bars: each site shows 2024 / 2025 / 2027 */
+function yoyBars(id,data,years,cols){
+  var w=700,h=290,padB=52,padT=46,padL=26,padR=26;
+  var max=0;data.forEach(function(d){d.vals.forEach(function(v){if(v>max)max=v;});});max*=1.22;
+  var plotH=h-padB-padT,plotW=w-padL-padR,n=data.length,gw=plotW/n,base=padT+plotH;
+  var m=years.length,bw=(gw*0.62)/m,gap=(gw*0.62)/(m*4);
+  var s=svg(w,h);
+  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(w-padR)+'" y2="'+base+'" stroke="'+C.grid+'"/>';
+  data.forEach(function(d,i){
+    var gx=padL+i*gw+gw*0.19;
+    d.vals.forEach(function(v,j){
+      var bh=plotH*(v/max),y=base-bh,x=gx+j*(bw+gap);
+      var tip='&lt;div class=&quot;tt-t&quot;&gt;'+d.site+' &#183; '+years[j]+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;~'+v.toFixed(1)+'K MT&lt;/span&gt;'+(j>0?' &#183; flat-demand proj.':' actual')+'&lt;/div&gt;';
+      s+='<rect class="ib" data-tip="'+tip+'" x="'+x+'" y="'+y+'" width="'+bw+'" height="'+bh+'" rx="2.5" fill="'+cols[j]+'"/>';
+    });
+    s+='<text x="'+(gx+(m*(bw+gap)-gap)/2)+'" y="'+(base+18)+'" fill="'+C.t2+'" font-size="11.5" font-weight="600" text-anchor="middle">'+d.site+'</text>';
+  });
+  var lx=padL, ly=h-14;
+  years.forEach(function(yr,j){
+    s+='<rect x="'+lx+'" y="'+(ly-9)+'" width="11" height="11" rx="2" fill="'+cols[j]+'"/>';
+    s+='<text x="'+(lx+16)+'" y="'+ly+'" fill="'+C.t3+'" font-size="11">'+yr+(j===0?' (actual)':' (proj.)')+'</text>';
+    lx+=98;
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+/* diverging horizontal bars (CAGR by site) */
+function divBars(id,data){
+  var w=700,h=300,padL=130,padR=70,padT=8,padB=8;
+  var max=Math.max.apply(null,data.map(function(d){return Math.abs(d.v);}));
+  var rowH=(h-padT-padB)/data.length,mid=padL+(w-padL-padR)/2,halfW=(w-padL-padR)/2;
+  var s=svg(w,h);
+  s+='<line x1="'+mid+'" y1="'+padT+'" x2="'+mid+'" y2="'+(h-padB)+'" stroke="'+C.grid+'"/>';
+  data.forEach(function(d,i){
+    var y=padT+i*rowH+rowH/2,bw=halfW*(Math.abs(d.v)/max)*0.9;
+    var pos=d.v>=0,x=pos?mid:mid-bw,col=pos?C.pos:C.neg;
+    s+='<rect class="ib" data-tip="&lt;div class=&quot;tt-t&quot;&gt;'+d.label+'&lt;/div&gt;&lt;div&gt;&lt;span class=&quot;tt-v&quot;&gt;'+(pos?'+':'')+d.v+'%&lt;/span&gt; DDP over EXW&lt;/div&gt;" x="'+x+'" y="'+(y-9)+'" width="'+bw+'" height="18" rx="3" fill="'+col+'"/>';
+    s+='<text x="'+(padL-10)+'" y="'+(y+4)+'" fill="'+C.t2+'" font-size="11.5" text-anchor="end">'+d.label+'</text>';
+    s+='<text x="'+(pos?mid+bw+7:mid-bw-7)+'" y="'+(y+4)+'" fill="'+col+'" font-size="11" font-weight="800" text-anchor="'+(pos?'start':'end')+'">'+(pos?'+':'')+d.v+'%</text>';
+  });
+  var _el=document.getElementById(id);if(_el)_el.innerHTML=s+'</svg>';
+}
+function renderCharts(){
+  waterfall('ch_waterfall',[
+    {label:'LATAC',type:'start',value:40.2,disp:'40.2'},
+    {label:'Australia',type:'pos',value:38.9,disp:'+38.9'},
+    {label:'Canada',type:'pos',value:16.1,disp:'+16.1'},
+    {label:'PNG',type:'pos',value:3.7,disp:'+3.7'},
+    {label:'Ghana',type:'pos',value:2.6,disp:'+2.6'},
+    {label:'Combined LTM',type:'total',value:101.5,disp:'~101'}
+  ]);
+  hbars('ch_cat',[
+    {label:'LATAC',value:40.2,val:'40.2',pct:'40%'},
+    {label:'Australia',value:38.9,val:'38.9',pct:'38%'},
+    {label:'Canada',value:16.1,val:'16.1',pct:'16%',color:C.gold},
+    {label:'PNG',value:3.7,val:'3.7',pct:'4%',color:C.gold},
+    {label:'Ghana',value:2.6,val:'2.6',pct:'3%',color:C.muted}
+  ]);
+  hbars('ch_bu',[
+    {label:'Penasquito',value:35.1,val:'35.1',color:C.info},
+    {label:'Cadia',value:23.1,val:'23.1',color:C.info},
+    {label:'Red Chris',value:14.4,val:'14.4',color:C.info},
+    {label:'Boddington',value:13.8,val:'13.8',color:C.info},
+    {label:'Lihir',value:3.7,val:'3.7',color:C.info},
+    {label:'Cerro Negro',value:3.0,val:'3.0',color:C.info},
+    {label:'Ahafo',value:2.6,val:'2.6',color:C.info},
+    {label:'Merian',value:2.1,val:'2.1',color:C.info},
+    {label:'Tanami',value:2.0,val:'2.0',color:C.info},
+    {label:'Brucejack',value:1.7,val:'1.7',color:C.info}
+  ]);
+  pareto('ch_pareto',[48.0,27.8,18.6,4.5,1.8,0.8]);
+  hbars('ch_mega',[
+    {label:'Molycop',value:48.0,val:'48.0'},
+    {label:'ME Elecmetal',value:27.8,val:'27.8'},
+    {label:'Vega',value:18.6,val:'18.6'},
+    {label:'Magotteaux',value:4.5,val:'4.5'},
+    {label:'Wafor',value:1.8,val:'1.8',color:C.gold},
+    {label:'B5 Plus',value:0.8,val:'0.8',color:C.muted}
+  ]);
+  tailChart('ch_tail',[
+    {label:'LATAC',top:37.0,tail:3.2,tailL:'~$3.2M freight'},
+    {label:'Australia',top:36.0,tail:2.9,tailL:'~$2.9M freight'},
+    {label:'Canada',top:15.0,tail:1.1,tailL:'~$1.1M freight'},
+    {label:'Ghana',top:2.1,tail:0.5,tailL:'~$0.5M freight'}
+  ]);
+  skuChart('ch_sku',[
+    {label:'Boddington HC 17mm',spend:24.2,skus:1},
+    {label:'Penasquito Fgd 3in',spend:12.6,skus:1},
+    {label:'Penasquito Fgd 5.5in',spend:11.9,skus:1},
+    {label:'Cadia Fgd 125mm',spend:11.1,skus:1},
+    {label:'Ahafo Fgd 125mm',spend:9.4,skus:1},
+    {label:'Merian Fgd 2in',spend:8.9,skus:1},
+    {label:'Cadia Fgd 65mm',spend:4.9,skus:1},
+    {label:'Cadia Fgd 80mm',spend:4.8,skus:1}
+  ]);
+  groupBars('ch_hpdell',[
+    {label:'Penasquito forged',a:1053,b:950},
+    {label:'Cadia forged',a:1107,b:980},
+    {label:'Merian forged',a:1085,b:950},
+    {label:'Boddington HC',a:1373,b:1150},
+    {label:'Cadia HC',a:1301,b:1150}
+  ]);
+  waterfall('ch_valwf',[
+    {label:'Combined LTM',type:'start',value:101.5,disp:'~101'},
+    {label:'RFP price neg.',type:'neg',value:4,disp:'&#8722;4'},
+    {label:'Volume discount',type:'neg',value:2,disp:'&#8722;2'},
+    {label:'Red Chris Fgd&#8594;HC',type:'neg',value:6,disp:'&#8722;6'},
+    {label:'Optimised spend',type:'total',value:89.5,disp:'~90'}
+  ],{h:300});
+  savingsBar('ch_gauge');
+  coverageBars('ch_bundle',[
+    {band:'LATAC pool',sub:'Penasquito, Merian, Cerro Negro',spend:40.2,color:C.accent},
+    {band:'Australia pool',sub:'Cadia, Boddington, Tanami',spend:38.9,color:C.accent},
+    {band:'Canada pool',sub:'Red Chris, Brucejack',spend:16.1,color:C.info},
+    {band:'PNG + Ghana',sub:'Lihir, Ahafo \\u00b7 local content',spend:6.3,color:C.gold}
+  ]);
+  hbars('ch_consol',[
+    {label:'Molycop',value:48.0,val:'48.0'},
+    {label:'ME Elecmetal',value:27.8,val:'27.8'},
+    {label:'Vega',value:18.6,val:'18.6'},
+    {label:'Magotteaux',value:4.5,val:'4.5'},
+    {label:'2 tail suppliers',value:2.6,val:'2.6',color:C.muted}
+  ]);
+  donut('ch_matmix',[
+    {label:'Forged steel',value:75,val:'~75% \u00b7 ~87K MT',color:C.accent},
+    {label:'High chrome',value:23,val:'~23% \u00b7 ~26K MT',color:C.info},
+    {label:'White iron / other',value:2,val:'~2% \u00b7 ~2K MT',color:C.muted}
+  ],'~116K','MT / yr');
+  hbars('ch_specvol',[
+    {label:'Boddington HC 17mm',value:17631,val:'17,631',color:C.info},
+    {label:'Penasquito Fgd 3in',value:12000,val:'12,000'},
+    {label:'Cadia Fgd 125mm',value:10000,val:'10,000'},
+    {label:'Penasquito Fgd 5.5in',value:9600,val:'9,600'},
+    {label:'Merian Fgd 2in',value:8188,val:'8,188'},
+    {label:'Ahafo Fgd 125mm',value:8041,val:'8,041'},
+    {label:'Cadia Fgd 65mm',value:4654,val:'4,654'},
+    {label:'Cadia Fgd 80mm',value:4518,val:'4,518'}
+  ],'Annual volume (MT)');
+  yoyBars('ch_fcyear',[
+    {site:'Cadia',vals:[26.0,26.2,26.5]},
+    {site:'Penasquito',vals:[22.0,22.2,22.5]},
+    {site:'Boddington',vals:[18.0,18.1,18.4]},
+    {site:'Red Chris',vals:[14.0,14.1,14.3]}
+  ],['2024','2025','2027'],[C.accent,C.info,C.gold]);
+  divBars('ch_fccagr',[
+    {label:'Ahafo (Fgd)',v:21.6},
+    {label:'Cerro Negro (Fgd)',v:19.1},
+    {label:'Merian (Fgd)',v:13.8},
+    {label:'Boddington (HC)',v:8.4},
+    {label:'Penasquito (Fgd)',v:4.3}
+  ]);
+  stackBars('ch_scstack',[
+    {label:'Forged',sc:862,paid:1179,margin:317,marginPct:'~27%',segs:[499,0,73,29,29,233]},
+    {label:'High Chrome',sc:1105,paid:1227,margin:122,marginPct:'~10%',segs:[399,343,73,29,29,233]}
+  ],[
+    {name:'Steel',color:C.accent},
+    {name:'Chrome',color:C.info},
+    {name:'Overheads / utilities',color:C.gold},
+    {name:'Labour',color:C.purple},
+    {name:'Packaging',color:C.pos},
+    {name:'Other (indirect)',color:C.muted}
+  ]);
+}
+/* nav / view switching */
+function switchView(v){
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.toggle('active',n.getAttribute('data-view')===v);});
+  document.querySelectorAll('.view').forEach(function(view){view.classList.toggle('active',view.getAttribute('data-v')===v);});
+  document.querySelector('.scroll').scrollTop=0;
+}
+document.querySelectorAll('.nav-item').forEach(function(it){
+  it.addEventListener('click',function(){var v=this.getAttribute('data-view');if(v)switchView(v);});
+});
+document.querySelectorAll('.mtab').forEach(function(t){
+  t.addEventListener('click',function(){
+    var k=this.getAttribute('data-mtab');
+    this.parentNode.querySelectorAll('.mtab').forEach(function(x){x.classList.toggle('active',x===t);});
+    this.closest('.view').querySelectorAll('.mpane').forEach(function(p){p.classList.toggle('active',p.getAttribute('data-mpane')===k);});
+  });
+});
+function renderMem(){
+  hbars('ch_mem',[
+    {label:'North America',value:85.8,val:'85.8%',color:C.accent},
+    {label:'Europe',value:75.1,val:'75.1%',color:C.gold},
+    {label:'China',value:63.9,val:'63.9%',color:C.info}
+  ],'Raw material % of total production cost');
+}function applyChartTheme(){
+  var L=document.body.classList.contains('light');
+  C.t1=L?'#15171c':'#f4f5f7';
+  C.t2=L?'rgba(20,23,30,.66)':'rgba(255,255,255,.62)';
+  C.t3=L?'rgba(20,23,30,.46)':'rgba(255,255,255,.42)';
+  C.grid=L?'rgba(18,22,30,.10)':'rgba(255,255,255,.07)';
+  C.track=L?'rgba(18,22,30,.07)':'rgba(255,255,255,.05)';
+  C.muted=L?'#c2c6cf':'rgba(255,255,255,.24)';
+}
+function drawAll(){applyChartTheme();renderCharts();renderMem();}
+drawAll();
+
+/* rise/fall price simulator */
+var RF={mat:'f',
+  f:{steel:.58,chrome:0,util:.08,lab:.03,base:1300,spend:32.4},
+  c:{steel:.36,chrome:.31,util:.07,lab:.03,base:1400,spend:23.4}};
+function rfSetMat(m){RF.mat=m;
+  document.getElementById('rfMatF').classList.toggle('on',m==='f');
+  document.getElementById('rfMatC').classList.toggle('on',m==='c');
+  document.getElementById('rfRowChrome').classList.toggle('dim',m!=='c');
+  rfCalc();}
+function rfPreset(s,c,e,l){
+  document.getElementById('rfSteel').value=s;
+  document.getElementById('rfChrome').value=c;
+  document.getElementById('rfElec').value=e;
+  document.getElementById('rfLab').value=l;
+  rfCalc();}
+function rfCalc(){
+  if(!document.getElementById('rfSteel'))return;
+  var w=RF[RF.mat];
+  var s=+document.getElementById('rfSteel').value,
+      c=+document.getElementById('rfChrome').value,
+      e=+document.getElementById('rfElec').value,
+      l=+document.getElementById('rfLab').value,
+      fix=+document.getElementById('rfFix').value/100;
+  document.getElementById('rfvSteel').textContent=(s>=0?'+':'')+s+'%';
+  document.getElementById('rfvChrome').textContent=(c>=0?'+':'')+c+'%';
+  document.getElementById('rfvElec').textContent=(e>=0?'+':'')+e+'%';
+  document.getElementById('rfvLab').textContent=(l>=0?'+':'')+l+'%';
+  document.getElementById('rfvFix').textContent=Math.round(fix*100)+'%';
+  var k=(1-fix);
+  var bars=[
+    {l:'Steel',v:w.steel*s*k,col:C.accent},
+    {l:'Chrome',v:w.chrome*c*k,col:C.info},
+    {l:'Utilities',v:w.util*e*k,col:C.gold},
+    {l:'Labour',v:w.lab*l*k,col:C.purple}
+  ];
+  if(RF.mat!=='c') bars=bars.filter(function(b){return b.l!=='Chrome';});
+  var net=bars.reduce(function(a,b){return a+b.v;},0);
+  var maxAbs=Math.max(0.01,Math.max.apply(null,bars.map(function(b){return Math.abs(b.v);})));
+  var html='';
+  bars.forEach(function(b){
+    var pct=Math.abs(b.v)/maxAbs*50,left=b.v>=0?50:50-pct;
+    html+='<div class="rfbar"><span class="lbl">'+b.l+'</span><span class="track"><span class="fill" style="left:'+left+'%;width:'+pct+'%;background:'+b.col+'"></span></span><span class="pts">'+(b.v>=0?'+':'')+b.v.toFixed(2)+'</span></div>';
+  });
+  document.getElementById('rfBars').innerHTML=html;
+  var netEl=document.getElementById('rfNet');
+  netEl.textContent=(net>=0?'+':'')+net.toFixed(1)+'%';
+  netEl.className='big '+(net>0?'up':(net<0?'down':''));
+  document.getElementById('rfPrice').textContent='$'+Math.round(w.base*(1+net/100)).toLocaleString();
+  var impact=net/100*w.spend;
+  document.getElementById('rfImpact').textContent=(impact>=0?'+$':'\u2212$')+Math.abs(impact).toFixed(1)+'M';
+  document.getElementById('rfWeighted').textContent=(net>=0?'+':'')+net.toFixed(1)+'%';
+  document.getElementById('rfNaive').textContent=(s>=0?'+':'')+s.toFixed(1)+'%';
+  document.getElementById('rfAvoid').textContent=Math.abs(s-net).toFixed(1)+' pts';
+}
+function rfInit(){ if(document.getElementById('rfSteel')) rfSetMat('f'); }
+rfInit();
+
+/* ---- interactive chart layer: tooltips + click pulse ---- */
+(function(){
+  var tip=document.getElementById('tooltip');
+  document.addEventListener('mousemove',function(e){
+    var t=e.target.closest ? e.target.closest('[data-tip]') : null;
+    if(t){
+      tip.innerHTML=t.getAttribute('data-tip');
+      tip.classList.add('show');
+      var x=e.clientX+14, y=e.clientY+16;
+      if(x+tip.offsetWidth>window.innerWidth-10) x=e.clientX-tip.offsetWidth-14;
+      if(y+tip.offsetHeight>window.innerHeight-10) y=e.clientY-tip.offsetHeight-16;
+      tip.style.left=x+'px'; tip.style.top=y+'px';
+    } else if(tip.classList.contains('show')){ tip.classList.remove('show'); }
+  });
+  document.addEventListener('click',function(e){
+    var t=e.target.closest ? e.target.closest('.ib') : null;
+    if(t){ t.classList.remove('flash'); void t.getBBox(); t.classList.add('flash');
+      setTimeout(function(){t.classList.remove('flash');},480); }
+  });
+})();
+
+/* light / dark toggle */
+var dmSwitch=document.getElementById('dmSwitch');
+document.getElementById('dmToggle').addEventListener('click',function(){
+  var light=document.body.classList.toggle('light');
+  dmSwitch.classList.toggle('on',!light);
+  drawAll();
+});
+
+/* toast */
+var _tt;
+function toast(msg){var el=document.getElementById('toast');el.querySelector('.tmsg').textContent=msg;el.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){el.classList.remove('show');},2800);}
+
+/* chatbot */
+var REPLIES={
+  save:'The biggest bookable value comes from the multi-regional RFP: <b>direct price negotiation ~$6M</b> (~4%, ~$4M on the smaller base), a <b>global volume discount ~$2M</b> ($10&ndash;$50/t tiers on combined volume), and the <b>Red Chris forged&rarr;high-chrome switch ~$6M</b> (~42% of ~$14M). That is about <b>$12M total</b> (~12% of the leaner ~$101M base &#8212; a higher % because Red Chris is retained).',
+  hpdell:'Sizeable. Directional China should-cost is <b>~$862/MT forged</b> and <b>~$1,105/MT high-chrome</b>, implying ~<b>27%</b> margin on forged and ~<b>10%</b> on HC. Newmont forged prices paid range ~$1,053 (Penasquito) to ~$1,554 (Ghana) &mdash; all above the floor. Because raw material is 64&ndash;86% of cost and index-linked, anchor the RFP on the should-cost build and a favourable rise/fall index rather than expecting large absolute cuts.',
+  '90day':'Four to watch: (1) <b>steel prices rising into 2026</b> &mdash; lock a weighted rise/fall on the lowest-cost index now; (2) <b>Ghana local-content rules</b> &mdash; a single global supplier is not feasible, so design a hybrid award; (3) <b>spec-switch trials</b> need Technical Services sign-off &mdash; underwrite with supplier performance guarantees; (4) <b>site volume volatility</b> (&minus;46% to +109% YoY) &mdash; pool regionally so contract value absorbs the swings.',
+  ic:'Here is a draft you can send to shortlisted suppliers:<br><br><i>"As part of the global grinding-media RFP, please submit a clear, weighted rise/fall formula based on your cost structure, referencing: steel (lowest-cost regional index), electricity (regional index), labour (country labour-cost index, excluding highly inflationary economies) and logistics. Include explicit language for price decreases when indices fall, and propose bi-annual repricing. Submit alongside your unit-rate and volume-rebate proposals."</i><br><br>Want me to tailor this per region (Africa, LATAM, Australia)?',
+  _fb:'I can pull that from the diagnostic. Try a suggested prompt above, or ask about the combined baseline (~$101M post-divestiture), the tested levers, should-cost, volume rebates, logistics/Incoterms, or supplier strategy.'
+};
+function pushMsg(cls,html){var b=document.getElementById('chatBody');var d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;b.appendChild(d);b.scrollTop=b.scrollHeight;return d;}
+function ask(q,label){pushMsg('user',label||q);var ty=pushMsg('bot','<span class="dots"><i></i><i></i><i></i></span>');setTimeout(function(){ty.remove();pushMsg('bot',REPLIES[q]||REPLIES._fb);},700);}
+function openChat(){document.getElementById('chatWin').classList.add('open');}
+document.getElementById('chatFab').addEventListener('click',function(){document.getElementById('chatWin').classList.toggle('open');});
+document.getElementById('chatClose').addEventListener('click',function(){document.getElementById('chatWin').classList.remove('open');});
+document.querySelectorAll('.pchip').forEach(function(p){p.addEventListener('click',function(){ask(this.getAttribute('data-q'),this.textContent);});});
+var ci=document.getElementById('chatInput');
+function sendInput(){var v=ci.value.trim();if(!v)return;ci.value='';pushMsg('user',v);var ty=pushMsg('bot','<span class="dots"><i></i><i></i><i></i></span>');setTimeout(function(){ty.remove();pushMsg('bot',REPLIES._fb);},700);}
+document.getElementById('chatSend').addEventListener('click',sendInput);
+ci.addEventListener('keydown',function(e){if(e.key==='Enter')sendInput();});
+
+/* recommended actions */
+function recAct(t){
+  if(t==='chargeback'){openChat();setTimeout(function(){ask('ic','Draft the rise/fall index request to suppliers');},250);toast('Drafting the rise/fall request in the Assistant\u2026');return;}
+  var m={rfq:'Should-cost RFQ drafted and queued to shortlisted suppliers.',reseller:'Volume-rebate structure request sent to key suppliers.',rfp:'Global grinding-media RFP opened across sites.',panel:'Award scenarios (hybrid) drafted for Directorate review.',showback:'Incoterm shift model created \u2014 EXW vs DDP delta quantified.',calendar:'In-house transport consolidation (AUS/Ghana) scoped.',catalogue:'Bulk-packaging assessment started with sites & suppliers.',cyber:'Consignment terms review scheduled.',apprat:'Efficiency-data solicitation started for SKU performance trials.',chargeback:'Weighted rise/fall formula drafted for negotiation.',demand:'Buy-desk / hedging business case opened.',m365:'Request created.',vmware:'Request created.',council:'Category Council charter routed.'};
+  toast(m[t]||'Action triggered.');
+}
+
+
+/* AI insight + lever toggles */
+function toggleAI(btn){var s=btn.closest('section');if(s)s.classList.toggle('ai-open');}
+function toggleResp(btn){btn.parentNode.classList.toggle('open');}
+function selLever(k){document.querySelectorAll('.lev[data-lev]').forEach(function(c){c.classList.toggle('active',c.getAttribute('data-lev')===k);});var le=document.getElementById('levEmpty');if(le)le.style.display='none';document.querySelectorAll('.levpane').forEach(function(p){p.classList.toggle('active',p.getAttribute('data-lev')===k);});}
+function toggleMoreLevers(){var b=document.getElementById('moreLevBtn'),m=document.getElementById('moreLevers');if(!b||!m)return;var open=(m.style.display==='none');m.style.display=open?'grid':'none';b.classList.toggle('open',open);b.firstChild.textContent=open?'Hide all levers ':'Show all levers ';}
+</script>
+</body>
+</html>
