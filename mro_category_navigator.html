@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CatNav &middot; MRO Category Navigator</title>
+<style>
+  :root{
+    --accent:#0C2B82;--accent-2:#12A6E6;--accent-deep:#071434;
+    --accent-soft:rgba(12,43,130,.14);--accent-glow:rgba(12,43,130,.34);
+    --pos:#17A673;--pos-soft:rgba(23,166,115,.10);
+    --neg:#E5484D;--neg-soft:rgba(229,72,77,.12);
+    --warn:#FCAF17;--warn-soft:rgba(252,175,23,.14);--info:#12A6E6;--purple:#3A68C5;--gold:#FCAF17;
+    --bg:#070B18;--panel:#0E1428;--panel-2:#0A0F20;
+    --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.10);
+    --t1:#f4f5f7;--t2:rgba(255,255,255,.62);--t3:rgba(255,255,255,.40);--t4:rgba(255,255,255,.28);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:Arial,Helvetica,sans-serif;
+    background:radial-gradient(900px 480px at 78% -8%,rgba(12,43,130,.12),transparent 60%),
+      radial-gradient(700px 420px at 6% 4%,rgba(18,166,230,.06),transparent 55%),var(--bg);
+    color:var(--t1);-webkit-font-smoothing:antialiased;overflow:hidden;font-size:15.5px;line-height:1.45}
+  .app{display:flex;height:100vh;overflow:hidden}
+  aside{width:246px;flex-shrink:0;background:var(--panel-2);border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .brand{height:64px;display:flex;align-items:center;gap:11px;padding:0 22px;border-bottom:1px solid var(--line)}
+  .nm-logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));box-shadow:0 4px 14px var(--accent-glow);flex-shrink:0}
+  .nm-logo svg{width:16px;height:16px}
+  .nm-txt b{display:block;font-size:16px;font-weight:800;letter-spacing:1.4px;color:var(--t1);line-height:1}
+  .nm-txt span{display:block;font-size:9px;font-weight:700;letter-spacing:1.1px;color:var(--accent-2);text-transform:uppercase;margin-top:3px}
+  nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+  .nav-lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--t4);padding:13px 12px 5px;font-weight:700}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:11px;color:var(--t2);font-weight:500;cursor:pointer;font-size:14.5px;transition:.16s;position:relative}
+  .nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+  .nav-item:hover{background:rgba(255,255,255,.04);color:var(--t1)}
+  .nav-item.active{background:var(--accent-soft);color:#fff}
+  .nav-item.active svg{opacity:1;color:var(--accent-2)}
+  .nav-item.active::before{content:"";position:absolute;left:-10px;top:7px;bottom:7px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--accent-2),var(--accent))}
+  .nav-item .badge{margin-left:auto;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px}
+  .nav-item .badge.r{background:var(--neg-soft);color:var(--neg)}
+  .nav-item .badge.a{background:var(--warn-soft);color:var(--warn)}
+  .side-foot{padding:9px 12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+  .user{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.03)}
+  .ava{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+  .user .nm{font-size:13.5px;font-weight:600;line-height:1.2}.user .ro{font-size:11.5px;color:var(--t3)}
+  .hiddenlink{font-size:11px;color:var(--t4);text-align:center;padding:5px 0 2px;cursor:pointer;letter-spacing:.02em}
+  .hiddenlink:hover{color:var(--t3)}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+  header.top{height:60px;border-bottom:1px solid var(--line);background:var(--panel-2);display:flex;align-items:center;gap:9px;padding:0 26px;flex-wrap:wrap}
+  .hi{font-size:15px;font-weight:600}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+  .top .spacer{flex:1}
+  .confbar{display:flex;align-items:center;gap:8px;padding:7px 26px;background:rgba(229,72,77,.08);border-bottom:1px solid rgba(229,72,77,.18);color:var(--t2);font-size:12px}
+  .scroll{flex:1;overflow-y:auto;padding:24px 30px 120px}
+  .wrap{max-width:1260px;margin:0 auto}
+  .view{display:none;flex-direction:column;gap:20px}.view.active{display:flex;animation:rise .35s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .vhead h1{font-size:26px;font-weight:800;letter-spacing:-.4px}
+  .vhead .date{font-size:13.5px;color:var(--t3);margin-top:3px;max-width:820px}
+  section.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;flex-wrap:wrap}
+  .card-h .ttl{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px}
+  .card-h .ttl .ic{width:28px;height:28px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0}
+  .card-h .ttl .ic svg{width:15px;height:15px;color:var(--accent-2)}
+  .chip{font-size:11.5px;font-weight:700;border-radius:7px;padding:3px 8px;letter-spacing:.02em}
+  .chip.dir{background:var(--accent-soft);color:var(--accent-2)}
+  .chip.ind{background:rgba(58,104,197,.16);color:var(--purple)}
+  .chip.r{background:var(--neg-soft);color:var(--neg)}
+  .chip.a{background:var(--warn-soft);color:var(--warn)}
+  .chip.g{background:var(--pos-soft);color:var(--pos)}
+  .sub{padding:0 20px 12px;color:var(--t3);font-size:13px}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .stat-row .m{padding:6px 16px;border-right:1px solid var(--line)}
+  .stat-row .m:last-child{border-right:none}
+  .stat-row .v{font-size:23px;font-weight:800}
+  .stat-row .v.g{color:var(--pos)}.stat-row .v.r{color:var(--neg)}.stat-row .v.a{color:var(--warn)}
+  .stat-row .l{font-size:12px;color:var(--t3);margin-top:2px}
+  .tblwrap{overflow-x:auto;padding:0 20px 18px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{text-align:left;color:var(--t3);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;padding:7px 9px;border-bottom:1px solid var(--line-2)}
+  thead th.r{text-align:right}thead th.c{text-align:center}
+  tbody td{padding:9px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody td.r{text-align:right}tbody td.c{text-align:center}
+  tbody tr:last-child td{border-bottom:none}
+  .lp{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;white-space:nowrap}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  @media(max-width:1050px){.grid2,.grid3{grid-template-columns:1fr}.stat-row{grid-template-columns:1fr 1fr}}
+  .aiins{margin:0 20px 14px;background:rgba(18,166,230,.06);border:1px solid rgba(18,166,230,.16);border-radius:11px;padding:12px 14px;font-size:13px;color:var(--t2);line-height:1.55}
+  .aiins .lab{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-2);display:block;margin-bottom:5px}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+  .dot.r{background:var(--neg)}.dot.a{background:var(--warn)}.dot.g{background:var(--pos)}
+  .btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;cursor:pointer;border-radius:10px;padding:8px 13px;transition:.16s;border:1px solid var(--line-2);background:rgba(255,255,255,.04);color:var(--t1)}
+  .btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .sliderbox{padding:14px 20px}
+  .sliderbox .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .sliderbox .lab{font-size:13px;font-weight:600;color:var(--t2)}
+  .sliderbox .val{font-size:13px;font-weight:700;color:var(--accent-2)}
+  input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:rgba(255,255,255,.1);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--accent-2);cursor:pointer;box-shadow:0 2px 8px rgba(18,166,230,.5)}
+  select{background:rgba(255,255,255,.04);border:1px solid var(--line-2);color:var(--t1);border-radius:9px;padding:7px 10px;font-size:13px;font-family:inherit}
+  .seg{display:flex;gap:6px;flex-wrap:wrap}
+  .seg button{font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid var(--line-2);background:rgba(255,255,255,.03);color:var(--t2);cursor:pointer}
+  .seg button.on{background:var(--accent-soft);color:#fff;border-color:var(--accent)}
+  .cprmresult{margin:14px 20px;border-radius:12px;padding:16px 18px;border:1px solid var(--line-2)}
+  .cprmresult.transfer{background:rgba(23,166,115,.08);border-color:rgba(23,166,115,.3)}
+  .cprmresult.operationalize{background:rgba(18,166,230,.08);border-color:rgba(18,166,230,.3)}
+  .cprmresult.deflect{background:rgba(58,104,197,.1);border-color:rgba(58,104,197,.3)}
+  .cprmresult.hedge{background:rgba(229,72,77,.08);border-color:rgba(229,72,77,.3)}
+  .cprmresult h4{font-size:16px;font-weight:800;margin-bottom:4px}
+  .cprmresult .owner{font-size:12px;color:var(--t3);margin-bottom:8px}
+  .cprmresult p{font-size:13.5px;color:var(--t2);line-height:1.55}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--line-2);border-radius:12px;padding:11px 17px;display:flex;align-items:center;gap:9px;font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.25s;z-index:999}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="nm-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 7v10l8 5 8-5V7z"/><path d="M4 7l8 5 8-5M12 12v10"/></svg></div>
+      <div class="nm-txt"><b>CATNAV</b><span>MRO</span></div>
+    </div>
+    <nav id="navList"></nav>
+    <div class="side-foot">
+      <div class="user"><div class="ava">PS</div><div><div class="nm">Priya Sundaram</div><div class="ro">Category Lead, MRO</div></div></div>
+      <div class="hiddenlink" onclick="switchView('datasrc')">Data sources &amp; references</div>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <span class="hi">Good day, Priya!</span>
+      <div class="spacer"></div>
+      <span class="pill"><span class="dot g" style="background:var(--accent)"></span>Annual MRO spend &#8250; $95M</span>
+      <span class="pill">5 plants &middot; 6 sub-categories &middot; 3 spend types</span>
+      <span class="pill" id="pillRag">3 red &middot; 7 amber &middot; 12 green</span>
+    </header>
+    <div class="confbar"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Illustrative control tower for a multi-plant cement producer. Component and material prices sourced from public indices as at September 2026, refreshed periodically. DRAFT.</span></div>
+    <div class="scroll"><div class="wrap" id="viewsRoot"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg"></span></div>
+<script>
+/* ===================== NAV ===================== */
+var NAVITEMS = [
+  {sec:'Category Cockpit', items:[
+    {k:'control', label:'Category Control Tower', icon:'<rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M3 9h18M9 21V9"/>'},
+    {k:'baseline', label:'Spend Baseline', icon:'<path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/>'}
+  ]},
+  {sec:'Should-Cost', items:[
+    {k:'supplies', label:'Sub-Category Should-Cost', icon:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/>'},
+    {k:'services', label:'Services Should-Cost', icon:'<circle cx="9" cy="7" r="3"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M16 3.5a4 4 0 0 1 0 7.8"/>'}
+  ]},
+  {sec:'Synergy', items:[
+    {k:'standard', label:'Standardization &amp; Synergy', icon:'<circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/>'},
+    {k:'basket', label:'Market Basket &amp; Maverick Spend', icon:'<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>'}
+  ]},
+  {sec:'Market &amp; Action', items:[
+    {k:'market', label:'Market Intelligence', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>'},
+    {k:'actions', label:'Actions &amp; Roadmap', icon:'<path d="M13 2 3 14h7l-1 8 10-12h-7z"/>'}
+  ]}
+];
+function buildNav(){
+  var html='';
+  NAVITEMS.forEach(function(sec){
+    html+='<div class="nav-lbl">'+sec.sec+'</div>';
+    sec.items.forEach(function(it){
+      html+='<div class="nav-item" data-view="'+it.k+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+it.icon+'</svg>'+it.label+
+        (it.k==='supplies'?'<span class="badge r" id="navSuppliesBadge"></span>':'')+
+        (it.k==='basket'?'<span class="badge a" id="navBasketBadge"></span>':'')+
+      '</div>';
+    });
+  });
+  document.getElementById('navList').innerHTML=html;
+  document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){switchView(this.getAttribute('data-view'));});});
+}
+
+/* ===================== DATA: SUB-CATEGORIES & SPEND ===================== */
+var TOTAL_SPEND = 95; // $M
+var SPEND_TYPE = [
+  {name:'Supplies', pct:55, color:'#12A6E6'},
+  {name:'Services', pct:35, color:'#3A68C5'},
+  {name:'Equipment &amp; parts', pct:10, color:'#FCAF17'}
+];
+var SUBCATS = [
+  {name:'Mechanical spares', pct:26, spend:22.0, examples:'Bearings, gearboxes, couplings, belts, seals'},
+  {name:'Electrical &amp; instrumentation', pct:19, spend:16.1, examples:'Motors, VFDs/drives, cables, sensors, PLC/DCS components'},
+  {name:'PPE &amp; safety', pct:9, spend:7.6, examples:'Helmets, gloves, respiratory, footwear'},
+  {name:'Consumables &amp; tools', pct:15, spend:12.7, examples:'Lubricants, welding supplies, fasteners, hand tools'},
+  {name:'Mechanical &amp; electrical services', pct:31, spend:26.3, examples:'Contracted maintenance labour, mechanical and electrical work orders'}
+];
+
+/* ===================== DATA: SKU SHOULD-COST (Supplies) ===================== */
+var SKU_SHOULDCOST = {
+ 'Mechanical spares':[
+   {item:'Deep groove ball bearing, 6208 2RS equivalent', unit:'per unit', paid:850,
+    bom:[['Chrome alloy steel forging','&#8377;210'],['Machining &amp; heat treatment','&#8377;180'],['Seals &amp; grease','&#8377;45'],['Packaging','&#8377;15'],['Freight &amp; margin','&#8377;220']], shouldcost:670},
+   {item:'Industrial V-belt, standard section', unit:'per unit', paid:1450,
+    bom:[['Rubber compound (EPDM/chloroprene)','&#8377;380'],['Reinforcement cord (polyester)','&#8377;210'],['Moulding &amp; conversion','&#8377;260'],['Packaging','&#8377;40'],['Freight &amp; margin','&#8377;360']], shouldcost:1250}
+ ],
+ 'Electrical & instrumentation':[
+   {item:'XLPE armoured cable, 3-core 16mm&sup2;', unit:'per metre', paid:385,
+    bom:[['Copper conductor','&#8377;145'],['XLPE insulation &amp; armour','&#8377;85'],['Conversion','&#8377;55'],['Packaging / reel','&#8377;15'],['Freight &amp; margin','&#8377;65']], shouldcost:365},
+   {item:'Variable frequency drive, 15kW', unit:'per unit', paid:42000,
+    bom:[['Power electronics / IGBT module (~35%)','&#8377;14,700'],['PCB &amp; control (~20%)','&#8377;8,400'],['Enclosure &amp; cooling (~12%)','&#8377;5,040'],['Assembly &amp; testing (~13%)','&#8377;5,460'],['Margin &amp; freight (~20%)','&#8377;-']], shouldcost:33600}
+ ],
+ 'PPE & safety':[
+   {item:'Safety helmet, ISI marked', unit:'per unit', paid:320,
+    bom:[['HDPE shell','&#8377;45'],['Harness / liner','&#8377;35'],['Conversion','&#8377;40'],['Packaging','&#8377;10'],['Freight &amp; margin','&#8377;95']], shouldcost:225},
+   {item:'Nitrile safety gloves, pair', unit:'per pair', paid:85,
+    bom:[['Nitrile compound','&#8377;22'],['Cotton liner','&#8377;8'],['Conversion','&#8377;18'],['Packaging','&#8377;4'],['Freight &amp; margin','&#8377;22']], shouldcost:74}
+ ],
+ 'Consumables & tools':[
+   {item:'Industrial gear oil, 20L drum', unit:'per drum', paid:3400,
+    bom:[['Base oil (SN500, 20L)','&#8377;2,000'],['Additive package','&#8377;450'],['Drum &amp; packaging','&#8377;180'],['Freight &amp; margin','&#8377;380']], shouldcost:3010},
+   {item:'Welding electrode, 5kg pack', unit:'per pack', paid:950,
+    bom:[['Steel wire core &amp; flux coating','&#8377;520'],['Conversion','&#8377;180'],['Packaging','&#8377;40'],['Freight &amp; margin','&#8377;150']], shouldcost:890}
+ ]
+};
+
+/* ===================== DATA: SERVICES SHOULD-COST ===================== */
+var SERVICE_SUPPLIERS = [
+  {name:'Supplier A', base:280, overheadPct:58, marginPct:12, target:480},
+  {name:'Supplier B', base:265, overheadPct:75, marginPct:15, target:488},
+  {name:'Supplier C', base:300, overheadPct:50, marginPct:10, target:485},
+  {name:'Supplier D', base:255, overheadPct:65, marginPct:18, target:460}
+];
+function serviceCurrentRate(s){ return Math.round(s.base*(1+s.overheadPct/100)*(1+s.marginPct/100)); }
+var DILO = [
+  {supplier:'Supplier A', project:'Mill liner replacement, Plant 2', crew:3, hours:14.5, valueAdd:65},
+  {supplier:'Supplier B', project:'Conveyor gearbox overhaul, Plant 3', crew:4, hours:19.0, valueAdd:42},
+  {supplier:'Supplier B', project:'Fabrication work, structural steel, Plant 1', crew:2, hours:8.5, valueAdd:38},
+  {supplier:'Supplier D', project:'Electrical panel upgrade, Plant 4', crew:2, hours:11.0, valueAdd:61}
+];
+var EMBEDDED_MATERIAL = {steelContentShare:22, currentMarkup:24, benchmarkMarkup:9, affectedSpend:5.8};
+
+/* ===================== DATA: STANDARDIZATION & SYNERGY ===================== */
+var STANDARD_ITEMS = [
+  {item:'Bearing 6208 2RS (functionally equivalent)', specs:4, plants:5, volume:'18,400 units/yr', currentBlended:850, consolidatedTier:715, savingsPct:16},
+  {item:'Nitrile safety gloves, cut-resistant grade', specs:3, plants:5, volume:'96,000 pairs/yr', currentBlended:85, consolidatedTier:73, savingsPct:14},
+  {item:'XLPE armoured cable, 16mm&sup2; equivalent', specs:2, plants:4, volume:'42km/yr', currentBlended:385, consolidatedTier:352, savingsPct:9},
+  {item:'Industrial V-belt, standard sections', specs:5, plants:5, volume:'6,200 units/yr', currentBlended:1450, consolidatedTier:1265, savingsPct:13}
+];
+
+/* ===================== DATA: MARKET BASKET & MAVERICK SPEND ===================== */
+var BASKET_COVERAGE = {targetPct:30, actualPct:19, skuSharePct:11};
+var MAVERICK = [
+  {subcat:'Mechanical spares', maverickPct:18},
+  {subcat:'Electrical &amp; instrumentation', maverickPct:12},
+  {subcat:'PPE &amp; safety', maverickPct:31},
+  {subcat:'Consumables &amp; tools', maverickPct:27},
+  {subcat:'Services', maverickPct:9}
+];
+var SUPPLIER_FRAG = [
+  {subcat:'Mechanical spares', active:210, top80pct:34},
+  {subcat:'Electrical &amp; instrumentation', active:145, top80pct:22},
+  {subcat:'PPE &amp; safety', active:68, top80pct:9},
+  {subcat:'Consumables &amp; tools', active:189, top80pct:28},
+  {subcat:'Services', active:31, top80pct:6}
+];
+
+var DECISIONS = [];
+var OPEN_KPI = null;
+
+/* ===================== DATA: CONTROL TOWER KPIs ===================== */
+var KPIS = [
+  {id:'k1', title:'PPE &amp; safety should-cost gap is the widest of any sub-category', catName:'Should-cost',
+   plan:'&#8804;15% gap to should-cost', actual:'~30% gap (helmet SKU)', dev:'+15 pts', devPct:15, direction:'bad',
+   attribution:[
+     {label:'Certification and brand premium embedded in PPE pricing, not reflected in the bill of materials', pct:9},
+     {label:'Low SKU-level negotiation history; PPE historically bought on catalogue list price', pct:6}
+   ],
+   recs:[
+     {label:'Run a should-cost-anchored RFQ on the top 15 PPE SKUs by spend, citing the bill-of-materials gap directly', buys:'Should close most of the gap on items where certification cost is genuinely small relative to the premium charged.', cost:'Negotiation cycle of 4&#8211;6 weeks per SKU family.', watchout:'Some of the premium is genuine (certification, batch testing) and will not move; do not target 100% of the gap.', risk:'Low', owner:'MRO Category Lead', revisit:'Next quarterly review'},
+     {label:'Consolidate PPE spend to 2&#8211;3 preferred suppliers across all plants', buys:'Volume leverage on top of the should-cost case.', cost:'Some plants lose a locally preferred supplier relationship.', watchout:'Confirm certification portability across plants before consolidating.', risk:'Med', owner:'MRO Category Lead', revisit:'Next quarter'}
+   ]},
+  {id:'k2', title:'Supplier B services overhead sits 20 points above the benchmark range', catName:'Services should-cost',
+   plan:'50&#8211;58% overhead surcharge (benchmark range)', actual:'75% overhead surcharge', dev:'+17 to +25 pts vs peers', devPct:14, direction:'bad',
+   attribution:[
+     {label:'Higher non-wage labour cost allocation than the other three suppliers doing comparable work', pct:8},
+     {label:'Highest quoted margin of the four suppliers (15%) on top of the highest overhead base', pct:6}
+   ],
+   recs:[
+     {label:'Present the rebuilt cost structure to Supplier B directly and negotiate to the &#8377;780/hr target rate', buys:'Modelled 8% rate reduction, the largest of the four suppliers.', cost:'Requires the supplier to open their cost structure or accept the benchmark without full disclosure.', watchout:'Supplier B may argue their scope of work is more complex than peers; verify against actual work orders before conceding.', risk:'Med', owner:'MRO Category Lead', revisit:'Next negotiation cycle'},
+     {label:'Shift incremental volume to Supplier D (lowest target rate) rather than renegotiate Supplier B', buys:'Faster to execute than a renegotiation.', cost:'Concentrates more risk in a single supplier relationship.', watchout:'Only viable if Supplier D has spare capacity across the affected sites.', risk:'Med', owner:'MRO Category Lead', revisit:'Next quarter'}
+   ]},
+  {id:'k3', title:'Non-value-add labour time observed at 42&#8211;58% on two work orders', catName:'Services should-cost',
+   plan:'&#8804;35% non-value-add time', actual:'42% and 58% on two Supplier B work orders', dev:'+7 to +23 pts', devPct:15, direction:'bad',
+   attribution:[
+     {label:'Conveyor gearbox overhaul (Plant 3): waiting time and material fetching accounted for 58% of observed crew hours', pct:9},
+     {label:'Structural fabrication work (Plant 1): 38% value-add, driven by material staging delays', pct:6}
+   ],
+   recs:[
+     {label:'Require pre-staged materials and tools as a condition of the work order, verified before crew mobilisation', buys:'Directly targets the largest observed waste category (waiting and fetching).', cost:'Requires site logistics coordination that does not currently exist.', watchout:'This is a site operations change, not a pure negotiation lever &#8211; needs plant ops buy-in.', risk:'Low', owner:'Plant Operations + MRO Category Lead', revisit:'Next 2 work orders, re-measure'},
+     {label:'Extend the day-in-the-life observation to all four suppliers before acting on Supplier B alone', buys:'Confirms whether this is a Supplier B-specific issue or a site-wide pattern.', cost:'Delays action by one more observation cycle.', watchout:'Reasonable if the sample size of two work orders feels thin to act on directly.', risk:'Low', owner:'MRO Category Lead', revisit:'Next month'}
+   ]},
+  {id:'k4', title:'Bearing 6208 2RS specified four different ways across five plants', catName:'Standardization',
+   plan:'1 standard spec per functional item', actual:'4 distinct specs/part numbers, no plant-level driver identified', dev:'3 excess specs', devPct:75, direction:'bad',
+   attribution:[
+     {label:'No evidence of differing technical requirement across the 4 specs, on review of the applications', pct:60},
+     {label:'Historical supplier relationships at 2 plants, not a technical constraint', pct:15}
+   ],
+   recs:[
+     {label:'Converge to a single standard spec and re-tender the combined 18,400 unit/year volume', buys:'Modelled 16% saving from tier pricing at consolidated volume.', cost:'One-time technical validation to confirm no plant has a genuine differing requirement.', watchout:'Do this validation before committing &#8211; the whole case collapses if one plant genuinely needs a different spec.', risk:'Low', owner:'MRO Category Lead + Plant Engineering', revisit:'Next quarter'}
+   ]},
+  {id:'k5', title:'Maverick spend on PPE and consumables running well above the services benchmark', catName:'Compliance',
+   plan:'&#8804;15% off-contract spend', actual:'31% (PPE), 27% (consumables)', dev:'+12 to +16 pts', devPct:16, direction:'bad',
+   attribution:[
+     {label:'PPE frequently bought locally at plant level for urgent/safety-critical needs, bypassing the catalogue', pct:10},
+     {label:'Consumables (lubricants, fasteners) bought via informal local vendors for small-quantity, fast-turnaround needs', pct:6}
+   ],
+   recs:[
+     {label:'Stand up a plant-level emergency PPE stock (vendor-managed) to remove the urgency justification for off-contract buying', buys:'Addresses the root cause rather than policing the symptom.', cost:'Requires a consignment stock agreement with the preferred PPE supplier.', watchout:'Only works if the consigned stock actually covers the SKUs plants are buying around the contract for.', risk:'Low', owner:'MRO Category Lead', revisit:'Next quarter'},
+     {label:'Mandate PO-before-purchase for all PPE and consumables, no exceptions', buys:'Immediate visibility.', cost:'May genuinely slow down safety-critical urgent purchases if not paired with the stock fix above.', watchout:'Do not implement this without the vendor-managed stock in place first.', risk:'Med', owner:'MRO Category Lead', revisit:'Next quarter'}
+   ]},
+  {id:'k6', title:'Electrical cable should-cost gap is the tightest of any SKU reviewed', catName:'Should-cost', favourable:true,
+   plan:'Reference: should-cost within 10% of price paid', actual:'5% gap (XLPE armoured cable)', dev:'&#8722;5 pts favourable vs benchmark gap', devPct:-5, direction:'good',
+   attribution:[
+     {label:'Copper content is transparent and index-tracked, leaving little room for undisclosed margin', pct:-3},
+     {label:'Cable is already sourced through a competitively tendered panel, unlike PPE', pct:-2}
+   ],
+   sustainNote:'This is what a well-run should-cost category looks like: transparent commodity content, competitive tendering, tight gap. Use this sub-category as the reference case when explaining to stakeholders why PPE and consumables should be able to close most of their gap too, not as evidence that should-cost universally finds 20%+.'}
+];
+
+/* ===================== DATA: MARKET INTELLIGENCE (real, current) ===================== */
+var NEWS = [
+  {tag:'risk', cat:'Steel', when:'This month', title:'Indian steel prices remain firm on sustained infrastructure demand',
+   body:'HR coil is trading between &#8377;54,800 and &#8377;60,450 per tonne and TMT bar between &#8377;51,600 and &#8377;56,300 per tonne as of September 2026, supported by the Union Budget capex push and rising input costs for coking coal and iron ore. This directly affects should-cost baselines for bearings, fasteners and fabricated mechanical spares.'},
+  {tag:'risk', cat:'Copper', when:'This month', title:'Copper prices holding firm on tight global inventories',
+   body:'Domestic copper prices are holding firm, supported by tightening global inventories and supply-side constraints even as some demand signals soften. Cable and electrical-supply should-cost models should be refreshed against the current copper reference rather than a stale baseline given the volatility.'},
+  {tag:'opp', cat:'Base oil', when:'Ongoing', title:'Base oil prices tracking crude, currently range-bound',
+   body:'Industrial base oil (SN150/SN500 grades) is trading in a relatively narrow band, giving a stable reference point for lubricant should-cost work over the near term, in contrast to the volatility on the metals side.'},
+  {tag:'opp', cat:'Sourcing structure', when:'Structural', title:'Market basket coverage remains below the 30% target used elsewhere in the industry',
+   body:'Current basket coverage sits at 19% of MRO supplies spend against a 30% target commonly used to make extrapolated savings credible. Below this threshold, savings claimed on basket items are harder to defend as representative of the full tail.'},
+  {tag:'reg', cat:'Services', when:'Structural', title:'Overhead surcharge for mechanical services in India typically runs 50&#8211;75% over base wage',
+   body:'Statutory contributions alone (EPF 12%, ESI 3.25% where applicable, bonus 8.33%, gratuity ~4.81%) add roughly 20&#8211;30% over base wage for direct industrial labour; contracted mechanical service suppliers layer on equipment, supervision and margin on top, which is why overhead varies meaningfully even among suppliers doing comparable work, and why a rebuilt cost structure, not a rate comparison alone, is the correct basis for negotiation.'}
+];
+
+/* ===================== DATA: ACTIONS & ROADMAP ===================== */
+var ACTIONS = [
+  {title:'Should-cost RFQ on top 15 PPE SKUs', lever:'Should-cost', value:'Targets ~30% gap on PPE', urgency:'Next 4&#8211;6 weeks'},
+  {title:'Renegotiate Supplier B services rate to target', lever:'Services should-cost', value:'8% rate reduction modelled', urgency:'Next negotiation cycle'},
+  {title:'Converge bearing 6208 2RS to one spec, re-tender combined volume', lever:'Standardization', value:'16% saving modelled', urgency:'Next quarter'},
+  {title:'Stand up vendor-managed PPE stock at plant level', lever:'Maverick spend', value:'Addresses root cause of 31% off-contract PPE spend', urgency:'Next quarter'}
+];
+var ROADMAP = [
+  {phase:'Phase 1', window:'Now &#8211; 6 weeks', items:['Launch should-cost RFQ on top PPE and consumables SKUs', 'Extend DILO observation to all four service suppliers', 'Validate bearing spec convergence with plant engineering']},
+  {phase:'Phase 2', window:'6&#8211;14 weeks', items:['Renegotiate services rates against rebuilt cost structures', 'Re-tender consolidated bearing and glove volumes', 'Stand up vendor-managed PPE stock']},
+  {phase:'Phase 3', window:'14&#8211;24 weeks', items:['Expand market basket coverage toward the 30% threshold', 'Roll should-cost discipline to the remaining sub-categories', 'Formalise maverick-spend monitoring as a standing KPI']}
+];
+
+var DATASOURCES = [
+  {name:'Tata Nexarc steel price tracker (HR coil, TMT bar)', use:'Indian steel benchmark pricing for bearing, fastener and fabrication should-cost'},
+  {name:'MCX (India) copper futures; LME as import-parity cross-check', use:'Copper price reference for cable and electrical should-cost'},
+  {name:'SteelMint / BigMint domestic assessments', use:'Cross-check on steel and ferro-alloy content within MRO spares should-cost'},
+  {name:'OfBusiness / Nexizo base oil and industrial commodity pricing', use:'Base oil reference for lubricant should-cost'},
+  {name:'BIS/ISI certification standards for PPE', use:'Specification baseline for PPE should-cost, separating certification cost from margin'},
+  {name:'EPFO/ESIC statutory contribution rates (EPF, ESI, bonus, gratuity)', use:'Statutory basis for the labour cost floor in the services overhead build-up'},
+  {name:'IndiaMART / TradeIndia supplier listings', use:'Cross-check on finished-goods pricing (PPE, lubricants, fasteners) at SKU level'},
+  {name:'IndexMundi steel wire rod series', use:'Historical trend cross-check on steel-linked components'},
+  {name:'Internal ERP transactional spend data', use:'Actual price paid, supplier, plant and PO/off-contract flag by line item'},
+  {name:'Internal contract and catalogue management system', use:'Market basket coverage and contracted vs off-contract spend split'},
+  {name:'S&amp;P Global Platts / CRU metals pricing', use:'Recommended as the primary licensed feed for steel and copper indices in a production build'},
+  {name:'ICIS chemical and base oil pricing', use:'Recommended for lubricant and consumables raw-material tracking'},
+  {name:'Direct supplier cost-structure disclosure (services)', use:'Recommended as a formal RFQ requirement to sharpen the overhead build beyond statutory benchmarks alone'},
+  {name:'Time-and-motion / day-in-the-life field observation', use:'Recommended as a recurring practice, not a one-off study, to build a genuine utilization baseline per supplier'}
+];
+
+/* ===================== CHART HELPERS ===================== */
+var C={accent:'#0C2B82',accent2:'#12A6E6',gold:'#FCAF17',pos:'#17A673',neg:'#E5484D',purple:'#3A68C5',t1:'#f4f5f7',t3:'rgba(255,255,255,.42)',track:'rgba(255,255,255,.06)'};
+function svgTag(w,h){return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Arial,Helvetica,sans-serif">';}
+function hbar(data,o){
+  o=o||{}; var w=o.w||760,padL=o.padL||190,padR=70,top=10,rh=o.rh||30,h=top*2+data.length*rh;
+  var max=Math.max.apply(null,data.map(function(d){return d.v;}));
+  var s=svgTag(w,h);
+  data.forEach(function(d,i){
+    var y=top+i*rh+rh/2, bw=(w-padL-padR)*(d.v/max), col=d.c||C.accent2;
+    s+='<text x="'+(padL-12)+'" y="'+y+'" fill="'+C.t3+'" font-size="12" text-anchor="end" dominant-baseline="middle">'+d.k+'</text>';
+    s+='<rect x="'+padL+'" y="'+(y-8)+'" width="'+(w-padL-padR)+'" height="16" rx="5" fill="'+C.track+'"/>';
+    s+='<rect x="'+padL+'" y="'+(y-8)+'" width="'+Math.max(2,bw)+'" height="16" rx="5" fill="'+col+'"/>';
+    s+='<text x="'+(padL+bw+10)+'" y="'+y+'" fill="'+C.t1+'" font-size="12" font-weight="700" dominant-baseline="middle">'+d.t+'</text>';
+  });
+  return s+'</svg>';
+}
+function donut(data,big,small){
+  var w=260,h=260,cx=130,cy=130,r=88,ir=58;
+  var total=data.reduce(function(a,b){return a+b.pct;},0),ang=-Math.PI/2,s=svgTag(w,h);
+  data.forEach(function(d){
+    var frac=d.pct/total,a2=ang+frac*Math.PI*2;
+    var x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+    var xi1=cx+ir*Math.cos(a2),yi1=cy+ir*Math.sin(a2),xi2=cx+ir*Math.cos(ang),yi2=cy+ir*Math.sin(ang);
+    var large=frac>0.5?1:0;
+    s+='<path d="M'+x1+' '+y1+' A'+r+' '+r+' 0 '+large+' 1 '+x2+' '+y2+' L'+xi1+' '+yi1+' A'+ir+' '+ir+' 0 '+large+' 0 '+xi2+' '+yi2+' Z" fill="'+d.color+'"/>';
+    ang=a2;
+  });
+  s+='<text x="'+cx+'" y="'+(cy-3)+'" fill="'+C.t1+'" font-size="21" font-weight="800" text-anchor="middle">'+big+'</text>';
+  s+='<text x="'+cx+'" y="'+(cy+16)+'" fill="'+C.t3+'" font-size="11" text-anchor="middle">'+small+'</text>';
+  return s+'</svg>';
+}
+
+/* ===================== RENDERERS: CONTROL TOWER ===================== */
+function attrColor(pct){return pct<0?C.pos:C.neg;}
+function renderKpiCard(k,rank){
+  var big=Math.abs(k.devPct);
+  var st = k.favourable ? 'g' : (big>=15?'r':'a');
+  var stColor = st==='r'?'var(--neg)':st==='a'?'var(--warn)':'var(--pos)';
+  var isOpen = OPEN_KPI===k.id;
+  var attrRows='';
+  k.attribution.forEach(function(a){
+    var w = Math.min(100, Math.abs(a.pct)/Math.max(big,1)*100);
+    attrRows+='<div style="display:flex;align-items:center;gap:10px;font-size:12.5px;padding:3px 0"><div style="flex:2;color:var(--t2)">'+a.label+'</div><div style="flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.06);position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;bottom:0;width:'+w+'%;border-radius:4px;background:'+attrColor(a.pct)+'"></div></div><div style="width:60px;text-align:right;font-weight:700;color:'+attrColor(a.pct)+'">'+(a.pct>=0?'+':'')+a.pct+(k.dev.indexOf('pt')>-1?'pt':'%')+'</div></div>';
+  });
+  var body='';
+  if(k.favourable){
+    body='<div style="background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px"><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:7px;font-weight:700">What&rsquo;s driving it</h5>'+attrRows+'</div>'+
+      '<div style="background:var(--pos-soft);border:1px solid rgba(23,166,115,.25);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--t2)"><b style="color:var(--pos)">Favourable. Use as the reference case.</b> '+k.sustainNote+'</div>';
+  } else {
+    var recCards='';
+    k.recs.forEach(function(r,i){
+      var adopted = DECISIONS.some(function(d){return d.kpiId===k.id && d.recIndex===i;});
+      recCards+='<div style="border:1px solid '+(adopted?'var(--pos)':'var(--line-2)')+';background:'+(adopted?'var(--pos-soft)':'rgba(255,255,255,.015)')+';border-radius:11px;padding:12px 13px;display:flex;flex-direction:column;gap:6px">'+
+        '<div style="display:flex;justify-content:space-between;gap:6px"><div style="font-weight:700;font-size:13px">'+r.label+'</div><span style="font-size:10px;font-weight:800;border-radius:6px;padding:2px 6px;flex-shrink:0;background:'+(r.risk==='Low'?'var(--pos-soft)':r.risk==='Med'?'var(--warn-soft)':'var(--neg-soft)')+';color:'+(r.risk==='Low'?'var(--pos)':r.risk==='Med'?'var(--warn)':'var(--neg)')+'">'+r.risk+'</span></div>'+
+        '<p style="font-size:12px;color:var(--t2)"><b>Buys:</b> '+r.buys+'</p><p style="font-size:12px;color:var(--t2)"><b>Costs:</b> '+r.cost+'</p><p style="font-size:12px;color:var(--t2)"><b>Watch-out:</b> '+r.watchout+'</p>'+
+        '<div style="font-size:11px;color:var(--t3)">Owner: '+r.owner+' &middot; Revisit: '+r.revisit+'</div>'+
+        '<button style="margin-top:2px;font-size:12px;font-weight:700;border-radius:8px;padding:6px 9px;border:1px solid '+(adopted?'var(--pos)':'var(--line-2)')+';background:'+(adopted?'rgba(23,166,115,.1)':'rgba(255,255,255,.04)')+';color:'+(adopted?'var(--pos)':'var(--t1)')+';cursor:pointer" onclick="adoptRec(\''+k.id+'\','+i+',event)">'+(adopted?'&#10003; Adopted':'Adopt this option')+'</button>'+
+      '</div>';
+    });
+    body='<div style="background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px"><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:7px;font-weight:700">Root cause, decomposed</h5>'+attrRows+'</div>'+
+      '<div><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin:2px 0 9px;font-weight:700">Recommended options</h5><div style="display:grid;grid-template-columns:repeat('+(k.recs.length>=3?3:k.recs.length)+',1fr);gap:10px">'+recCards+'</div></div>';
+  }
+  return '<div style="border:1px solid var(--line-2);border-radius:13px;background:rgba(255,255,255,.015);overflow:hidden;border-left:4px solid '+stColor+'">'+
+    '<div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer" onclick="toggleKpi(\''+k.id+'\')">'+
+      '<div style="width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.06);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--t3);flex-shrink:0">'+rank+'</div>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">'+k.title+'</div><div style="font-size:11.5px;color:var(--t3);margin-top:2px">'+k.catName+'</div></div>'+
+      '<div style="text-align:right;flex-shrink:0"><div style="font-size:17px;font-weight:800;color:'+(k.direction==='bad'?'var(--neg)':'var(--pos)')+'">'+k.dev+'</div><div style="font-size:11px;color:var(--t3)">Plan '+k.plan+'</div></div>'+
+      '<svg style="width:16px;height:16px;color:var(--t3);flex-shrink:0;transition:.2s;transform:rotate('+(isOpen?180:0)+'deg)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'+
+    '</div>'+
+    (isOpen?'<div style="padding:0 16px 16px">'+body+'</div>':'')+
+  '</div>';
+}
+function toggleKpi(id){OPEN_KPI=(OPEN_KPI===id)?null:id;renderControl();var e=document.getElementById('card-'+id);if(e&&e.scrollIntoView)e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function adoptRec(kpiId,recIndex,evt){
+  if(evt)evt.stopPropagation();
+  var k=KPIS.find(function(x){return x.id===kpiId;}); var r=k.recs[recIndex];
+  var already=DECISIONS.some(function(d){return d.kpiId===kpiId&&d.recIndex===recIndex;});
+  if(!already){DECISIONS.unshift({kpiId:kpiId,kpiTitle:k.title,recLabel:r.label,risk:r.risk,owner:r.owner,revisit:r.revisit});toast('Logged: '+r.label);}
+  renderControl();
+}
+function toast(msg){var el=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;el.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(function(){el.classList.remove('show');},3200);}
+
+function renderControl(){
+  var sorted=KPIS.slice().sort(function(a,b){return Math.abs(b.devPct)-Math.abs(a.devPct);});
+  var cardsHtml = sorted.map(function(k,i){ return '<div id="card-'+k.id+'">'+renderKpiCard(k,i+1)+'</div>'; }).join('');
+  var html =
+    '<div class="vhead"><div><h1>Category Control Tower</h1><div class="date">Live view of category health across should-cost gaps, services cost structure, standardization and off-contract spend. Sorted by materiality, not a full scorecard.</div></div></div>'+
+    '<div class="stat-row card" style="padding:16px 20px">'+
+      '<div class="m"><div class="v a">74 / 100</div><div class="l">Category health score</div></div>'+
+      '<div class="m"><div class="v r">~30%</div><div class="l">Widest should-cost gap (PPE)</div></div>'+
+      '<div class="m"><div class="v r">19%</div><div class="l">Market basket coverage vs 30% target</div></div>'+
+      '<div class="m"><div class="v a">27&#8211;31%</div><div class="l">Maverick spend, PPE &amp; consumables</div></div>'+
+    '</div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>The PPE should-cost gap and the PPE maverick spend problem are connected: PPE bought off-contract at plant level for urgent safety needs is also the spend least likely to have been should-cost challenged at all, so fixing the vendor-managed stock issue is likely to close part of the should-cost gap too, not just the compliance gap. The two services issues (Supplier B overhead, low value-add time) both point at Supplier B specifically, worth handling as one conversation rather than two.</div>'+
+    '<div style="display:flex;flex-direction:column;gap:11px">'+cardsHtml+'</div>';
+  document.getElementById('view-control').innerHTML=html;
+}
+
+function renderBaseline(){
+  var html =
+    '<div class="vhead"><div><h1>Spend Baseline</h1><div class="date">$'+TOTAL_SPEND+'M annual MRO spend across 5 plants, split by spend type and by sub-category.</div></div></div>'+
+    '<div class="grid2">'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg></span>Spend by type</div></div>'+
+        '<div class="sub">Services and supplies need genuinely different should-cost logic; equipment &amp; parts is covered in the adjacent grinding media / refractories tool</div>'+
+        '<div style="display:flex;justify-content:center;padding:6px 0 14px">'+donut(SPEND_TYPE,'$'+TOTAL_SPEND+'M','total spend')+'</div>'+
+        '<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding-bottom:14px;font-size:12.5px;color:var(--t2)">'+SPEND_TYPE.map(function(s){return '<span><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:'+s.color+';margin-right:5px"></i>'+s.name+' &middot; '+s.pct+'%</span>';}).join('')+'</div>'+
+      '</section>'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 4 3 4-6"/></svg></span>Spend by sub-category</div></div>'+
+        '<div class="sub">$M annualised</div>'+
+        '<div style="padding:6px 4px 14px">'+hbar(SUBCATS.map(function(s){return {k:s.name,v:s.spend,t:'$'+s.spend+'M'};}),{w:520,rh:34,padL:200})+'</div>'+
+      '</section>'+
+    '</div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span>Sub-category definitions</div></div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Sub-category</th><th class="r">% of spend</th><th class="r">$M</th><th>Representative items</th></tr></thead><tbody>'+
+      SUBCATS.map(function(s){return '<tr><td class="cat">'+s.name+'</td><td class="r">'+s.pct+'%</td><td class="r">$'+s.spend+'M</td><td>'+s.examples+'</td></tr>';}).join('')+
+      '</tbody></table></div>'+
+      '<div class="aiins"><span class="lab">AI insight</span>Refractory bricks and mill liners are deliberately not shown here even though they are technically MRO wear parts &#8211; they sit in the grinding media category navigator alongside the same mills and the same suppliers, to avoid showing the same spend twice across two tools.</div>'+
+    '</section>';
+  document.getElementById('view-baseline').innerHTML=html;
+}
+
+
+/* ===================== RENDERERS: SUPPLIES SHOULD-COST ===================== */
+var ACTIVE_SUBCAT = 'Mechanical spares';
+function renderSupplies(){
+  var cats = Object.keys(SKU_SHOULDCOST);
+  var segBtns = cats.map(function(c){return '<button class="'+(ACTIVE_SUBCAT===c?'on':'')+'" data-cat="'+c+'">'+c+'</button>';}).join('');
+  var skus = SKU_SHOULDCOST[ACTIVE_SUBCAT];
+  var skuHtml = skus.map(function(sku){
+    var gapPct = Math.round((sku.paid-sku.shouldcost)/sku.paid*100);
+    var bomRows = sku.bom.map(function(b){return '<tr><td>'+b[0]+'</td><td class="r">'+b[1]+'</td></tr>';}).join('');
+    return '<div class="card" style="padding:16px 18px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px"><div><div style="font-weight:700;font-size:14.5px">'+sku.item+'</div><div style="font-size:11.5px;color:var(--t3)">'+sku.unit+'</div></div><span class="lp" style="background:'+(gapPct>=20?'var(--neg-soft)':gapPct>=10?'var(--warn-soft)':'var(--pos-soft)')+';color:'+(gapPct>=20?'var(--neg)':gapPct>=10?'var(--warn)':'var(--pos)')+'">'+gapPct+'% gap</span></div>'+
+      '<table style="width:100%;font-size:12.5px;margin-bottom:8px">'+bomRows+'</table>'+
+      '<div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--line);font-size:13px"><span style="color:var(--t3)">Should-cost</span><b>&#8377;'+sku.shouldcost.toLocaleString()+'</b></div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--t3)">Price paid</span><b style="color:var(--neg)">&#8377;'+sku.paid.toLocaleString()+'</b></div>'+
+    '</div>';
+  }).join('');
+  var html =
+    '<div class="vhead"><div><h1>Sub-Category Should-Cost</h1><div class="date">A representative SKU-level should-cost build for each supplies sub-category, decomposed to raw material, conversion and freight/margin. Not every category has the same headroom &#8211; that variation is the point.</div></div></div>'+
+    '<section class="card" style="padding:16px 18px 6px"><div class="seg">'+segBtns+'</div></section>'+
+    '<div class="grid2">'+skuHtml+'</div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>The gap ranges from 5% (electrical cable, commodity-transparent, already tendered) to 30% (PPE, certification and brand premium, historically bought on list price). Treat the wide-gap categories as the negotiation priority and the tight-gap categories as the reference case for how a well-run category should look, not as evidence that every category has 20%+ sitting in it.</div>';
+  document.getElementById('view-supplies').innerHTML=html;
+  document.querySelectorAll('#view-supplies .seg button').forEach(function(b){
+    b.addEventListener('click',function(){ACTIVE_SUBCAT=this.getAttribute('data-cat');renderSupplies();});
+  });
+}
+
+/* ===================== RENDERERS: SERVICES SHOULD-COST ===================== */
+function renderServices(){
+  var rateRows = SERVICE_SUPPLIERS.map(function(s){
+    var current = serviceCurrentRate(s);
+    var movePct = Math.round((current-s.target)/current*100);
+    return {s:s, current:current, movePct:movePct};
+  });
+  var html =
+    '<div class="vhead"><div><h1>Services Should-Cost</h1><div class="date">Mechanical and electrical maintenance labour should-costs differently to a physical SKU: the build is base wage plus overhead plus margin, and a second, separate lever is how much of the billed hour is actually value-adding work.</div></div></div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3"/></svg></span>Hourly rate build-up, by supplier</div></div>'+
+      '<div class="sub">Overhead includes statutory contributions (EPF, ESI, bonus, gratuity), supervision and equipment allocation, and other overhead. Industry-observed range for Indian mechanical service contractors: 50&#8211;75%.</div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Supplier</th><th class="r">Base wage</th><th class="r">Overhead %</th><th class="r">Margin %</th><th class="r">Current billed rate</th><th class="r">Target rate</th><th class="r">Modelled move</th></tr></thead><tbody>'+
+      rateRows.map(function(r){
+        return '<tr><td class="cat">'+r.s.name+'</td><td class="r">&#8377;'+r.s.base+'/hr</td><td class="r">'+r.s.overheadPct+'%</td><td class="r">'+r.s.marginPct+'%</td><td class="r">&#8377;'+r.current+'/hr</td><td class="r">&#8377;'+r.s.target+'/hr</td><td class="r" style="color:'+(r.movePct>=6?'var(--neg)':'var(--warn)')+';font-weight:700">&#8722;'+r.movePct+'%</td></tr>';
+      }).join('')+
+      '</tbody></table></div>'+
+      '<div class="aiins"><span class="lab">AI insight</span>Supplier B carries both the highest overhead (75%) and the highest margin (15%) of the four, compounding into the largest modelled rate reduction (8%). This is not necessarily bad faith &#8211; it may reflect genuinely higher cost structure &#8211; but it is the clearest case for opening their cost structure in the next negotiation rather than negotiating off the headline rate alone.</div>'+
+    '</section>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></span>Day-in-the-life: value-add vs non-value-add time</div></div>'+
+      '<div class="sub">Direct field observation of crew time, by work order</div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Supplier</th><th>Work order</th><th class="r">Crew</th><th class="r">Observed hours</th><th class="r">Value-add</th><th class="r">Non-value-add</th></tr></thead><tbody>'+
+      DILO.map(function(d){
+        var nva = 100-d.valueAdd;
+        return '<tr><td class="cat">'+d.supplier+'</td><td>'+d.project+'</td><td class="r">'+d.crew+'</td><td class="r">'+d.hours+'</td><td class="r" style="color:var(--pos)">'+d.valueAdd+'%</td><td class="r" style="color:'+(nva>=50?'var(--neg)':'var(--warn)')+';font-weight:700">'+nva+'%</td></tr>';
+      }).join('')+
+      '</tbody></table></div>'+
+      '<div class="aiins"><span class="lab">AI insight</span>Even a cooperative, well-regarded supplier can carry 35&#8211;60% non-value-add time on a given work order &#8211; this is a separate lever from the rate itself. You can win the rate negotiation and still be paying for idle time the rate never captured. The fix here is a site logistics change (pre-staged materials), not a further rate cut.</div>'+
+    '</section>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/></svg></span>Embedded material price transparency</div></div>'+
+      '<div class="sub" style="padding-bottom:14px">Service contracts often embed materials (steel for fabrication/replacement) marked up over a floating index that rarely gets revisited</div>'+
+      '<div class="stat-row" style="padding:0 20px 16px">'+
+        '<div class="m"><div class="v">'+EMBEDDED_MATERIAL.steelContentShare+'%</div><div class="l">Steel content share of services spend</div></div>'+
+        '<div class="m"><div class="v r">'+EMBEDDED_MATERIAL.currentMarkup+'%</div><div class="l">Current markup over steel index</div></div>'+
+        '<div class="m"><div class="v g">'+EMBEDDED_MATERIAL.benchmarkMarkup+'%</div><div class="l">Benchmark markup</div></div>'+
+        '<div class="m"><div class="v">$'+EMBEDDED_MATERIAL.affectedSpend+'M</div><div class="l">Services spend affected</div></div>'+
+      '</div>'+
+      '<div class="aiins" style="margin-top:0"><span class="lab">AI insight</span>This is a third, distinct lever from the rate and the utilization work above &#8211; worth tracking as its own line so it does not get folded into the rate conversation and forgotten.</div>'+
+    '</section>';
+  document.getElementById('view-services').innerHTML=html;
+}
+
+/* ===================== RENDERERS: STANDARDIZATION ===================== */
+function renderStandard(){
+  var html =
+    '<div class="vhead"><div><h1>Standardization &amp; Synergy</h1><div class="date">Where functionally-equivalent items are specified differently plant to plant, converging to one standard spec and buying the combined volume as one tender unlocks a better price tier.</div></div></div>'+
+    '<div class="tblwrap card" style="padding-top:16px"><table><thead><tr><th>Item</th><th class="r">Distinct specs</th><th class="r">Plants affected</th><th>Combined volume</th><th class="r">Current blended price</th><th class="r">Consolidated tier price</th><th class="r">Synergy saving</th></tr></thead><tbody>'+
+    STANDARD_ITEMS.map(function(s){
+      return '<tr><td class="cat">'+s.item+'</td><td class="r">'+s.specs+'</td><td class="r">'+s.plants+'</td><td>'+s.volume+'</td><td class="r">&#8377;'+s.currentBlended.toLocaleString()+'</td><td class="r" style="color:var(--pos);font-weight:700">&#8377;'+s.consolidatedTier.toLocaleString()+'</td><td class="r" style="color:var(--pos);font-weight:700">'+s.savingsPct+'%</td></tr>';
+    }).join('')+
+    '</tbody></table></div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>The bearing example has the most distinct specs (4) and the largest volume, which is why it carries the largest synergy saving. In every case here, the fragmentation traces to historical plant-level supplier relationships rather than a genuine technical difference &#8211; confirm that with plant engineering before committing to a single spec, since the whole case collapses if even one plant has a real reason for its variant.</div>';
+  document.getElementById('view-standard').innerHTML=html;
+}
+
+/* ===================== RENDERERS: MARKET BASKET & MAVERICK ===================== */
+function renderBasket(){
+  var html =
+    '<div class="vhead"><div><h1>Market Basket &amp; Maverick Spend</h1><div class="date">With tens of thousands of MRO SKUs, pricing every line is impossible. The basket approach prices a representative sample and extrapolates; coverage below about 30% of spend makes that extrapolation harder to defend.</div></div></div>'+
+    '<div class="stat-row card" style="padding:16px 20px">'+
+      '<div class="m"><div class="v r">'+BASKET_COVERAGE.actualPct+'%</div><div class="l">Spend covered by the market basket</div></div>'+
+      '<div class="m"><div class="v">'+BASKET_COVERAGE.targetPct+'%</div><div class="l">Target coverage</div></div>'+
+      '<div class="m"><div class="v">'+BASKET_COVERAGE.skuSharePct+'%</div><div class="l">Of total SKU references used to get there</div></div>'+
+      '<div class="m"><div class="v a">643</div><div class="l">Total active suppliers across sub-categories</div></div>'+
+    '</div>'+
+    '<div class="grid2">'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/></svg></span>Maverick / off-contract spend, by sub-category</div></div>'+
+        '<div style="padding:6px 4px 14px">'+hbar(MAVERICK.map(function(m){return {k:m.subcat,v:m.maverickPct,t:m.maverickPct+'%',c:m.maverickPct>=25?C.neg:m.maverickPct>=15?C.gold:C.pos};}),{w:520,rh:34,padL:210})+'</div>'+
+      '</section>'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Supplier fragmentation, by sub-category</div></div>'+
+        '<div class="tblwrap"><table><thead><tr><th>Sub-category</th><th class="r">Active suppliers</th><th class="r">Suppliers = 80% of spend</th></tr></thead><tbody>'+
+        SUPPLIER_FRAG.map(function(f){return '<tr><td class="cat">'+f.subcat+'</td><td class="r">'+f.active+'</td><td class="r">'+f.top80pct+'</td></tr>';}).join('')+
+        '</tbody></table></div>'+
+      '</section>'+
+    '</div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>PPE and consumables carry both the highest maverick spend and the most fragmented supplier base, and that is not a coincidence: informal, off-contract buying and a long supplier tail reinforce each other. Services sits at the opposite end on both measures, which is consistent with services already running through a small, negotiated supplier panel.</div>';
+  document.getElementById('view-basket').innerHTML=html;
+}
+
+function renderMarket(){
+  var html =
+    '<div class="vhead"><div><h1>Market Intelligence</h1><div class="date">Current commodity and structural signals relevant to MRO should-cost and sourcing.</div></div></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">'+
+    NEWS.map(function(n){
+      return '<div class="card" style="padding:15px 17px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="chip '+(n.tag==='risk'?'r':n.tag==='opp'?'g':'a')+'">'+n.cat+'</span><span style="font-size:11px;color:var(--t3)">'+n.when+'</span></div><h4 style="font-size:14.5px;font-weight:700;margin-bottom:6px">'+n.title+'</h4><p style="font-size:13px;color:var(--t2);line-height:1.55">'+n.body+'</p></div>';
+    }).join('')+
+    '</div>';
+  document.getElementById('view-market').innerHTML=html;
+}
+
+function renderActions(){
+  var html =
+    '<div class="vhead"><div><h1>Actions &amp; Roadmap</h1><div class="date">This cycle&rsquo;s priority actions, and the phased roadmap to roll should-cost and standardization discipline across the full MRO spend base.</div></div></div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></span>This cycle&rsquo;s priority actions</div></div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Action</th><th>Lever</th><th>Value</th><th>Urgency</th></tr></thead><tbody>'+
+      ACTIONS.map(function(a){return '<tr><td class="cat">'+a.title+'</td><td>'+a.lever+'</td><td>'+a.value+'</td><td>'+a.urgency+'</td></tr>';}).join('')+
+      '</tbody></table></div>'+
+    '</section>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/></svg></span>Roadmap</div></div>'+
+      '<div style="padding:6px 20px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">'+
+      ROADMAP.map(function(p){
+        return '<div style="border:1px solid var(--line-2);border-radius:11px;padding:13px 15px"><div style="font-weight:800;font-size:14px">'+p.phase+'</div><div style="font-size:11.5px;color:var(--accent-2);margin-bottom:9px">'+p.window+'</div><ul style="padding-left:16px;font-size:12.5px;color:var(--t2);line-height:1.7">'+p.items.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';
+      }).join('')+
+      '</div>'+
+    '</section>';
+  document.getElementById('view-actions').innerHTML=html;
+}
+
+function renderDataSrc(){
+  var html =
+    '<div class="vhead"><div><h1>Data Sources &amp; References</h1><div class="date">Public and internal sources informing the figures shown in this navigator.</div></div></div>'+
+    '<section class="card"><div class="tblwrap" style="padding-top:16px"><table><thead><tr><th>Source</th><th>Used for</th></tr></thead><tbody>'+
+    DATASOURCES.map(function(d){return '<tr><td class="cat">'+d.name+'</td><td>'+d.use+'</td></tr>';}).join('')+
+    '</tbody></table></div></section>';
+  document.getElementById('view-datasrc').innerHTML=html;
+}
+
+/* ===================== VIEW SHELL ===================== */
+function buildShell(){
+  var keys=['control','baseline','supplies','services','standard','basket','market','actions','datasrc'];
+  document.getElementById('viewsRoot').innerHTML = keys.map(function(k){return '<div class="view'+(k==='control'?' active':'')+'" data-v="'+k+'" id="view-'+k+'"></div>';}).join('');
+}
+function switchView(v){
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.toggle('active',n.getAttribute('data-view')===v);});
+  document.querySelectorAll('.view').forEach(function(el){el.classList.toggle('active',el.getAttribute('data-v')===v);});
+  document.querySelector('.scroll').scrollTop=0;
+}
+
+buildNav();
+buildShell();
+renderControl();
+renderBaseline();
+renderSupplies();
+renderServices();
+renderStandard();
+renderBasket();
+renderMarket();
+renderActions();
+renderDataSrc();
+document.getElementById('navSuppliesBadge').textContent = KPIS.filter(function(k){return !k.favourable && Math.abs(k.devPct)>=15;}).length;
+document.getElementById('navBasketBadge').textContent = '!';
+</script>
+</body>
+</html>

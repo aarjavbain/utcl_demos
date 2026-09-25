@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CatNav &middot; Coal &amp; Petcoke Category Navigator</title>
+<style>
+  :root{
+    --accent:#0C2B82;--accent-2:#12A6E6;--accent-deep:#071434;
+    --accent-soft:rgba(12,43,130,.14);--accent-glow:rgba(12,43,130,.34);
+    --pos:#17A673;--pos-soft:rgba(23,166,115,.10);
+    --neg:#E5484D;--neg-soft:rgba(229,72,77,.12);
+    --warn:#FCAF17;--warn-soft:rgba(252,175,23,.14);--info:#12A6E6;--purple:#3A68C5;--gold:#FCAF17;
+    --bg:#070B18;--panel:#0E1428;--panel-2:#0A0F20;
+    --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.10);
+    --t1:#f4f5f7;--t2:rgba(255,255,255,.62);--t3:rgba(255,255,255,.40);--t4:rgba(255,255,255,.28);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:Arial,Helvetica,sans-serif;
+    background:radial-gradient(900px 480px at 78% -8%,rgba(12,43,130,.12),transparent 60%),
+      radial-gradient(700px 420px at 6% 4%,rgba(18,166,230,.06),transparent 55%),var(--bg);
+    color:var(--t1);-webkit-font-smoothing:antialiased;overflow:hidden;font-size:15.5px;line-height:1.45}
+  .app{display:flex;height:100vh;overflow:hidden}
+  aside{width:246px;flex-shrink:0;background:var(--panel-2);border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .brand{height:64px;display:flex;align-items:center;gap:11px;padding:0 22px;border-bottom:1px solid var(--line)}
+  .nm-logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent-2),var(--accent-deep));box-shadow:0 4px 14px var(--accent-glow);flex-shrink:0}
+  .nm-logo svg{width:16px;height:16px}
+  .nm-txt b{display:block;font-size:16px;font-weight:800;letter-spacing:1.4px;color:var(--t1);line-height:1}
+  .nm-txt span{display:block;font-size:9px;font-weight:700;letter-spacing:1.1px;color:var(--accent-2);text-transform:uppercase;margin-top:3px}
+  nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+  .nav-lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--t4);padding:13px 12px 5px;font-weight:700}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:11px;color:var(--t2);font-weight:500;cursor:pointer;font-size:14.5px;transition:.16s;position:relative}
+  .nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
+  .nav-item:hover{background:rgba(255,255,255,.04);color:var(--t1)}
+  .nav-item.active{background:var(--accent-soft);color:#fff}
+  .nav-item.active svg{opacity:1;color:var(--accent-2)}
+  .nav-item.active::before{content:"";position:absolute;left:-10px;top:7px;bottom:7px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--accent-2),var(--accent))}
+  .nav-item .badge{margin-left:auto;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px}
+  .nav-item .badge.r{background:var(--neg-soft);color:var(--neg)}
+  .nav-item .badge.a{background:var(--warn-soft);color:var(--warn)}
+  .side-foot{padding:9px 12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+  .user{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.03)}
+  .ava{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-deep));display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+  .user .nm{font-size:13.5px;font-weight:600;line-height:1.2}.user .ro{font-size:11.5px;color:var(--t3)}
+  .hiddenlink{font-size:11px;color:var(--t4);text-align:center;padding:5px 0 2px;cursor:pointer;letter-spacing:.02em}
+  .hiddenlink:hover{color:var(--t3)}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+  header.top{height:60px;border-bottom:1px solid var(--line);background:var(--panel-2);display:flex;align-items:center;gap:9px;padding:0 26px;flex-wrap:wrap}
+  .hi{font-size:15px;font-weight:600}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--t2);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+  .top .spacer{flex:1}
+  .confbar{display:flex;align-items:center;gap:8px;padding:7px 26px;background:rgba(229,72,77,.08);border-bottom:1px solid rgba(229,72,77,.18);color:var(--t2);font-size:12px}
+  .scroll{flex:1;overflow-y:auto;padding:24px 30px 120px}
+  .wrap{max-width:1260px;margin:0 auto}
+  .view{display:none;flex-direction:column;gap:20px}.view.active{display:flex;animation:rise .35s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .vhead h1{font-size:26px;font-weight:800;letter-spacing:-.4px}
+  .vhead .date{font-size:13.5px;color:var(--t3);margin-top:3px;max-width:820px}
+  section.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;flex-wrap:wrap}
+  .card-h .ttl{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px}
+  .card-h .ttl .ic{width:28px;height:28px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0}
+  .card-h .ttl .ic svg{width:15px;height:15px;color:var(--accent-2)}
+  .chip{font-size:11.5px;font-weight:700;border-radius:7px;padding:3px 8px;letter-spacing:.02em}
+  .chip.dir{background:var(--accent-soft);color:var(--accent-2)}
+  .chip.ind{background:rgba(58,104,197,.16);color:var(--purple)}
+  .chip.r{background:var(--neg-soft);color:var(--neg)}
+  .chip.a{background:var(--warn-soft);color:var(--warn)}
+  .chip.g{background:var(--pos-soft);color:var(--pos)}
+  .sub{padding:0 20px 12px;color:var(--t3);font-size:13px}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  .stat-row .m{padding:6px 16px;border-right:1px solid var(--line)}
+  .stat-row .m:last-child{border-right:none}
+  .stat-row .v{font-size:23px;font-weight:800}
+  .stat-row .v.g{color:var(--pos)}.stat-row .v.r{color:var(--neg)}.stat-row .v.a{color:var(--warn)}
+  .stat-row .l{font-size:12px;color:var(--t3);margin-top:2px}
+  .tblwrap{overflow-x:auto;padding:0 20px 18px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{text-align:left;color:var(--t3);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;padding:7px 9px;border-bottom:1px solid var(--line-2)}
+  thead th.r{text-align:right}thead th.c{text-align:center}
+  tbody td{padding:9px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody td.r{text-align:right}tbody td.c{text-align:center}
+  tbody tr:last-child td{border-bottom:none}
+  .lp{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;white-space:nowrap}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  @media(max-width:1050px){.grid2,.grid3{grid-template-columns:1fr}.stat-row{grid-template-columns:1fr 1fr}}
+  .aiins{margin:0 20px 14px;background:rgba(18,166,230,.06);border:1px solid rgba(18,166,230,.16);border-radius:11px;padding:12px 14px;font-size:13px;color:var(--t2);line-height:1.55}
+  .aiins .lab{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-2);display:block;margin-bottom:5px}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+  .dot.r{background:var(--neg)}.dot.a{background:var(--warn)}.dot.g{background:var(--pos)}
+  .btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;cursor:pointer;border-radius:10px;padding:8px 13px;transition:.16s;border:1px solid var(--line-2);background:rgba(255,255,255,.04);color:var(--t1)}
+  .btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .sliderbox{padding:14px 20px}
+  .sliderbox .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .sliderbox .lab{font-size:13px;font-weight:600;color:var(--t2)}
+  .sliderbox .val{font-size:13px;font-weight:700;color:var(--accent-2)}
+  input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:rgba(255,255,255,.1);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--accent-2);cursor:pointer;box-shadow:0 2px 8px rgba(18,166,230,.5)}
+  select{background:rgba(255,255,255,.04);border:1px solid var(--line-2);color:var(--t1);border-radius:9px;padding:7px 10px;font-size:13px;font-family:inherit}
+  .seg{display:flex;gap:6px;flex-wrap:wrap}
+  .seg button{font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:9px;border:1px solid var(--line-2);background:rgba(255,255,255,.03);color:var(--t2);cursor:pointer}
+  .seg button.on{background:var(--accent-soft);color:#fff;border-color:var(--accent)}
+  .cprmresult{margin:14px 20px;border-radius:12px;padding:16px 18px;border:1px solid var(--line-2)}
+  .cprmresult.transfer{background:rgba(23,166,115,.08);border-color:rgba(23,166,115,.3)}
+  .cprmresult.operationalize{background:rgba(18,166,230,.08);border-color:rgba(18,166,230,.3)}
+  .cprmresult.deflect{background:rgba(58,104,197,.1);border-color:rgba(58,104,197,.3)}
+  .cprmresult.hedge{background:rgba(229,72,77,.08);border-color:rgba(229,72,77,.3)}
+  .cprmresult h4{font-size:16px;font-weight:800;margin-bottom:4px}
+  .cprmresult .owner{font-size:12px;color:var(--t3);margin-bottom:8px}
+  .cprmresult p{font-size:13.5px;color:var(--t2);line-height:1.55}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--line-2);border-radius:12px;padding:11px 17px;display:flex;align-items:center;gap:9px;font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.25s;z-index:999}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="nm-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 7v10l8 5 8-5V7z"/><path d="M4 7l8 5 8-5M12 12v10"/></svg></div>
+      <div class="nm-txt"><b>CATNAV</b><span>Coal &amp; Petcoke</span></div>
+    </div>
+    <nav id="navList"></nav>
+    <div class="side-foot">
+      <div class="user"><div class="ava">RK</div><div><div class="nm">Ravi Kannan</div><div class="ro">Category Lead, Fuel &amp; Power</div></div></div>
+      <div class="hiddenlink" onclick="switchView('datasrc')">Data sources &amp; references</div>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <span class="hi">Good day, Ravi!</span>
+      <div class="spacer"></div>
+      <span class="pill"><span class="dot g" style="background:var(--accent)"></span>Annual fuel spend &#8250; $580M</span>
+      <span class="pill">8 kilns &middot; 5 plants &middot; 7 sources</span>
+      <span class="pill" id="pillRag">3 red &middot; 6 amber &middot; 11 green</span>
+    </header>
+    <div class="confbar"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Illustrative control tower for a multi-plant cement producer. Market prices sourced from public indices as at September 2026, refreshed periodically. DRAFT.</span></div>
+    <div class="scroll"><div class="wrap" id="viewsRoot"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg"></span></div>
+<script>
+/* ===================== NAV ===================== */
+var NAVITEMS = [
+  {sec:'Category Cockpit', items:[
+    {k:'control', label:'Category Control Tower', icon:'<rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="M3 9h18M9 21V9"/>'},
+    {k:'baseline', label:'Spend Baseline', icon:'<path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/>'}
+  ]},
+  {sec:'Fuel Engineering', items:[
+    {k:'kiln', label:'Kiln GCV &amp; Consumption', icon:'<path d="M8 3v4M16 3v4"/><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M4 13h16"/>'},
+    {k:'blend', label:'Blend Optimizer', icon:'<circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/>'}
+  ]},
+  {sec:'Sourcing', items:[
+    {k:'mines', label:'Mine &amp; Source Intelligence', icon:'<path d="M3 21h18M5 21V10l7-7 7 7v11"/><path d="M9 21v-6h6v6"/>'},
+    {k:'contracts', label:'Contracts &amp; Hedge Coverage', icon:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/>'}
+  ]},
+  {sec:'Risk', items:[
+    {k:'cprm', label:'CPRM Decision Engine', icon:'<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>'}
+  ]},
+  {sec:'Market &amp; Action', items:[
+    {k:'market', label:'Market Intelligence', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>'},
+    {k:'actions', label:'Actions &amp; Roadmap', icon:'<path d="M13 2 3 14h7l-1 8 10-12h-7z"/>'}
+  ]}
+];
+function buildNav(){
+  var html = '';
+  NAVITEMS.forEach(function(sec){
+    html += '<div class="nav-lbl">'+sec.sec+'</div>';
+    sec.items.forEach(function(it){
+      html += '<div class="nav-item" data-view="'+it.k+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+it.icon+'</svg>'+it.label+
+        (it.k==='kiln'?'<span class="badge r" id="navKilnBadge"></span>':'')+
+        (it.k==='cprm'?'<span class="badge a" id="navCprmBadge"></span>':'')+
+      '</div>';
+    });
+  });
+  document.getElementById('navList').innerHTML = html;
+  document.querySelectorAll('.nav-item').forEach(function(it){
+    it.addEventListener('click',function(){switchView(this.getAttribute('data-view'));});
+  });
+}
+
+/* ===================== DATA: KILNS ===================== */
+var TARGET_GCV_LOW = 4400, TARGET_GCV_HIGH = 4600;
+var KILNS = [
+  {id:'Kiln 1', plant:'Plant 1', gcv:4550, index:0.142, capacity:96, mix:'Domestic e-auction + Indonesian GAR 5000'},
+  {id:'Kiln 2', plant:'Plant 1', gcv:4200, index:0.155, capacity:89, mix:'Domestic linkage + domestic e-auction'},
+  {id:'Kiln 3', plant:'Plant 2', gcv:4450, index:0.145, capacity:94, mix:'Indonesian GAR 5000 + petcoke blend'},
+  {id:'Kiln 4', plant:'Plant 2', gcv:3850, index:0.178, capacity:79, mix:'Domestic linkage, single-source'},
+  {id:'Kiln 5', plant:'Plant 3', gcv:4600, index:0.139, capacity:97, mix:'Indonesian GAR 5000 + petcoke blend (newest kiln)'},
+  {id:'Kiln 6', plant:'Plant 4', gcv:4100, index:0.161, capacity:85, mix:'Domestic e-auction + Indonesian GAR 4200'},
+  {id:'Kiln 7', plant:'Plant 5', gcv:3950, index:0.172, capacity:81, mix:'Domestic linkage, single-source'},
+  {id:'Kiln 8', plant:'Plant 5', gcv:4400, index:0.147, capacity:93, mix:'Indonesian GAR 5000 + Australian API5'}
+];
+function kilnStatus(k){
+  if(k.gcv>=TARGET_GCV_LOW && k.gcv<=TARGET_GCV_HIGH+50 && k.capacity>=90) return 'g';
+  if(k.gcv<TARGET_GCV_LOW-250 || k.capacity<83) return 'r';
+  return 'a';
+}
+
+/* ===================== DATA: SOURCES / MINES ===================== */
+var SOURCES = [
+  {name:'Domestic linkage (Coal India, Grade G12)', origin:'India, notified allocation', gcv:'4300&#8211;4600 kcal/kg (ARB)',
+   price:22, unit:'$/t ex-mine', basis:'Notified price, Ministry of Coal', vsIndex:-74, trend:'flat to +3% (6mo)', outlook:'Quota-constrained; allocation not elastic to demand', color:'pos'},
+  {name:'Domestic e-auction (SECL/ECL, G10&#8211;G11)', origin:'India, market allocation', gcv:'4500&#8211;5000 kcal/kg (ARB)',
+   price:62, unit:'$/t ex-mine', basis:'E-auction clearing price', vsIndex:-35, trend:'+8% (6mo)', outlook:'Volatile; premium over notified widens when linkage is tight', color:'warn'},
+  {name:'Indonesian coal, GAR 5000', origin:'South Kalimantan', gcv:'5000 kcal/kg (GAR)',
+   price:110, unit:'$/t landed (FOB $95.50 + freight)', basis:'HBA-linked, FOB Kalimantan', vsIndex:0, trend:'+18% YTD', outlook:'Tightening; HBA revised upward repeatedly through 2026', color:'accent2', isRef:true},
+  {name:'Indonesian coal, GAR 4200', origin:'South Kalimantan', gcv:'4200 kcal/kg (GAR)',
+   price:92, unit:'$/t landed (FOB $79.00 + freight)', basis:'HBA-linked, FOB Kalimantan', vsIndex:-16, trend:'+15% YTD', outlook:'Stable to adequate supply', color:'pos'},
+  {name:'Australian coal, API5 (mid-CV)', origin:'Newcastle, NSW', gcv:'5500 kcal/kg (NAR)',
+   price:166, unit:'$/t landed (FOB ~$144 + freight)', basis:'Argus/McCloskey API5, fob Newcastle', vsIndex:38, trend:'near 3-month high', outlook:'Tight; global energy-security demand pulling volumes from Asia', color:'neg'},
+  {name:'Petroleum coke, US Gulf (6.5% S)', origin:'US Gulf Coast', gcv:'7800&#8211;8200 kcal/kg',
+   price:undefined, unit:'$/t FOB', basis:'Fuel-grade, fob US Gulf', vsIndex:undefined, trend:'spiking, +30&#8211;45% in weeks', outlook:'Disrupted: Strait of Hormuz transit risk curtailing Saudi-origin cargo (Yanbu, Jubail)', color:'neg', volatile:true},
+  {name:'Petroleum coke, domestic (India refinery)', origin:'India refinery gate', gcv:'~7500 kcal/kg',
+   price:165, unit:'$/t ex-refinery', basis:'Domestic refinery gate, import-parity linked', vsIndex:-7, trend:'rising with import reference', outlook:'Limited volumes; allocation-constrained, not a scalable substitute', color:'warn'}
+];
+
+var DECISIONS = [];
+var OPEN_KPI = null;
+
+/* ===================== DATA: SPEND BASELINE ===================== */
+var TOTAL_SPEND = 580; // $M
+var SPEND_MIX = [
+  {name:'Domestic linkage', pct:15, color:'#17A673'},
+  {name:'Domestic e-auction', pct:18, color:'#FCAF17'},
+  {name:'Indonesian coal', pct:32, color:'#12A6E6'},
+  {name:'Australian coal', pct:10, color:'#3A68C5'},
+  {name:'Petroleum coke (US + domestic)', pct:25, color:'#E5484D'}
+];
+var SPEND_BY_PLANT = [
+  {plant:'Plant 1', spend:145, kilns:2}, {plant:'Plant 2', spend:128, kilns:2},
+  {plant:'Plant 3', spend:96, kilns:1}, {plant:'Plant 4', spend:78, kilns:1},
+  {plant:'Plant 5', spend:133, kilns:2}
+];
+
+/* ===================== DATA: CONTROL TOWER KPIs ===================== */
+var KPIS = [
+  {id:'k1', title:'Petcoke exposure vs current market disruption', catName:'Sourcing risk',
+   plan:'25% of fuel mix, budgeted at $170/t', actual:'Spot offers 30&#8211;45% above budget', dev:'+$45&#8211;55/t on 25% of mix', devPct:14, direction:'bad',
+   attribution:[
+     {label:'Strait of Hormuz transit disruption curtailing Saudi-origin cargo (Yanbu, Jubail refineries)', pct:9.5},
+     {label:'US Gulf coke tightening as buyers substitute away from Middle East origin', pct:4.5}
+   ],
+   recs:[
+     {label:'Draw down petcoke inventory buffer and shift incremental tonnage to Indonesian coal blend for 6&#8211;8 weeks', buys:'Avoids paying the spike on the full 25% share while it lasts.', cost:'Blended GCV drops slightly, small consumption-index penalty.', watchout:'Only viable where blend flexibility already exists at the kiln.', risk:'Low', owner:'Fuel Category Lead', revisit:'Weekly while disruption continues'},
+     {label:'Lock a 3-month forward petcoke position at a capped premium with the incumbent supplier', buys:'Caps the downside if the disruption extends.', cost:'Pays a premium now even if the market normalises faster than expected.', watchout:'Wrong call if Hormuz transit resumes within weeks.', risk:'Med', owner:'Fuel Category Lead + Treasury', revisit:'Bi-weekly'},
+     {label:'Do nothing, ride the spot market', buys:'No commitment, full flexibility.', cost:'Full exposure to further spikes if disruption worsens.', watchout:'This is the scenario the CPRM engine flags as high urgency.', risk:'High', owner:'Fuel Category Lead', revisit:'Daily'}
+   ]},
+  {id:'k2', title:'Kiln 4 and Kiln 7 running below capacity on low-GCV single-source coal', catName:'Kiln engineering',
+   plan:'&#8805;90% capacity factor', actual:'79% (Kiln 4), 81% (Kiln 7)', dev:'&#8722;9 to &#8722;11 pts', devPct:-11, direction:'bad',
+   attribution:[
+     {label:'Kiln 4 fired at 3,850 kcal/kg against an optimal band of 4,400&#8211;4,600, single-sourced from domestic linkage coal', pct:7.5},
+     {label:'Kiln 7 fired at 3,950 kcal/kg, same single-source pattern', pct:3.5}
+   ],
+   recs:[
+     {label:'Introduce a 40% Indonesian GAR 5000 blend at both kilns (see Blend Optimizer)', buys:'Blended GCV recovers to target band; capacity factor modelled to recover to ~91&#8211;92%.', cost:'Landed fuel cost per tonne rises; net value depends on the value of the recovered clinker output.', watchout:'Requires blending infrastructure (mill or on-belt) to be feasible at each site &#8211; confirm before committing.', risk:'Med', owner:'Plant Operations + Fuel Category Lead', revisit:'Next monthly review'},
+     {label:'Leave as-is, treat as a structural constraint of linkage allocation', buys:'No capex or blending logistics required.', cost:'Foregone clinker output continues indefinitely.', watchout:'This is the passive option the should-cost view argues against.', risk:'High', owner:'Plant Operations', revisit:'Quarterly'}
+   ]},
+  {id:'k3', title:'Rise/fall and hedge coverage gap on H2 requirement', catName:'CPRM',
+   plan:'70&#8211;80% of next 2 quarters contracted or hedged', actual:'54% covered', dev:'&#8722;16 to &#8722;26 pts', devPct:-20, direction:'bad',
+   attribution:[
+     {label:'Imported coal tranche for Q4 not yet committed, awaiting HBA settlement', pct:12},
+     {label:'Petcoke coverage paused during current price spike, pending CPRM recommendation', pct:8}
+   ],
+   recs:[
+     {label:'Commit the Q4 Indonesian tranche now at HBA-linked pricing rather than waiting for a dip', buys:'Removes the largest open position; HBA has moved up in 5 of the last 6 fortnightly settlements.', cost:'May lock a rate above the eventual settlement if the index reverses.', watchout:'This is a forecast-confidence call, not a certainty &#8211; see CPRM engine.', risk:'Med', owner:'Fuel Category Lead', revisit:'Next HBA settlement (fortnightly)'},
+     {label:'Wait for the petcoke disruption to resolve before committing further coverage', buys:'Avoids compounding two open positions at once.', cost:'Coverage gap persists into Q4 in the meantime.', watchout:'Acceptable only if petcoke share is actively being substituted down in the interim.', risk:'Med', owner:'Fuel Category Lead + Treasury', revisit:'Weekly'}
+   ]},
+  {id:'k4', title:'Domestic e-auction premium over notified price', catName:'Sourcing', favourable:false,
+   plan:'25&#8211;30% premium over linkage-equivalent notified price', actual:'~35% premium, widening', dev:'+5 to +10 pts', devPct:8, direction:'bad',
+   attribution:[
+     {label:'Linkage allocation running below plan at 2 of 5 plants, forcing more e-auction reliance', pct:6},
+     {label:'National e-auction demand up broadly, per Ministry of Coal clearing prices', pct:2}
+   ],
+   recs:[
+     {label:'Escalate linkage allocation shortfall through the annual coal linkage review process', buys:'Structural fix, restores access to notified pricing on a larger share.', cost:'Slow, tied to an annual/periodic administrative cycle.', watchout:'Not a lever that moves this quarter.', risk:'Low', owner:'Fuel Category Lead', revisit:'Next linkage review window'},
+     {label:'Accept the e-auction premium as the marginal cost of the shortfall tonnage', buys:'No process delay.', cost:'Premium continues until linkage is restored.', watchout:'Fine as a bridge, not a strategy.', risk:'Med', owner:'Fuel Category Lead', revisit:'Monthly'}
+   ]},
+  {id:'k5', title:'Blended fuel cost per tonne clinker, best-performing kilns', catName:'Kiln engineering', favourable:true,
+   plan:'$9.50&#8211;10.50 per tonne clinker', actual:'$9.10 per tonne clinker (Kiln 5, Kiln 1)', dev:'&#8722;$0.60 favourable', devPct:-6, direction:'good',
+   attribution:[
+     {label:'Kiln 5 (newest) sustaining GCV at 4,600 with a stable two-source blend, capacity factor 97%', pct:-4},
+     {label:'Kiln 1 tracking close behind on a similar blend discipline', pct:-2}
+   ],
+   sustainNote:'This is the target state for every kiln, not just these two. The blend recipe and supplier mix at Kiln 5 and Kiln 1 should be the reference case used when engineering the Kiln 4 and Kiln 7 interventions above, rather than designing each in isolation.'}
+];
+
+/* ===================== DATA: CONTRACTS & HEDGE COVERAGE ===================== */
+var CONTRACTS = [
+  {source:'Domestic linkage', term:'Annual allocation, FSA', volume:'0.9 Mt/yr', coverage:100, expiry:'FY renewal, March'},
+  {source:'Domestic e-auction', term:'Rolling, fortnightly auctions', volume:'1.1 Mt/yr (variable)', coverage:35, expiry:'No fixed term'},
+  {source:'Indonesian coal (GAR 5000 &amp; 4200)', term:'6-month index-linked', volume:'2.0 Mt/yr', coverage:58, expiry:'Next tranche: Q4 2026'},
+  {source:'Australian coal (API5)', term:'Spot / short-term', volume:'0.6 Mt/yr', coverage:20, expiry:'No fixed term'},
+  {source:'Petroleum coke (US + domestic)', term:'Quarterly, price-review', volume:'1.5 Mt/yr', coverage:40, expiry:'Under review during price spike'}
+];
+
+/* ===================== DATA: MARKET INTELLIGENCE (real, current events) ===================== */
+var NEWS = [
+  {tag:'risk', cat:'Petcoke / geopolitical', when:'This week', title:'Strait of Hormuz disruption curtails Saudi petroleum coke exports',
+   body:'Vessel owners are avoiding transit through the Strait of Hormuz following attacks on commercial shipping, cutting off loadings from the Jubail refinery and constraining Yanbu. US Gulf fuel-grade coke has firmed sharply as buyers substitute away from Middle East origin.'},
+  {tag:'risk', cat:'Coal index', when:'This week', title:'Newcastle thermal coal holds near three-month highs', 
+   body:'Benchmark thermal coal has held around $144&#8211;146/t as the IEA cites disruption-driven gas and oil price increases encouraging a shift back toward coal-fired power. The IEA has revised global coal demand upward to a record 8.94 billion tonnes for the year.'},
+  {tag:'risk', cat:'Indonesian index', when:'This month', title:'Indonesia raises HBA reference price across all grades again',
+   body:'The government-calculated HBA coal reference price has been revised upward in five of the last six fortnightly settlements, with GAR 5800 up from roughly $81/t in January to over $107/t by mid-year, a sustained tightening rather than a one-off move.'},
+  {tag:'opp', cat:'Domestic sourcing', when:'This month', title:'Coal India e-auction clearing prices continue to run above notified rates',
+   body:'E-auction clearing prices for comparable-grade coal are running well above Coal India\'s notified linkage price, reinforcing that linkage allocation, not e-auction access, is the scarce resource worth escalating.'},
+  {tag:'opp', cat:'Blend economics', when:'Ongoing', title:'Petcoke\u2019s calorific advantage is temporarily inverted',
+   body:'Petcoke has historically priced favourably against coal on a cost-per-kcal basis given its much higher calorific value, which is why blended firing is standard practice. The current price spike temporarily erodes or reverses that advantage &#8211; a reason to lean on coal blends, not petcoke, while the disruption lasts.'},
+  {tag:'reg', cat:'Freight', when:'Ongoing', title:'Indonesia-India freight remains the key swing factor in landed cost comparisons',
+   body:'FOB price differences between Indonesian coal grades are compressed relative to the landed price differences once freight is applied, meaning freight contracting deserves the same scrutiny as the coal price itself when comparing sources.'}
+];
+
+/* ===================== DATA: ACTIONS & ROADMAP ===================== */
+var ACTIONS = [
+  {title:'Draw down petcoke buffer, shift to coal blend', lever:'Risk mitigation', value:'Avoids spike on ~25% of fuel mix', urgency:'This week'},
+  {title:'Commit Q4 Indonesian tranche at HBA-linked rate', lever:'Hedge coverage', value:'Closes largest open position', urgency:'Next HBA settlement'},
+  {title:'Deploy Kiln 4 / Kiln 7 blend recipe', lever:'Kiln engineering', value:'Capacity factor +11&#8211;13 pts modelled', urgency:'Next shutdown window'},
+  {title:'Escalate linkage allocation shortfall', lever:'Structural sourcing', value:'Removes ~35% e-auction premium on shortfall tonnage', urgency:'Next linkage review'}
+];
+var ROADMAP = [
+  {phase:'Phase 1', window:'Now &#8211; 6 weeks', items:['Stand up CPRM decision engine and hedge coverage tracker', 'Commit Q4 Indonesian tranche', 'Draw down petcoke buffer']},
+  {phase:'Phase 2', window:'6&#8211;14 weeks', items:['Trial Kiln 4 blend recipe at next shutdown window', 'Escalate linkage allocation review', 'Extend blend optimizer to remaining amber kilns']},
+  {phase:'Phase 3', window:'14&#8211;24 weeks', items:['Roll should-cost and blend discipline across all 8 kilns', 'Formalise CPRM governance (core team / committee / board thresholds)', 'Re-tender freight contracts for Indonesian and Australian tonnage']}
+];
+
+/* ===================== CHART HELPERS ===================== */
+var C={accent:'#0C2B82',accent2:'#12A6E6',gold:'#FCAF17',pos:'#17A673',neg:'#E5484D',purple:'#3A68C5',t1:'#f4f5f7',t3:'rgba(255,255,255,.42)',track:'rgba(255,255,255,.06)'};
+function svgTag(w,h){return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" preserveAspectRatio="xMidYMid meet" font-family="Arial,Helvetica,sans-serif">';}
+function hbar(data,o){
+  o=o||{}; var w=o.w||760,padL=o.padL||190,padR=70,top=10,rh=o.rh||30,h=top*2+data.length*rh;
+  var max=Math.max.apply(null,data.map(function(d){return d.v;}));
+  var s=svgTag(w,h);
+  data.forEach(function(d,i){
+    var y=top+i*rh+rh/2, bw=(w-padL-padR)*(d.v/max), col=d.c||C.accent2;
+    s+='<text x="'+(padL-12)+'" y="'+y+'" fill="'+C.t3+'" font-size="12" text-anchor="end" dominant-baseline="middle">'+d.k+'</text>';
+    s+='<rect x="'+padL+'" y="'+(y-8)+'" width="'+(w-padL-padR)+'" height="16" rx="5" fill="'+C.track+'"/>';
+    s+='<rect x="'+padL+'" y="'+(y-8)+'" width="'+Math.max(2,bw)+'" height="16" rx="5" fill="'+col+'"/>';
+    s+='<text x="'+(padL+bw+10)+'" y="'+y+'" fill="'+C.t1+'" font-size="12" font-weight="700" dominant-baseline="middle">'+d.t+'</text>';
+  });
+  return s+'</svg>';
+}
+function donut(data,big,small){
+  var w=260,h=260,cx=130,cy=130,r=88,ir=58;
+  var total=data.reduce(function(a,b){return a+b.pct;},0),ang=-Math.PI/2,s=svgTag(w,h);
+  data.forEach(function(d){
+    var frac=d.pct/total,a2=ang+frac*Math.PI*2;
+    var x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang),x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+    var xi1=cx+ir*Math.cos(a2),yi1=cy+ir*Math.sin(a2),xi2=cx+ir*Math.cos(ang),yi2=cy+ir*Math.sin(ang);
+    var large=frac>0.5?1:0;
+    s+='<path d="M'+x1+' '+y1+' A'+r+' '+r+' 0 '+large+' 1 '+x2+' '+y2+' L'+xi1+' '+yi1+' A'+ir+' '+ir+' 0 '+large+' 0 '+xi2+' '+yi2+' Z" fill="'+d.color+'"/>';
+    ang=a2;
+  });
+  s+='<text x="'+cx+'" y="'+(cy-3)+'" fill="'+C.t1+'" font-size="21" font-weight="800" text-anchor="middle">'+big+'</text>';
+  s+='<text x="'+cx+'" y="'+(cy+16)+'" fill="'+C.t3+'" font-size="11" text-anchor="middle">'+small+'</text>';
+  return s+'</svg>';
+}
+function gcvBars(kilns){
+  var w=880,padL=90,padR=100,top=20,rh=42,h=top*2+kilns.length*rh+30;
+  var maxG=5000;
+  var s=svgTag(w,h);
+  // target band shading
+  var bx1=padL+(w-padL-padR)*(TARGET_GCV_LOW/maxG), bx2=padL+(w-padL-padR)*(TARGET_GCV_HIGH/maxG);
+  s+='<rect x="'+bx1+'" y="'+(top-6)+'" width="'+(bx2-bx1)+'" height="'+(kilns.length*rh+12)+'" fill="rgba(23,166,115,.10)"/>';
+  s+='<text x="'+((bx1+bx2)/2)+'" y="'+(top-10)+'" fill="'+C.pos+'" font-size="10.5" font-weight="700" text-anchor="middle">TARGET BAND</text>';
+  kilns.forEach(function(k,i){
+    var y=top+i*rh+rh/2, bw=(w-padL-padR)*(k.gcv/maxG);
+    var st=kilnStatus(k), col=st==='g'?C.pos:st==='r'?C.neg:C.gold;
+    s+='<text x="'+(padL-12)+'" y="'+(y-6)+'" fill="'+C.t1+'" font-size="12.5" font-weight="700" text-anchor="end">'+k.id+'</text>';
+    s+='<text x="'+(padL-12)+'" y="'+(y+9)+'" fill="'+C.t3+'" font-size="10.5" text-anchor="end">'+k.plant+'</text>';
+    s+='<rect x="'+padL+'" y="'+(y-7)+'" width="'+(w-padL-padR)+'" height="14" rx="5" fill="'+C.track+'"/>';
+    s+='<rect x="'+padL+'" y="'+(y-7)+'" width="'+Math.max(2,bw)+'" height="14" rx="5" fill="'+col+'"/>';
+    s+='<text x="'+(padL+bw+10)+'" y="'+y+'" fill="'+C.t1+'" font-size="12" font-weight="700" dominant-baseline="middle">'+k.gcv+' kcal/kg &#183; cap '+k.capacity+'%</text>';
+  });
+  return s+'</svg>';
+}
+
+/* ===================== RENDERERS ===================== */
+function statusClassKpi(k){
+  if(k.favourable) return 'st-g';
+  return Math.abs(k.devPct)>=15?'st-r':'st-a';
+}
+function attrColor(pct){return pct<0?C.pos:C.neg;}
+function renderKpiCard(k,rank){
+  var big=Math.abs(k.devPct);
+  var st = k.favourable ? 'g' : (big>=15?'r':'a');
+  var stColor = st==='r'?'var(--neg)':st==='a'?'var(--warn)':'var(--pos)';
+  var isOpen = OPEN_KPI===k.id;
+  var attrRows='';
+  k.attribution.forEach(function(a){
+    var w = Math.min(100, Math.abs(a.pct)/Math.max(big,1)*100);
+    attrRows+='<div style="display:flex;align-items:center;gap:10px;font-size:12.5px;padding:3px 0"><div style="flex:2;color:var(--t2)">'+a.label+'</div><div style="flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.06);position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;bottom:0;width:'+w+'%;border-radius:4px;background:'+attrColor(a.pct)+'"></div></div><div style="width:60px;text-align:right;font-weight:700;color:'+attrColor(a.pct)+'">'+(a.pct>=0?'+':'')+a.pct+(k.dev.indexOf('pt')>-1?'pt':'%')+'</div></div>';
+  });
+  var body='';
+  if(k.favourable){
+    body='<div style="background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px"><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:7px;font-weight:700">What&rsquo;s driving it</h5>'+attrRows+'</div>'+
+      '<div style="background:var(--pos-soft);border:1px solid rgba(23,166,115,.25);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--t2)"><b style="color:var(--pos)">Favourable. Use as the reference case.</b> '+k.sustainNote+'</div>';
+  } else {
+    var recCards='';
+    k.recs.forEach(function(r,i){
+      var adopted = DECISIONS.some(function(d){return d.kpiId===k.id && d.recIndex===i;});
+      recCards+='<div style="border:1px solid '+(adopted?'var(--pos)':'var(--line-2)')+';background:'+(adopted?'var(--pos-soft)':'rgba(255,255,255,.015)')+';border-radius:11px;padding:12px 13px;display:flex;flex-direction:column;gap:6px">'+
+        '<div style="display:flex;justify-content:space-between;gap:6px"><div style="font-weight:700;font-size:13px">'+r.label+'</div><span style="font-size:10px;font-weight:800;border-radius:6px;padding:2px 6px;flex-shrink:0;background:'+(r.risk==='Low'?'var(--pos-soft)':r.risk==='Med'?'var(--warn-soft)':'var(--neg-soft)')+';color:'+(r.risk==='Low'?'var(--pos)':r.risk==='Med'?'var(--warn)':'var(--neg)')+'">'+r.risk+'</span></div>'+
+        '<p style="font-size:12px;color:var(--t2)"><b>Buys:</b> '+r.buys+'</p><p style="font-size:12px;color:var(--t2)"><b>Costs:</b> '+r.cost+'</p><p style="font-size:12px;color:var(--t2)"><b>Watch-out:</b> '+r.watchout+'</p>'+
+        '<div style="font-size:11px;color:var(--t3)">Owner: '+r.owner+' &middot; Revisit: '+r.revisit+'</div>'+
+        '<button style="margin-top:2px;font-size:12px;font-weight:700;border-radius:8px;padding:6px 9px;border:1px solid '+(adopted?'var(--pos)':'var(--line-2)')+';background:'+(adopted?'rgba(23,166,115,.1)':'rgba(255,255,255,.04)')+';color:'+(adopted?'var(--pos)':'var(--t1)')+';cursor:pointer" onclick="adoptRec(\''+k.id+'\','+i+',event)">'+(adopted?'&#10003; Adopted':'Adopt this option')+'</button>'+
+      '</div>';
+    });
+    body='<div style="background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:12px"><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:7px;font-weight:700">Root cause, decomposed</h5>'+attrRows+'</div>'+
+      '<div><h5 style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin:2px 0 9px;font-weight:700">Recommended options</h5><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+recCards+'</div></div>';
+  }
+  return '<div style="border:1px solid var(--line-2);border-radius:13px;background:rgba(255,255,255,.015);overflow:hidden;border-left:4px solid '+stColor+'">'+
+    '<div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer" onclick="toggleKpi(\''+k.id+'\')">'+
+      '<div style="width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.06);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--t3);flex-shrink:0">'+rank+'</div>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">'+k.title+'</div><div style="font-size:11.5px;color:var(--t3);margin-top:2px">'+k.catName+'</div></div>'+
+      '<div style="text-align:right;flex-shrink:0"><div style="font-size:17px;font-weight:800;color:'+(k.direction==='bad'?'var(--neg)':'var(--pos)')+'">'+k.dev+'</div><div style="font-size:11px;color:var(--t3)">Plan '+k.plan+'</div></div>'+
+      '<svg style="width:16px;height:16px;color:var(--t3);flex-shrink:0;transition:.2s;transform:rotate('+(isOpen?180:0)+'deg)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'+
+    '</div>'+
+    (isOpen?'<div style="padding:0 16px 16px">'+body+'</div>':'')+
+  '</div>';
+}
+function toggleKpi(id){OPEN_KPI=(OPEN_KPI===id)?null:id;renderControl();var e=document.getElementById('card-'+id);if(e)e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function adoptRec(kpiId,recIndex,evt){
+  if(evt)evt.stopPropagation();
+  var k=KPIS.find(function(x){return x.id===kpiId;}); var r=k.recs[recIndex];
+  var already=DECISIONS.some(function(d){return d.kpiId===kpiId&&d.recIndex===recIndex;});
+  if(!already){DECISIONS.unshift({kpiId:kpiId,kpiTitle:k.title,recLabel:r.label,risk:r.risk,owner:r.owner,revisit:r.revisit});toast('Logged: '+r.label);}
+  renderControl();
+}
+function toast(msg){var el=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;el.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(function(){el.classList.remove('show');},3200);}
+
+function renderControl(){
+  var sorted=KPIS.slice().sort(function(a,b){return Math.abs(b.devPct)-Math.abs(a.devPct);});
+  var cardsHtml = sorted.map(function(k,i){ return '<div id="card-'+k.id+'">'+renderKpiCard(k,i+1)+'</div>'; }).join('');
+  var html =
+    '<div class="vhead"><div><h1>Category Control Tower</h1><div class="date">Live view of category health across kiln performance, sourcing risk and hedge coverage. Sorted by materiality, not a full scorecard.</div></div></div>'+
+    '<div class="stat-row card" style="padding:16px 20px">'+
+      '<div class="m"><div class="v a">78 / 100</div><div class="l">Category health score</div></div>'+
+      '<div class="m"><div class="v r">$45&#8211;55/t</div><div class="l">Petcoke spike above budget, 25% of mix</div></div>'+
+      '<div class="m"><div class="v r">2 of 8</div><div class="l">Kilns below 83% capacity factor</div></div>'+
+      '<div class="m"><div class="v a">54%</div><div class="l">H2 requirement contracted or hedged</div></div>'+
+    '</div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>The petcoke spike and the hedge coverage gap are related, not separate problems: the Q4 coverage decision was paused specifically because of the petcoke disruption, so resolving the sourcing response (draw down buffer, shift to coal blend) also unblocks the coverage decision. The two kiln issues (Kiln 4, Kiln 7) share a root cause with each other, both are single-sourced on domestic linkage coal with no blend, but not with the sourcing or hedge issues above, so they can be worked in parallel by a different owner.</div>'+
+    '<div style="display:flex;flex-direction:column;gap:11px">'+cardsHtml+'</div>';
+  document.getElementById('view-control').innerHTML=html;
+}
+
+function renderBaseline(){
+  var html =
+    '<div class="vhead"><div><h1>Spend Baseline</h1><div class="date">$'+TOTAL_SPEND+'M annual fuel and power procurement spend across 5 plants and 8 kilns, split across seven sourcing channels.</div></div></div>'+
+    '<div class="grid2">'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg></span>Spend by source</div></div>'+
+        '<div class="sub">Domestic linkage is the cheapest tonne but the most constrained; petcoke is the most exposed to current disruption</div>'+
+        '<div style="display:flex;justify-content:center;padding:6px 0 14px">'+donut(SPEND_MIX,'$'+TOTAL_SPEND+'M','total spend')+'</div>'+
+        '<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding-bottom:14px;font-size:12.5px;color:var(--t2)">'+SPEND_MIX.map(function(s){return '<span><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:'+s.color+';margin-right:5px"></i>'+s.name+' &middot; '+s.pct+'%</span>';}).join('')+'</div>'+
+        '<div class="aiins" style="margin-top:0"><span class="lab">AI insight</span>Petroleum coke is a quarter of spend but carries the highest exposure to a single geopolitical event right now. Domestic linkage is the cheapest source by a wide margin but capped by allocation, not by choice, so it cannot simply be scaled up to absorb the petcoke exposure.</div>'+
+      '</section>'+
+      '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-4 4 3 4-6"/></svg></span>Spend by plant</div></div>'+
+        '<div class="sub">$M annualised, by number of kilns</div>'+
+        '<div style="padding:6px 4px 14px">'+hbar(SPEND_BY_PLANT.map(function(p){return {k:p.plant+' ('+p.kilns+' kiln'+(p.kilns>1?'s':'')+')',v:p.spend,t:'$'+p.spend+'M'};}),{w:520,rh:34,padL:150})+'</div>'+
+        '<div class="aiins" style="margin-top:0"><span class="lab">AI insight</span>Plant 1 and Plant 5 carry the largest spend and also each run one underperforming kiln, so the blend optimizer work at Kiln 4 (Plant 2) and Kiln 7 (Plant 5) has an outsized effect on total category cost relative to a single-kiln site.</div>'+
+      '</section>'+
+    '</div>';
+  document.getElementById('view-baseline').innerHTML=html;
+}
+
+/* ===================== DATA: SOURCES (hidden tab) ===================== */
+var DATASOURCES = [
+  {name:'Argus/McCloskey API5 &amp; API2 coal indices', use:'Australian and CIF ARA thermal coal benchmark pricing'},
+  {name:'Indonesia Ministry of Energy and Mineral Resources (ESDM) &#8211; HBA reference price', use:'Fortnightly Indonesian coal reference price and grade bands'},
+  {name:'Indonesia Coal Index (ICI), weekly assessments', use:'Indonesian FOB price by GAR grade'},
+  {name:'Coal India / Ministry of Coal notified prices and e-auction results', use:'Domestic linkage and e-auction clearing prices by grade'},
+  {name:'CEIC India coal representative price series', use:'Historical trend on non-coking coal grades G10&#8211;G13'},
+  {name:'BigMint (SteelMint) coal and petcoke price assessments', use:'Domestic e-auction and import parity cross-checks'},
+  {name:'Argus petroleum coke price assessments (fob US Gulf, CFR India, CFR China)', use:'Petcoke pricing and current disruption commentary'},
+  {name:'IEA Coal Market Report', use:'Global demand outlook and structural trend commentary'},
+  {name:'Trading Economics commodity data', use:'Newcastle thermal coal spot series cross-check'},
+  {name:'S&amp;P Global Platts / Commodity Insight coal and petcoke assessments', use:'Recommended as the primary licensed feed for a production build'},
+  {name:'Wood Mackenzie coal supply-demand outlook', use:'Recommended for mine-level supply forecasting depth'},
+  {name:'CRU coal and petcoke market intelligence', use:'Recommended for structural freight and mine-cost curve analysis'},
+  {name:'ICE and SGX coal futures (API5, API8)', use:'Recommended for forward curve and hedge-instrument pricing'},
+  {name:'Vessel-tracking/AIS signals, Strait of Hormuz transit', use:'Leading indicator for petcoke and Gulf-origin coal supply disruption'},
+  {name:'NSE currency futures (USD/INR)', use:'FX hedge reference for imported coal and petcoke, both USD-denominated'},
+  {name:'Internal ERP and contract management system', use:'Actual contracted volumes, tenors and pricing formulas'},
+  {name:'Plant DCS/SCADA kiln operating data', use:'Kiln-level GCV fired, consumption index and capacity factor, at higher granularity than shown here'}
+];
+
+function renderKiln(){
+  var flagged = KILNS.filter(function(k){return kilnStatus(k)!=='g';});
+  var html =
+    '<div class="vhead"><div><h1>Kiln GCV &amp; Consumption</h1><div class="date">Per-kiln fired GCV against the optimal band, consumption index and capacity factor. The mechanic: a lower GCV raises the tonnes of coal needed per tonne of clinker and typically drops kiln capacity, so a cheaper coal price does not always mean a cheaper tonne of clinker.</div></div></div>'+
+    '<div class="stat-row card" style="padding:16px 20px">'+
+      '<div class="m"><div class="v">4,400&#8211;4,600</div><div class="l">Optimal GCV band (kcal/kg, ARB)</div></div>'+
+      '<div class="m"><div class="v r">'+flagged.length+' of 8</div><div class="l">Kilns outside band or below 90% capacity</div></div>'+
+      '<div class="m"><div class="v">0.139&#8211;0.178</div><div class="l">Consumption index range (kg coal / kg clinker)</div></div>'+
+      '<div class="m"><div class="v g">$9.10</div><div class="l">Best-case fuel cost per tonne clinker (Kiln 5)</div></div>'+
+    '</div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v4M16 3v4"/><rect x="4" y="7" width="16" height="14" rx="2"/></svg></span>Fired GCV by kiln, against the target band</div></div>'+
+      '<div class="sub">Green band marks the optimal 4,400&#8211;4,600 kcal/kg range; bar colour reflects overall kiln status</div>'+
+      '<div style="padding:6px 10px 16px">'+gcvBars(KILNS)+'</div>'+
+    '</section>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/></svg></span>Kiln detail</div></div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Kiln</th><th>Plant</th><th class="r">GCV fired</th><th class="r">Consumption index</th><th class="r">Capacity factor</th><th>Current fuel mix</th><th class="c">Status</th></tr></thead><tbody>'+
+      KILNS.slice().sort(function(a,b){return kilnStatus(a)==='r'?-1:kilnStatus(b)==='r'?1:0;}).map(function(k){
+        var st=kilnStatus(k);
+        var chip=st==='r'?'<span class="lp" style="background:var(--neg-soft);color:var(--neg)">Red</span>':st==='a'?'<span class="lp" style="background:var(--warn-soft);color:var(--warn)">Amber</span>':'<span class="lp" style="background:var(--pos-soft);color:var(--pos)">Green</span>';
+        return '<tr><td class="cat">'+k.id+'</td><td>'+k.plant+'</td><td class="r">'+k.gcv+' kcal/kg</td><td class="r">'+k.index+'</td><td class="r">'+k.capacity+'%</td><td>'+k.mix+'</td><td class="c">'+chip+'</td></tr>';
+      }).join('')+
+      '</tbody></table></div>'+
+      '<div class="aiins"><span class="lab">AI insight</span>Kiln 4 and Kiln 7 are both single-sourced on domestic linkage coal with no blending, and both sit well outside the target band with capacity factors below 83%. Kiln 5 and Kiln 1, both running a two-source blend, sit inside or near the band with capacity above 93%. The pattern is consistent enough to treat blending, not coal quality alone, as the lever &#8211; see the Blend Optimizer for the specific recipe.</div>'+
+    '</section>';
+  document.getElementById('view-kiln').innerHTML=html;
+}
+
+function renderBlend(){
+  var flagged = KILNS.filter(function(k){return kilnStatus(k)!=='g';});
+  var recipes = [
+    {kiln:'Kiln 4', plant:'Plant 2', current:'100% domestic linkage, GCV 3,850', currentCost:38, currentIdx:0.178, currentCap:79,
+     proposed:'60% domestic linkage + 40% Indonesian GAR 5000', proposedGcv:4285, proposedCost:67, proposedIdx:0.151, proposedCap:91},
+    {kiln:'Kiln 7', plant:'Plant 5', current:'100% domestic linkage, GCV 3,950', currentCost:40, currentIdx:0.172, currentCap:81,
+     proposed:'55% domestic linkage + 45% Indonesian GAR 4200', proposedGcv:4310, proposedCost:61, proposedIdx:0.150, proposedCap:90},
+    {kiln:'Kiln 6', plant:'Plant 4', current:'70% domestic e-auction + 30% Indonesian GAR 4200, GCV 4,100', currentCost:71, currentIdx:0.161, currentCap:85,
+     proposed:'50% domestic e-auction + 50% Indonesian GAR 5000', proposedGcv:4340, proposedCost:86, proposedIdx:0.144, proposedCap:93},
+    {kiln:'Kiln 2', plant:'Plant 1', current:'80% domestic linkage + 20% domestic e-auction, GCV 4,200', currentCost:32, currentIdx:0.155, currentCap:89,
+     proposed:'55% domestic linkage + 45% Indonesian GAR 4200', proposedGcv:4380, proposedCost:59, proposedIdx:0.148, proposedCap:92}
+  ];
+  var html =
+    '<div class="vhead"><div><h1>Blend Optimizer</h1><div class="date">For each kiln outside the target band, the lowest-cost blend of available sources that recovers GCV and capacity, netted against the fuel-cost increase. Availability-constrained to sources actually contracted or accessible to that plant, not an open market assumption.</div></div></div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>None of these four recipes are a straightforward cost saving on fuel alone &#8211; landed fuel cost per tonne rises in every case, since the blend brings in imported coal at 2 to 3 times the linkage price. The case rests on capacity recovery: an 11 to 13 point capacity factor gain is additional clinker from the same kiln hours, which is the more valuable number to negotiate should-cost against, not the coal price itself. This mirrors a documented case at a comparable cement group where the same trade-off held: a higher blended fuel cost was outweighed by capacity and export-clinker value, not fuel savings alone.</div>'+
+    '<div class="tblwrap card" style="padding-top:16px"><table><thead><tr><th>Kiln</th><th>Current blend</th><th class="r">Current cost</th><th class="r">Current index</th><th class="r">Current capacity</th><th>Proposed blend</th><th class="r">Proposed GCV</th><th class="r">Proposed cost</th><th class="r">Proposed index</th><th class="r">Proposed capacity</th></tr></thead><tbody>'+
+    recipes.map(function(r){
+      return '<tr><td class="cat">'+r.kiln+' <span style="color:var(--t3);font-weight:400">('+r.plant+')</span></td><td>'+r.current+'</td><td class="r">$'+r.currentCost+'/t</td><td class="r">'+r.currentIdx+'</td><td class="r">'+r.currentCap+'%</td>'+
+        '<td>'+r.proposed+'</td><td class="r">'+r.proposedGcv+'</td><td class="r">$'+r.proposedCost+'/t</td><td class="r">'+r.proposedIdx+'</td><td class="r" style="color:var(--pos);font-weight:700">'+r.proposedCap+'%</td></tr>';
+    }).join('')+
+    '</tbody></table></div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg></span>Execution requirement before committing</div></div>'+
+      '<div class="sub" style="padding-bottom:14px">Blending only works if the physical infrastructure exists</div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Method</th><th>Description</th><th>Capex</th></tr></thead><tbody>'+
+      '<tr><td class="cat">Mill blending</td><td>Mixed firing, dedicating one or two mills to high-GCV coal and the remainder to low-GCV, with heat loading adjusted per burner zone</td><td>No capex required if spare mill capacity exists</td></tr>'+
+      '<tr><td class="cat">On-belt blending</td><td>Different coal qualities stockpiled separately, reclaimed onto conveyors that merge at a single point before firing, with weighing and speed control</td><td>Incremental capex for conveyor weighing/control systems</td></tr>'+
+      '</tbody></table></div>'+
+      '<div class="aiins"><span class="lab">AI insight</span>Confirm which method each of the four flagged kilns can support before treating the blend ratios above as committed &#8211; a kiln with no spare mill and no on-belt weighing infrastructure cannot execute either recipe without a capex step first.</div>'+
+    '</section>';
+  document.getElementById('view-blend').innerHTML=html;
+}
+
+function renderMines(){
+  var html =
+    '<div class="vhead"><div><h1>Mine &amp; Source Intelligence</h1><div class="date">Seven sourcing channels compared on spec, current landed price, discount or premium to the Indonesian GAR 5000 reference, recent trend and supply outlook.</div></div></div>'+
+    '<div class="tblwrap card" style="padding-top:16px"><table><thead><tr><th>Source</th><th>Origin</th><th>Spec (GCV)</th><th class="r">Current price</th><th class="r">vs reference</th><th>6-month trend</th><th>Supply outlook</th></tr></thead><tbody>'+
+    SOURCES.map(function(s){
+      var vs = s.vsIndex===undefined?'<span style="color:var(--t3)">n/a &#8211; own reference</span>':(s.vsIndex>0?'<span style="color:var(--neg)">+'+s.vsIndex+'%</span>':'<span style="color:var(--pos)">'+s.vsIndex+'%</span>');
+      var priceStr = s.price===undefined ? '<span style="color:var(--neg);font-weight:700">Spiking, see note</span>' : ('$'+s.price+' <span style="color:var(--t3);font-size:11px">'+s.unit+'</span>');
+      return '<tr><td class="cat">'+s.name+(s.isRef?' <span class="lp" style="background:var(--accent-soft);color:var(--accent-2)">Reference</span>':'')+'</td><td>'+s.origin+'</td><td>'+s.gcv+'</td><td class="r">'+priceStr+'</td><td class="r">'+vs+'</td><td>'+s.trend+'</td><td style="max-width:260px">'+s.outlook+'</td></tr>';
+    }).join('')+
+    '</tbody></table></div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>Australian coal carries a 38% premium to the Indonesian reference at equivalent-ish GCV and is currently near a three-month high on energy-security demand, which is why it stays a minority, flexibility-only source rather than a core tonnage line. Petroleum coke has no stable discount/premium figure right now because the market itself is in active disruption; treat any petcoke quote received this week as a spot data point, not a basis for a multi-month commitment.</div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/></svg></span>Landed cost normalization</div></div>'+
+      '<div class="sub" style="padding-bottom:14px">The same nominal price tells a different story once normalised to cost per unit of energy, not cost per tonne</div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Source</th><th class="r">Price ($/t)</th><th class="r">GCV (kcal/kg)</th><th class="r">$ per Gcal delivered</th></tr></thead><tbody>'+
+      '<tr><td class="cat">Indonesian GAR 5000</td><td class="r">$110</td><td class="r">5,000</td><td class="r">$22.00</td></tr>'+
+      '<tr><td class="cat">Indonesian GAR 4200</td><td class="r">$92</td><td class="r">4,200</td><td class="r">$21.90</td></tr>'+
+      '<tr><td class="cat">Australian API5</td><td class="r">$166</td><td class="r">5,500</td><td class="r">$30.18</td></tr>'+
+      '<tr><td class="cat">Petcoke, US Gulf (pre-disruption reference ~$178/t)</td><td class="r">~$178</td><td class="r">8,000</td><td class="r">~$22.25</td></tr>'+
+      '<tr><td class="cat">Petcoke, US Gulf (current spot, disrupted)</td><td class="r">~$250+</td><td class="r">8,000</td><td class="r" style="color:var(--neg);font-weight:700">~$31.25+</td></tr>'+
+      '</tbody></table></div>'+
+      '<div class="aiins"><span class="lab">AI insight</span>On a normal market, petcoke and Indonesian GAR 5000 land at a near-identical cost per unit of energy, which is exactly why blending the two is standard practice. The current disruption has pushed petcoke to roughly a 40% premium per Gcal over Indonesian coal, the clearest, most current argument for shifting blend ratios toward coal until the Hormuz situation resolves.</div>'+
+    '</section>';
+  document.getElementById('view-mines').innerHTML=html;
+}
+
+function renderContracts(){
+  var totalCov = CONTRACTS.reduce(function(s,c){return s+c.coverage;},0)/CONTRACTS.length;
+  var html =
+    '<div class="vhead"><div><h1>Contracts &amp; Hedge Coverage</h1><div class="date">Contracted or hedged share of the next two quarters&rsquo; requirement, by source. Feeds directly into the CPRM engine&rsquo;s risk exposure input.</div></div></div>'+
+    '<div class="stat-row card" style="padding:16px 20px">'+
+      '<div class="m"><div class="v a">'+Math.round(totalCov)+'%</div><div class="l">Blended coverage, next 2 quarters</div></div>'+
+      '<div class="m"><div class="v r">1</div><div class="l">Source under active price review (petcoke)</div></div>'+
+      '<div class="m"><div class="v">$580M</div><div class="l">Annualised spend this coverage protects</div></div>'+
+      '<div class="m"><div class="v g">100%</div><div class="l">Domestic linkage coverage (allocation-based)</div></div>'+
+    '</div>'+
+    '<div class="tblwrap card" style="padding-top:16px"><table><thead><tr><th>Source</th><th>Term structure</th><th>Volume</th><th class="r">Coverage, next 2Q</th><th>Next key date</th></tr></thead><tbody>'+
+    CONTRACTS.map(function(c){
+      var col = c.coverage>=70?'var(--pos)':c.coverage>=40?'var(--warn)':'var(--neg)';
+      return '<tr><td class="cat">'+c.source+'</td><td>'+c.term+'</td><td>'+c.volume+'</td><td class="r" style="color:'+col+';font-weight:700">'+c.coverage+'%</td><td>'+c.expiry+'</td></tr>';
+    }).join('')+
+    '</tbody></table></div>'+
+    '<div class="aiins"><span class="lab">AI insight</span>Petroleum coke coverage is deliberately paused, not overlooked &#8211; committing further coverage mid-spike would lock in the disruption premium for the contract term. Australian coal coverage is structurally low because it is used as a flexibility source, not a base-load tonnage line, so 20% coverage there is not the same kind of gap as 35% coverage on the Indonesian tranche.</div>';
+  document.getElementById('view-contracts').innerHTML=html;
+}
+
+/* ===================== CPRM DECISION ENGINE ===================== */
+var CPRM_STATE = {direction:'up', confidence:'high', exposure:'high'};
+var CPRM_MATRIX = {
+  'up-low-low':{lever:'operationalize',urgency:'Low urgency',text:'Forecast is uncertain and exposure is limited. Monitor through the normal monthly review; no position change warranted.'},
+  'up-low-high':{lever:'hedge',urgency:'Moderate urgency',text:'Exposure is real even though the forecast is uncertain. Take a partial hedge or forward position sized to the exposure, not the forecast confidence.'},
+  'up-high-low':{lever:'operationalize',urgency:'Low urgency',text:'Confident the market is rising, but exposure is small. Note it for the next planning cycle rather than acting immediately.'},
+  'up-high-high':{lever:'hedge',urgency:'High urgency',text:'This is the current petroleum coke situation. High confidence the disruption is real and ongoing, high exposure at 25% of fuel mix. Act now: draw down buffer, shift blend ratio, and consider a capped forward position.'},
+  'down-low-low':{lever:'operationalize',urgency:'Low urgency',text:'No clear signal and limited exposure. Hold position, continue monitoring.'},
+  'down-low-high':{lever:'transfer',urgency:'Moderate urgency, favour options over futures',text:'Exposure is high but the downward forecast is not confident. Favour option-based protection over locking a futures position, so you can still benefit if the price falls further.'},
+  'down-high-low':{lever:'operationalize',urgency:'Low urgency',text:'Confident of a declining market with limited exposure. Let it ride; no action needed.'},
+  'down-high-high':{lever:'transfer',urgency:'Moderate urgency, favour options over futures',text:'High confidence of a falling market, but exposure is large enough that being wrong is costly. Use options rather than futures to keep the downside protected without giving up the upside of a further price fall.'}
+};
+var CPRM_LEVERS = {
+  transfer:{name:'Transfer / share the risk',owner:'Procurement',desc:'Lock in prices with suppliers, use contracting structure (price-variance clauses, index caps) to pass volatility back to the counterparty.'},
+  operationalize:{name:'Operationalize the risk',owner:'Supply chain / plant operations',desc:'Stock or de-stock inventory, adjust blend ratios or sourcing mix &#8211; works when inventory capacity and blending flexibility allow it.'},
+  deflect:{name:'Deflect the risk',owner:'Commercial',desc:'Pass cost through to cement pricing where the market allows, or substitute specification &#8211; not generally available mid-contract for a B2B cement buyer, more relevant to the sell-side.'},
+  hedge:{name:'Hedge the risk',owner:'Finance',desc:'Use financial instruments (futures, options, swaps) to hedge the position &#8211; only where genuine internal expertise and risk tolerance exist.'}
+};
+function renderCprm(){
+  var html =
+    '<div class="vhead"><div><h1>CPRM Decision Engine</h1><div class="date">Set the forecast direction, forecast confidence and current risk exposure for any fuel line, and the engine recommends which of four risk responses applies, who owns it, and how urgently.</div></div></div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/></svg></span>Set the scenario</div></div>'+
+      '<div style="padding:6px 20px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">'+
+        '<div><div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:8px">Forecast direction</div><div class="seg" id="segDir"></div></div>'+
+        '<div><div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:8px">Forecast confidence</div><div class="seg" id="segConf"></div></div>'+
+        '<div><div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:8px">Current risk exposure</div><div class="seg" id="segExp"></div></div>'+
+      '</div>'+
+      '<div id="cprmOut"></div>'+
+    '</section>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>The four responses, and who owns each</div></div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Response</th><th>Owner</th><th>Description</th></tr></thead><tbody>'+
+      Object.keys(CPRM_LEVERS).map(function(k){var l=CPRM_LEVERS[k];return '<tr><td class="cat">'+l.name+'</td><td>'+l.owner+'</td><td>'+l.desc+'</td></tr>';}).join('')+
+      '</tbody></table></div>'+
+      '<div class="aiins"><span class="lab">AI insight</span>A CPRM programme that requires board sign-off on every position is too slow to be useful, and one with no escalation path is a risk nobody is actually governing. A workable structure: a core team handling ongoing market assessment and monthly strategy proposals, an executive tier approving anything outside pre-set thresholds quarterly, and board oversight limited to annual results and threshold-setting.</div>'+
+    '</section>';
+  document.getElementById('view-cprm').innerHTML=html;
+  buildSeg('segDir',[['up','Rising'],['down','Falling']],'direction');
+  buildSeg('segConf',[['low','Low'],['high','High']],'confidence');
+  buildSeg('segExp',[['low','Low'],['high','High']],'exposure');
+  renderCprmOut();
+}
+function buildSeg(id,opts,key){
+  var el=document.getElementById(id);
+  el.innerHTML=opts.map(function(o){return '<button class="'+(CPRM_STATE[key]===o[0]?'on':'')+'" data-key="'+key+'" data-val="'+o[0]+'">'+o[1]+'</button>';}).join('');
+  el.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click',function(){CPRM_STATE[this.getAttribute('data-key')]=this.getAttribute('data-val');renderCprm();});
+  });
+}
+function renderCprmOut(){
+  var key = CPRM_STATE.direction+'-'+CPRM_STATE.confidence+'-'+CPRM_STATE.exposure;
+  var r = CPRM_MATRIX[key];
+  var lever = CPRM_LEVERS[r.lever];
+  document.getElementById('cprmOut').innerHTML =
+    '<div class="cprmresult '+r.lever+'"><h4>Recommended: '+lever.name+'</h4><div class="owner">'+r.urgency+' &middot; Owner: '+lever.owner+'</div><p>'+r.text+'</p></div>';
+}
+
+function renderMarket(){
+  var html =
+    '<div class="vhead"><div><h1>Market Intelligence</h1><div class="date">Current market signals across coal, petcoke and freight, refreshed from public indices.</div></div></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">'+
+    NEWS.map(function(n){
+      var tagColor = n.tag==='risk'?'neg':n.tag==='opp'?'pos':'warn';
+      return '<div class="card" style="padding:15px 17px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="chip '+(n.tag==='risk'?'r':n.tag==='opp'?'g':'a')+'">'+n.cat+'</span><span style="font-size:11px;color:var(--t3)">'+n.when+'</span></div><h4 style="font-size:14.5px;font-weight:700;margin-bottom:6px">'+n.title+'</h4><p style="font-size:13px;color:var(--t2);line-height:1.55">'+n.body+'</p></div>';
+    }).join('')+
+    '</div>';
+  document.getElementById('view-market').innerHTML=html;
+}
+
+function renderActions(){
+  var html =
+    '<div class="vhead"><div><h1>Actions &amp; Roadmap</h1><div class="date">This cycle&rsquo;s priority actions, and the phased roadmap to roll the should-cost and blend discipline across the full kiln fleet.</div></div></div>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></span>This cycle&rsquo;s priority actions</div></div>'+
+      '<div class="tblwrap"><table><thead><tr><th>Action</th><th>Lever</th><th>Value</th><th>Urgency</th></tr></thead><tbody>'+
+      ACTIONS.map(function(a){return '<tr><td class="cat">'+a.title+'</td><td>'+a.lever+'</td><td>'+a.value+'</td><td>'+a.urgency+'</td></tr>';}).join('')+
+      '</tbody></table></div>'+
+    '</section>'+
+    '<section class="card"><div class="card-h"><div class="ttl"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/></svg></span>Roadmap</div></div>'+
+      '<div style="padding:6px 20px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">'+
+      ROADMAP.map(function(p){
+        return '<div style="border:1px solid var(--line-2);border-radius:11px;padding:13px 15px"><div style="font-weight:800;font-size:14px">'+p.phase+'</div><div style="font-size:11.5px;color:var(--accent-2);margin-bottom:9px">'+p.window+'</div><ul style="padding-left:16px;font-size:12.5px;color:var(--t2);line-height:1.7">'+p.items.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';
+      }).join('')+
+      '</div>'+
+    '</section>';
+  document.getElementById('view-actions').innerHTML=html;
+}
+
+function renderDataSrc(){
+  var html =
+    '<div class="vhead"><div><h1>Data Sources &amp; References</h1><div class="date">Public and internal sources informing the figures shown in this navigator.</div></div></div>'+
+    '<section class="card"><div class="tblwrap" style="padding-top:16px"><table><thead><tr><th>Source</th><th>Used for</th></tr></thead><tbody>'+
+    DATASOURCES.map(function(d){return '<tr><td class="cat">'+d.name+'</td><td>'+d.use+'</td></tr>';}).join('')+
+    '</tbody></table></div></section>';
+  document.getElementById('view-datasrc').innerHTML=html;
+}
+
+/* ===================== VIEW SHELL ===================== */
+function buildShell(){
+  var keys=['control','baseline','kiln','blend','mines','contracts','cprm','market','actions','datasrc'];
+  document.getElementById('viewsRoot').innerHTML = keys.map(function(k){return '<div class="view'+(k==='control'?' active':'')+'" data-v="'+k+'" id="view-'+k+'"></div>';}).join('');
+}
+function switchView(v){
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.toggle('active',n.getAttribute('data-view')===v);});
+  document.querySelectorAll('.view').forEach(function(el){el.classList.toggle('active',el.getAttribute('data-v')===v);});
+  document.querySelector('.scroll').scrollTop=0;
+}
+
+buildNav();
+buildShell();
+renderControl();
+renderBaseline();
+renderKiln();
+renderBlend();
+renderMines();
+renderContracts();
+renderCprm();
+renderMarket();
+renderActions();
+renderDataSrc();
+document.getElementById('navKilnBadge').textContent = KILNS.filter(function(k){return kilnStatus(k)==='r';}).length;
+document.getElementById('navCprmBadge').textContent = '!';
+</script>
+</body>
+</html>
